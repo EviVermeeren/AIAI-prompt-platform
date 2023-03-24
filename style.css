@@ -351,3 +351,94 @@ form {
   display: flex;
   flex-wrap: wrap;
 }
+
+#app {
+  max-width: 500px;
+  margin: 2em auto;
+  background-color: #3e3e3e;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.titlelogin {
+  font-size: 1.8em;
+  text-align: center;
+  color: white;
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.alert {
+  background-color: #efeef1;
+  border: 1px solid #e91c24;
+  border-radius: 5px;
+  border-left-width: 5px;
+  padding: 1em;
+}
+
+.nav--login {
+  padding-left: 5em;
+  padding-right: 5em;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.nav--login a {
+  color: white;
+  text-decoration: none;
+  margin-right: 1em;
+  font-family: "Filson Pro";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.form {
+  padding: 0.5em;
+}
+
+.form label {
+  display: block;
+  margin-top: 0.5em;
+  font-family: "Filson Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  color: white;
+}
+
+.form input {
+  width: 95%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: transparent;
+  border: 2px white solid;
+  margin-top: 5px;
+}
+
+.btn {
+  background-color: #00a08d;
+  color: white;
+  text-align: center;
+  display: block;
+  padding: 0.5em;
+  text-decoration: none;
+  border-radius: 5px;
+  font-family: "Filson Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  width: 100px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nav--login {
+  border-bottom: 2px solid white;
+  margin-bottom: 1em;
+}
+
+.hidden {
+  display: none;
+}
