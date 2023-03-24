@@ -326,7 +326,7 @@ form {
   padding-left: 10px;
   height: 30px;
   width: 190px;
-  margin-top: 120px;
+  margin-top: 130px;
   background-color: #3e3e3e;
   border-radius: 10px;
 }
@@ -343,7 +343,6 @@ form {
   padding-right: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
-  margin-left: 10px;
   width: 100px;
 }
 
@@ -526,4 +525,194 @@ form {
   color: #3e3e3e;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.detailheader {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.detailbutton {
+  background: #00a08d;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: white;
+  font-family: "Informa Pro";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.detailbuttondiv {
+  display: flex;
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.detailimgheader {
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.25));
+  border-radius: 10px;
+  height: 450px;
+  width: 400px;
+  background-image: url(/pickachu.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 20px;
+}
+
+.desc {
+  width: 650px;
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+.like-comment-section {
+  margin-top: 50px;
+  background-color: #3e3e3e;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 20px;
+  margin-left: 13%;
+  margin-right: 13%;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 300px;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 10px;
+}
+
+.action-button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.action-button:hover {
+  color: #00a08d;
+}
+
+.likes {
+  margin-bottom: 10px;
+  font-family: "Informa Pro";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  color: white;
+  padding-bottom: 30px;
+  border-bottom: 1px white solid;
+}
+
+.like-count {
+  font-size: 12px;
+}
+
+.comments {
+  margin-bottom: 10px;
+  border-top: 1px white solid;
+  padding-top: 30px;
+}
+
+.comment-count {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.comment-info {
+  flex: 1;
+  background-color: white;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.comment-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  color: #3e3e3e;
+}
+
+.comment-text {
+  font-size: 14px;
+  margin: 0;
+  color: #3e3e3e;
+}
+
+.add-comment {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.add-comment img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.add-comment textarea {
+  flex: 1;
+  background-color: transparent;
+  border-radius: 6px;
+  padding: 10px;
+  border: 1px solid white;
+}
+
+.add-comment button {
+  background: #00a08d;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  margin-left: 10px;
+  border: none;
+  color: white;
+  font-family: "Informa Pro";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.add-comment textarea::placeholder {
+  font-family: "Informa Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: white;
 }
