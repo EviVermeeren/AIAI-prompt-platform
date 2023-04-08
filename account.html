@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Account</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -29,50 +29,56 @@
       <div class="nav-items">
         <li><a href="/marketplace.html">Marketplace</a></li>
         <li><a href="/upload.html">Upload</a></li>
-        <li><a href="/login.html">Login</a></li>
+        <li><a href="/account.html">Account</a></li>
       </div>
     </nav>
 
-    <div id="app">
-      <h1 class="titlelogin">PromptSwap</h1>
-      <nav class="nav--login">
-          <a href="#" id="tabLogin">Log in</a>
-          <a href="#" id="tabSignIn">Sign up</a>
-      </nav>
     
-      <div class="alert hidden">That password was incorrect. Please try again</div>
-    
-    <div class="form form--login">
-      <label for="username">Email</label>
-      <input type="text" id="Email">
-    
-      <label for="password">Password</label>
-      <input type="password" id="password">
+
+    <div class="profile">
+
+        <div class="profileimg">
+            <img class="banner" src="/achtergrond.jpg" alt="">
+            <img class="pfp" src="/pickachu.png" alt="">
+        </div>
+
+        <div class="profilename">
+            <h2 class="nameuser">DaBawsVL</h2>
+            <div class="likeandfollow">
+            <a class="btnfollow" href="#">Follow</a>
+            <a class="btnfollow" href="#">Flag</a>
+        </div>
+        </div>  
+
+        <div class="profilebio">
+            <p class="biotext">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint quod soluta consequatur! Cum aut dolores pariatur quo repellat aliquam iure, ut vel eius nobis dolor facere. Quas dignissimos consequatur vitae.</p>
+        </div>
     </div>
-    
-    <div class="form form--signup hidden">
-      <label for="firstname">Firstname</label>
-      <input type="text" id="firstname">
 
-      <label for="lastname">Lastname</label>
-      <input type="text" id="lastname">
-      
-      <label for="username">Username</label>
-      <input type="text" id="username">
 
-      <label for="email2">Email</label>
-      <input type="email" id="email2">
 
-      <label for="password2">Password</label>
-      <input type="password" id="password2">
 
-      <label for="password3">Repeat password</label>
-      <input type="password" id="password3">
-    </div>
-    
-    <a href="#" class="btn" id="btnSubmit">Log In</a>
-  </div>
+      <div class="allprompts">
+        <div>
+            <h1>All prompts by <span>DaBawsVL</span></h1><!-- Hier ga je de username nemen van het profiel waar je op zit-->
+        </div>
 
+        <div class="promptflex"> <!-- Hier ga je éénmaal een prompt nemen in html en daarover lussen met een foreach in php vanuit uw database, dus niet de html aanpassen-->
+            
+          <a href="/detail.html">
+          <div class="prompt">
+                <p class="modelboxtitle">Stable Diffuson</p> <!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database -->
+                <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p><!-- tussen de span zet je de prijs, maar dit is geen echt geld -->
+            </div>
+          </a>
+
+          <a href="/detail.html">
+            <div class="prompt">
+                  <p class="modelboxtitle">Stable Diffuson</p> <!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database -->
+                  <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p><!-- tussen de span zet je de prijs, maar dit is geen echt geld -->
+              </div>
+            </a>
+        </div>
 
     <footer>
       <div class="footer">
