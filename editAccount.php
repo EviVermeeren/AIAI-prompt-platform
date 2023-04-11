@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+$message="";
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: login.php");
@@ -21,36 +22,56 @@ try {
     exit;
 }
 
-$query = $conn->prepare("SELECT profile_picture, profile_banner, password FROM users WHERE email = :email");
+$query = $conn->prepare("SELECT bio, profile_picture, profile_banner, password FROM users WHERE email = :email");
 
 $query->bindValue(":email", $email);
 $query->execute();
 
 $row = $query->fetch(PDO::FETCH_ASSOC);
+$bio = $row['bio'];
 $profile_picture = $row['profile_picture'];
 $profile_banner = $row['profile_banner'];
 $hashed_password = $row['password'];
 
 if (empty($profile_banner)) {
-  $banner_src = "./achtergrond.jpg";
+    $banner_src = "./achtergrond.jpg";
 } else {
-  $banner_src = $profile_banner;
+    $banner_src = $profile_banner;
 }
 
 if (empty($profile_picture)) {
-  $picture_src = "./pickachu.png";
+    $picture_src = "./pickachu.png";
 } else {
-  $picture_src = $profile_picture;
+    $picture_src = $profile_picture;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $first_name = $_POST["firstname"];
-    $last_name = $_POST["lastname"];
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
     $username = $_POST["username"];
     $current_password = $_POST["password"];
     $new_password = $_POST["newpassword"];
     $repeat_password = $_POST["repeatnewpassword"];
+    $bio = $_POST["bio"];
+    $profile_picture = $_POST["profile_picture"];
+    $profile_banner = $_POST["profile_banner"];
+
+    if (isset($_FILES['profile_picture'])) {
+        $picture_file = $_FILES['profile_picture']['tmp_name'];
+        $picture_name = $_FILES['profile_picture']['name'];
+        move_uploaded_file($picture_file, "media/" . $picture_name);
+        $profile_picture = "AIAI-prompt-platform-main/media/" . $picture_name;
+        var_dump($_FILES);
+    }
+    
+    if (isset($_FILES['profile_banner'])) {
+        $banner_file = $_FILES['profile_banner']['tmp_name'];
+        $banner_name = $_FILES['profile_banner']['name'];
+        move_uploaded_file($banner_file, "media/" . $banner_name);
+        $profile_banner = "AIAI-prompt-platform-main/media/" . $banner_name;
+        var_dump($_FILES);
+    }
 
     // Check if new password and repeat password match
     if ($new_password !== $repeat_password) {
@@ -70,11 +91,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
     // Update database with form data
-    $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, password=:hashed_password WHERE email=:email";
+    $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture, profile_banner=:profile_banner, password=:hashed_password WHERE email=:email";
     $query = $conn->prepare($sql);
-    $query->bindParam(":firstname", $first_name);
-    $query->bindParam(":lastname", $last_name);
+    $query->bindParam(":firstname", $firstname);
+    $query->bindParam(":lastname", $lastname);
     $query->bindParam(":username", $username);
+    $query->bindParam(":bio", $bio);
+    $query->bindParam(":profile_picture", $profile_picture);
+    $query->bindParam(":profile_banner", $profile_banner);
     $query->bindParam(":hashed_password", $hashed_password);
     $query->bindParam(":email", $email);
     $result = $query->execute();
@@ -125,11 +149,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input class="inputfield" type="password" id="title" name="password" required><br><br>
 
         <label for="title">New password</label><br>
-        <input class="inputfield" type="password" id="title" name="newpassword" required><br><br>
+        <input class="inputfield" type="password" id="title" name="newpassword"><br><br>
 
         <label for="title">Repeat new password</label><br>
-        <input class="inputfield" type="password" id="title" name="repeatnewpassword" required><br><br>
-      
+        <input class="inputfield" type="password" id="title" name="repeatnewpassword"><br><br>
+
+        <label for="title">Bio</label><br>
+        <textarea class="inputfield" id="bio" name="bio"><?php echo $bio ?></textarea><br><br>
+
+        <label for="profile_picture">Profile Picture</label><br>
+        <input type="file" name="profile_picture" accept="image/*"><br><br>
+
+        <label>Profile Banner</label><br>
+        <input type="file" name="profile_banner" accept="image/*"><br><br>
+
         <input class="submitbtn" type="submit" value="Save profile">
 
     </form>

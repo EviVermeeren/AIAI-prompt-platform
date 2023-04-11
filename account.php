@@ -11,6 +11,7 @@ $email = $_SESSION["email"];
 $conn = new PDO('mysql:host=localhost;dbname=promptswap', "evi", "12345");
 $query = $conn->prepare("SELECT profile_picture FROM users WHERE email = :email");
 $q = $conn->prepare("SELECT profile_banner FROM users WHERE email = :email");
+$qu = $conn->prepare("SELECT bio FROM users WHERE email = :email");
 
 $query->bindValue(":email", $email);
 $query->execute();
@@ -18,8 +19,12 @@ $query->execute();
 $q->bindValue(":email", $email);
 $q->execute();
 
+$qu->bindValue(":email", $email);
+$qu->execute();
+
 $profile_picture = $query->fetchColumn();
 $profile_banner = $q->fetchColumn();
+$bio = $qu->fetchColumn();
 
 $query_username = $conn->prepare("SELECT username FROM users WHERE email = :email");
 $query_username->bindValue(":email", $email);
@@ -57,8 +62,8 @@ if (!empty($profile_picture)) {
     <div class="profile">
 
         <div class="profileimg">
-            <img class="banner" src="<?php echo $profile_banner ?>" alt="">
-            <img class="pfp" src="<?php echo $profile_picture ?>" alt="">
+            <img class="banner" src="/media/<?php echo $profile_banner ?>" alt="">
+            <img class="pfp" src="./media/<?php echo $profile_picture ?>" alt="">
         </div>
 
         <div class="profilename">
@@ -71,7 +76,7 @@ if (!empty($profile_picture)) {
         </div>  
 
         <div class="profilebio">
-            <p class="biotext">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint quod soluta consequatur! Cum aut dolores pariatur quo repellat aliquam iure, ut vel eius nobis dolor facere. Quas dignissimos consequatur vitae.</p>
+            <p class="biotext"><?php echo $bio ?></p>
         </div>
     </div>
 

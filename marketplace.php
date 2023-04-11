@@ -7,6 +7,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
+// Connect to database
+$conn = new PDO('mysql:host=localhost;dbname=promptswap', "evi", "12345");
+
+
+// Query the database to get the prompts
+$sql = "SELECT name, model, price FROM prompts ORDER BY date DESC";
+$result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -88,26 +96,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
             <div class="promptflex"> <!-- Hier ga je éénmaal een prompt nemen in html en daarover lussen met een foreach in php vanuit uw database, dus niet de html aanpassen-->
                 
-              <a href="detail.php">
-              <div class="prompt">
-                    <p class="modelboxtitle">Stable Diffuson</p> <!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database -->
-                    <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p><!-- tussen de span zet je de prijs, maar dit is geen echt geld -->
-                </div>
-              </a>
-
-              <a href="detail.php">
-                <div class="prompt">
-                      <p class="modelboxtitle">Stable Diffuson</p> <!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database -->
-                      <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p><!-- tussen de span zet je de prijs, maar dit is geen echt geld -->
-                  </div>
-                </a>
-
-                <a href="detail.php">
-                  <div class="prompt">
-                        <p class="modelboxtitle">Stable Diffuson</p> <!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database -->
-                        <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p><!-- tussen de span zet je de prijs, maar dit is geen echt geld -->
-                    </div>
-                  </a>
+            <?php
+                // assuming $data is the array of data from your database
+                foreach ($result as $row) {
+                    // extract the relevant data from the row
+                    $name = $row['name'];
+                    $model = $row['model'];
+                    $price = $row['price'];
+                ?>
+                    <a href="detail.php">
+                        <div class="prompt">
+                            <p class="modelboxtitle"><?php echo $model ?></p>
+                            <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p>
+                        </div>
+                    </a>
+                <?php
+                }
+                ?>
             </div>
 
         </div>  
