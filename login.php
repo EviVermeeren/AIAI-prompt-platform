@@ -11,6 +11,7 @@
 
 			session_start();
 			$_SESSION['loggedin'] = true;
+      $_SESSION['email'] = $email;
 
 			header('Location: index.php');
 	

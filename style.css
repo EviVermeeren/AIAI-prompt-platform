@@ -1,5 +1,10 @@
 /* begin mobile devices */
 
+.errormessage {
+  font-size: 16px;
+  color: red;
+}
+
 @media (min-width: 0px) and (max-width: 767px) {
   body {
     background-color: white;
@@ -170,13 +175,12 @@
     border-radius: 10px;
     height: 350px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
   }
 
   .footer {
-   
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -201,10 +205,9 @@
     width: 300px;
   }
   .footer-item-2 {
-    flex: 130px 0 0; 
-    text-align: center; 
+    flex: 130px 0 0;
+    text-align: center;
     padding-top: 1em;
-    
 
     text-align: center;
     margin: auto;
@@ -350,7 +353,7 @@
     height: 200px;
     margin-top: 75px;
     margin-left: 25px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -619,7 +622,7 @@
     border-radius: 10px;
     height: 450px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 20px;
@@ -1033,7 +1036,7 @@
     border-radius: 10px;
     height: 350px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -1208,7 +1211,7 @@
     height: 200px;
     margin-top: 75px;
     margin-left: 25px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -1477,7 +1480,7 @@
     border-radius: 10px;
     height: 450px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 20px;
@@ -1880,7 +1883,7 @@
     border-radius: 10px;
     height: 350px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -2037,7 +2040,7 @@
     height: 200px;
     margin-top: 75px;
     margin-left: 25px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -2284,7 +2287,7 @@
     border-radius: 10px;
     height: 450px;
     width: 400px;
-    background-image: url(/pickachu.png);
+    background-image: url(./pickachu.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 20px;

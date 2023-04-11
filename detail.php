@@ -70,7 +70,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
           
           
           <div class="comment"> 
-            <img src="/pickachu.png" alt="Profile Picture"> <!--Hier komt uit de database de comment en van wie, pfp en naam, we tonen alle comments, maar de laatste 3 en de rest via "laden", loopen foreach comments->comment-->
+            <img src="./pickachu.png" alt="Profile Picture"> <!--Hier komt uit de database de comment en van wie, pfp en naam, we tonen alle comments, maar de laatste 3 en de rest via "laden", loopen foreach comments->comment-->
             <div class="comment-info">
               <h4 class="comment-name">John Doe</h4>
               <p class="comment-text">Great post! Keep up the good work.</p>
@@ -78,7 +78,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
           </div>
           
           <div class="add-comment">  <!--Hier komt uit de database de pfp van de persoon die ingelogd is-->
-            <img src="/pickachu.png" alt="Your Profile Picture">
+            <img src="./pickachu.png" alt="Your Profile Picture">
             <textarea style="resize: none;" placeholder="Write a comment..."></textarea>
             <button class="comment-button">Comment</button>  <!-- voegt de comment toe in de database van de persoon + foto + naam en print deze af -->
           </div>
