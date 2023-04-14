@@ -2,23 +2,11 @@
   include_once("../inc/bootstrap.php");
   include_once("../inc/functions.inc.php");
 
-  if(isset($_POST['email']) && isset($_POST['password'])){
-      $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-      $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
-      
-      try {
-            if(canLogin($email, $password)){
-                session_start();
-                $_SESSION['loggedin'] = true;
-                $_SESSION['email'] = $email;
-
-                header('Location: ../php/index.php');
-                exit();
-            } 
-      } catch (Throwable $e) {
-          $error = $e->getMessage();
-      }
-    }
+  if (isset($_POST['email']) && isset($_POST['password'])) {
+    $login = new Login($_POST['email'], $_POST['password']);
+    $login->doLogin();
+    $error = $login->getError();
+}
 
 ?>
 

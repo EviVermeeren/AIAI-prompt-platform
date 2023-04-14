@@ -1,7 +1,7 @@
 <?php
 include_once("../inc/bootstrap.php");
 
-$message="";
+$message = "";
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: ../php/login.php');
@@ -9,10 +9,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 $email = $_SESSION["email"];
-
-$dsn = "mysql:host=localhost;dbname=promptswap";
-$user = "evi";
-$pass = "12345";
 
 try {
     $conn = Db::getInstance();
@@ -60,16 +56,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES['profile_picture'])) {
         $picture_file = $_FILES['profile_picture']['tmp_name'];
         $picture_name = $_FILES['profile_picture']['name'];
-        move_uploaded_file($picture_file, "media/" . $picture_name);
-        $profile_picture = "AIAI-prompt-platform-main/media/" . $picture_name;
+        move_uploaded_file($picture_file, "../media/" . $picture_name);
+        $profile_picture = "../media/" . $picture_name;
         var_dump($_FILES);
     }
     
     if (isset($_FILES['profile_banner'])) {
         $banner_file = $_FILES['profile_banner']['tmp_name'];
         $banner_name = $_FILES['profile_banner']['name'];
-        move_uploaded_file($banner_file, "media/" . $banner_name);
-        $profile_banner = "AIAI-prompt-platform-main/media/" . $banner_name;
+        move_uploaded_file($banner_file, "../media/" . $banner_name);
+        $profile_banner = "../media/" . $banner_name;
         var_dump($_FILES);
     }
 
