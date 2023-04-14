@@ -55,7 +55,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         require '../vendor/autoload.php';
 
         $email = new \SendGrid\Mail\Mail(); 
-        $email->setFrom("evivermeeren@hotmail.com", "Example User");
+        $email->setFrom("evivermeeren@hotmail.com", "PromptSwap");
         $email->setSubject("Verify your email address");
         $email->addTo($_POST['email'], $_POST['username']);
         $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/promptswap/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code");

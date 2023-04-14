@@ -8,6 +8,11 @@
     $error = $login->getError();
 }
 
+if (isset($_SESSION['message'])) {
+  $worked = $_SESSION['message'];
+  unset($_SESSION['message']); // clear the message so it only displays once
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +59,10 @@
       
       <?php if(isset($error)): ?>
         <div class="alert"><?php echo $error ?></div>
+      <?php endif; ?>
+
+      <?php if(isset($worked)): ?>
+        <div class="alert"><?php echo $worked ?></div>
       <?php endif; ?>
 
       <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
