@@ -1,24 +1,24 @@
 <?php
-include_once("../inc/bootstrap.php");
-	include_once("../inc/functions.inc.php");
+  include_once("../inc/bootstrap.php");
+  include_once("../inc/functions.inc.php");
 
-	if(!empty($_POST)){
+  if(isset($_POST['email']) && isset($_POST['password'])){
+      $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+      $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
+      
+      try {
+            if(canLogin($email, $password)){
+                session_start();
+                $_SESSION['loggedin'] = true;
+                $_SESSION['email'] = $email;
 
-		$email = $_POST['email'];
-		$password = $_POST['password'];
-	
-		if(canLogin($email, $password)){
-
-			session_start();
-			$_SESSION['loggedin'] = true;
-      $_SESSION['email'] = $email;
-
-			header('Location: ../php/index.php');
-	
-		} else {
-			$error = true;
-		}
-	}
+                header('Location: ../php/index.php');
+                exit();
+            } 
+      } catch (Throwable $e) {
+          $error = $e->getMessage();
+      }
+    }
 
 ?>
 
@@ -65,7 +65,7 @@ include_once("../inc/bootstrap.php");
       </nav>
       
       <?php if(isset($error)): ?>
-        <div class="alert">That password was incorrect. Please try again</div>
+        <div class="alert"><?php echo $error ?></div>
       <?php endif; ?>
 
       <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

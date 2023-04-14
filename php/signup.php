@@ -1,8 +1,10 @@
 <?php 
 
 include_once("../inc/bootstrap.php");
+$config = parse_ini_file('../config/config.ini', true);
+$key = $config['keys']['sendgridapikey'];
 
-if(!empty($_POST)){
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
   $firstname = htmlspecialchars($_POST["firstname"], ENT_QUOTES, 'UTF-8');
   $lastname = htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8');
@@ -30,23 +32,49 @@ if(!empty($_POST)){
 
       // Check if email is already in use
       $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-      $query->bindValue(":email", $email);
+      $query->bindValue(":email", $email, PDO::PARAM_STR);
       $query->execute();
       $count = $query->fetchColumn();
 
       // If email is not in use and is valid, create a new user
       if ($count == 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        // Insert user into database
-        $query = $conn->prepare("INSERT INTO users (email, password, firstname, lastname, username, profile_picture, profile_banner) VALUES (:email, :password, :firstname, :lastname, :username, '../media/pickachu.png', './achtergrond.jpg')");
-        $query->bindValue(":email", $email);
-        $query->bindValue(":password", $password);
-        $query->bindValue(":firstname", $firstname);
-        $query->bindValue(":lastname", $lastname);
-        $query->bindValue(":username", $username);
+        // Generate verification code
+        $verification_code = uniqid();
+
+        // Insert user into database with verification code
+        $query = $conn->prepare("INSERT INTO users (email, password, firstname, lastname, username, profile_picture, profile_banner, verification_code) VALUES (:email, :password, :firstname, :lastname, :username, '../media/pickachu.png', './achtergrond.jpg', :verification_code)");
+        $query->bindValue(":email", $email, PDO::PARAM_STR);
+        $query->bindValue(":password", $password, PDO::PARAM_STR);
+        $query->bindValue(":firstname", $firstname, PDO::PARAM_STR);
+        $query->bindValue(":lastname", $lastname, PDO::PARAM_STR);
+        $query->bindValue(":username", $username, PDO::PARAM_STR);
+        $query->bindValue(":verification_code", $verification_code, PDO::PARAM_STR);
         $query->execute();
 
+        // Send email to user
+        require '../vendor/autoload.php';
+
+        $email = new \SendGrid\Mail\Mail(); 
+        $email->setFrom("evivermeeren@hotmail.com", "Example User");
+        $email->setSubject("Verify your email address");
+        $email->addTo($_POST['email'], $_POST['username']);
+        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/promptswap/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code");
+        $email->addContent(
+            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/promptswap/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
+        );
+        $sendgrid = new \SendGrid($key);
+        try {
+            $response = $sendgrid->send($email);
+            print $response->statusCode() . "\n";
+            print_r($response->headers());
+            print $response->body() . "\n";
+        } catch (Exception $e) {
+            echo 'Caught exception: '. $e->getMessage() ."\n";
+        }
+
         // Redirect to login page
-        header('Location: ../php/login.php');
+        header('Location: ../php/emailsent.php');
+        exit;
       } else {
         $error = "Invalid email or email already in use.";
       }
