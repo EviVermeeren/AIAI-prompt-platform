@@ -8,7 +8,7 @@ class User {
     public function __construct($email) {
         $this->email = $email;
     }
-
+    
     public function getProfilePicture() {
         $conn = Db::getInstance();
         $query = $conn->prepare("SELECT profile_picture FROM users WHERE email = :email");
