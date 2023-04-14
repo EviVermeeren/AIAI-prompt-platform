@@ -18,7 +18,7 @@ try {
     exit;
 }
 
-$query = $conn->prepare("SELECT bio, profile_picture, profile_banner, password FROM users WHERE email = :email");
+$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner, password FROM users WHERE email = :email");
 
 $query->bindValue(":email", $email);
 $query->execute();
@@ -28,18 +28,21 @@ $bio = $row['bio'];
 $profile_picture = $row['profile_picture'];
 $profile_banner = $row['profile_banner'];
 $hashed_password = $row['password'];
+$firstname = $row['firstname'];
+$lastname = $row['lastname'];
+$username = $row['username'];
 
-if (empty($profile_banner)) {
-    $banner_src = "../media/achtergrond.jpg";
-} else {
+if (!empty($profile_banner)) {
     $banner_src = $profile_banner;
-}
-
-if (empty($profile_picture)) {
-    $picture_src = "../media/pickachu.png";
-} else {
+  } else {
+    $banner_src = "../media/achtergrond.jpg";
+  }
+  
+  if (!empty($profile_picture)) {
     $picture_src = $profile_picture;
-}
+  } else {
+    $picture_src = "../media/pickachu.png";
+  }
 
 // Define an array of default profile pictures
 $profilePictures = array(
@@ -47,16 +50,9 @@ $profilePictures = array(
     "../media/default2.jpg",
     "../media/default3.jpg",
     "../media/default4.jpg",
-    "../media/default5.jpg"
+    "../media/default5.jpg",
+    "../media/pickachu.png"
   );
-
-$bannerPictures = array(
-    "../media/default6.jpg",
-    "../media/default7.jpg",
-    "../media/default8.jpg",
-    "../media/default9.jpg",
-    "../media/default10.jpg"
-);
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
@@ -67,8 +63,7 @@ $bannerPictures = array(
     $new_password = $_POST["newpassword"];
     $repeat_password = $_POST["repeatnewpassword"];
     $bio = $_POST["bio"];
-    $profile_picture = $_POST["profile_picture"];
-    $profile_banner = $_POST["profile_banner"];
+    $profile_picture = isset($_POST["profile_picture"]) ? $_POST["profile_picture"] : $profile_picture;
 
     // Check if new password and repeat password match
     if (!empty($new_password) && $new_password !== $repeat_password) {
@@ -90,8 +85,7 @@ $bannerPictures = array(
     }
 
     // Update database with form data
-    $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture, profile_banner=:profile_banner";
-    $parameters = array(':firstname' => $firstname, ':lastname' => $lastname, ':username' => $username, ':bio' => $bio, ':profile_picture' => $profile_picture, ':profile_banner' => $profile_banner);
+    $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture";
 
     // Update password, if provided
     if (!empty($new_password)) {
@@ -100,7 +94,7 @@ $bannerPictures = array(
     }
 
     $sql .= " WHERE email=:email";
-    $parameters[':email'] = $email;
+    $parameters = array(':firstname' => $firstname, ':lastname' => $lastname, ':username' => $username, ':bio' => $bio, ':profile_picture' => $profile_picture, ':email' => $email);
 
     $query = $conn->prepare($sql);
     $result = $query->execute($parameters);
@@ -109,7 +103,7 @@ $bannerPictures = array(
         header("Location: ../php/account.php");
         exit;
     } else {
-        $message = "Failed to update account.";
+        $message = "Your account has not been updated";
     }
 }
 ?>
@@ -139,13 +133,13 @@ $bannerPictures = array(
         <p class="errormessage"><?php echo $message ?></p>
 
         <label for="title">First name</label><br>
-        <input class="inputfield" type="text" id="title" name="firstname"><br><br>
+        <input class="inputfield" type="text" id="title" name="firstname" value="<?php echo $firstname; ?>"><br><br>
 
         <label for="title">Last name</label><br>
-        <input class="inputfield" type="text" id="title" name="lastname"><br><br>
+        <input class="inputfield" type="text" id="title" name="lastname" value="<?php echo $lastname; ?>"><br><br>
 
         <label for="title">Username</label><br>
-        <input class="inputfield" type="text" id="title" name="username"><br><br>
+        <input class="inputfield" type="text" id="title" name="username" value="<?php echo $username; ?>"><br><br>
       
         <label for="title">Current password</label><br>
         <input class="inputfield" type="password" id="title" name="password"><br><br>
@@ -159,19 +153,10 @@ $bannerPictures = array(
         <label for="title">Bio</label><br>
         <textarea class="inputfield" id="bio" name="bio"><?php echo $bio ?></textarea><br><br>
 
-        <p style="color: #3e3e3e;">Profile picture</p>
         <?php foreach ($profilePictures as $picture) { ?>
         <label>
-            <input type="radio" name="profile_picture" value="<?php echo $picture; ?>">
+        <input type="radio" name="profile_picture" value="<?php echo $picture; ?>" <?php if ($picture === $profile_picture) echo "checked"; ?>>
             <img src="<?php echo $picture; ?>" alt="Profile Picture" style="width: 100px;">
-        </label>
-        <?php } ?>
-
-        <p style="color: #3e3e3e;">Banner picture</p>
-        <?php foreach ($bannerPictures as $bpicture) { ?>
-        <label>
-            <input type="radio" name="profile_banner" value="<?php echo $bpicture; ?>">
-            <img src="<?php echo $bpicture; ?>" alt="Banner Picture" style="width: 300px;">
         </label>
         <?php } ?>
 
