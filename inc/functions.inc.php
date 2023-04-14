@@ -38,4 +38,10 @@
         return $result;
     }
    
+	function getProfileImages($banner, $picture) {
+		$banner_src = !empty($banner) ? $banner : "../media/achtergrond.jpg";
+		$picture_src = !empty($picture) ? $picture : "../media/pickachu.png";
+		return array('banner' => $banner_src, 'picture' => $picture_src);
+	}
+	
 ?>

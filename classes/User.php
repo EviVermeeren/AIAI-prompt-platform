@@ -27,6 +27,14 @@ class User {
         return !empty($profile_banner) ? $profile_banner : "../media/achtergrond.jpg";
     }
 
+    public function getId() {
+        $conn = Db::getInstance();
+        $query = $conn->prepare("SELECT id FROM users WHERE email = :email");
+        $query->bindValue(":email", $this->email);
+        $query->execute();
+        return $query->fetchColumn();
+    }
+
     public function getBio() {
         $conn = Db::getInstance();
         $query = $conn->prepare("SELECT bio FROM users WHERE email = :email");

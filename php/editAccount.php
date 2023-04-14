@@ -32,27 +32,9 @@ $firstname = $row['firstname'];
 $lastname = $row['lastname'];
 $username = $row['username'];
 
-if (!empty($profile_banner)) {
-    $banner_src = $profile_banner;
-  } else {
-    $banner_src = "../media/achtergrond.jpg";
-  }
-  
-  if (!empty($profile_picture)) {
-    $picture_src = $profile_picture;
-  } else {
-    $picture_src = "../media/pickachu.png";
-  }
 
 // Define an array of default profile pictures
-$profilePictures = array(
-    "../media/default1.jpg",
-    "../media/default2.jpg",
-    "../media/default3.jpg",
-    "../media/default4.jpg",
-    "../media/default5.jpg",
-    "../media/pickachu.png"
-  );
+$profilePictures = ProfilePicture::getDefaultPictures();
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data

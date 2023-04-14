@@ -1,5 +1,6 @@
 <?php
 include_once("../inc/bootstrap.php");
+include_once("../inc/functions.inc.php");
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: ../php/login.php');
@@ -13,17 +14,14 @@ $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();
 $username = $user->getUsername();
 
-if (!empty($profile_banner)) {
-  $banner_src = $profile_banner;
-} else {
-  $banner_src = "../media/achtergrond.jpg";
-}
-
-if (!empty($profile_picture)) {
-  $picture_src = $profile_picture;
-} else {
-  $picture_src = "../media/pickachu.png";
-}
+//this is the url that will be copied to the clipboard when the share button is clicked
+//it will be the url to the account page of the user that is currently logged in
+//the id of the user is added to the url so that the account page can be loaded with the correct data
+//the id is retrieved from the database
+//javascript:void(0) is added to the url so that the page doesn't reload when the button is clicked
+//the javascript function copyToClipboard() is called when the button is clicked
+$id = $user->getId();
+$share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.php?id=$id";
 
 ?>
 
@@ -54,6 +52,7 @@ if (!empty($profile_picture)) {
             <a class="btnfollow" href="#">Follow</a>
             <a class="btnfollow" href="#">Flag</a>
             <a class="btnfollow" href="../php/editAccount.php">Edit Account</a>
+            <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a>
         </div>
         </div>  
 
@@ -83,5 +82,6 @@ if (!empty($profile_picture)) {
         </div>
 
         <?php include_once("../inc/foot.inc.php"); ?>
+        <script src="../css/script.js"></script>
   </body>
 </html>
