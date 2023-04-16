@@ -1,7 +1,7 @@
 <?php 
 
-    spl_autoload_register(function ($class){
-        include_once("../classes/" . $class . ".php");
-    });
+    spl_autoload_register(function ($class){ // autoload classes
+        include_once("../classes/" . $class . ".php"); // include class
+    }); 
 
-    session_start();
+    session_start(); // start session

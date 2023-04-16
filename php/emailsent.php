@@ -9,21 +9,10 @@
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-    <nav>
-      <div class="logo">
-        <a href="index.php">PromptSwap</a>
-    </div>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
 
-      <div class="nav-items">
-        <li><a href="../php/marketplace.php">Marketplace</a></li>
-        <li><a href="../php/upload.php">Upload</a></li>
-        <li><a href="../php/login.php">Login</a></li>
-      </div>
-    </nav>
+    <h2 style="margin-left: 120px">Your verification e-mail has been sent.</h2> <!-- This is the message that will be displayed when the user clicks the submit button -->
 
-    <h2 style="margin-left: 120px">Your verification e-mail has been sent.</h2>
-
-
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- This is the footer -->
   </body>
 </html>

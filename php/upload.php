@@ -1,10 +1,10 @@
 <?php
 
-include_once("../inc/bootstrap.php");
+include_once("../inc/bootstrap.php"); // include bootstrap file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-  header('Location: ../php/login.php');
-    exit;
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if user is not logged in
+  header('Location: ../php/login.php'); // redirect to login page
+    exit; // exit script
 }
 
 ?>
@@ -20,7 +20,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-  <?php include_once("../inc/nav.inc.php"); ?>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
 
     
     <form class="uploadform">
@@ -47,6 +47,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </form>
 
 
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- This is the footer -->
   </body>
 </html>

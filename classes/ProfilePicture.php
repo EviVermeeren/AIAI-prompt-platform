@@ -1,7 +1,7 @@
-<?php
-class ProfilePicture {
-    public static function getDefaultPictures() {
-        return array(
+<?php 
+class ProfilePicture { // ProfilePicture class
+    public static function getDefaultPictures() { // get default pictures
+        return array( // return array
             "../media/default1.jpg",
             "../media/default2.jpg",
             "../media/default3.jpg",

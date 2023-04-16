@@ -1,10 +1,10 @@
 <?php
 
-include_once("../inc/bootstrap.php");
+include_once("../inc/bootstrap.php"); // include bootstrap file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: ../php/login.php');
-    exit;
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if user is not logged in
+    header('Location: ../php/login.php'); // redirect to login page
+    exit; // exit script
 }
 
 ?>
@@ -43,6 +43,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
       <div class="imgheader"></div>
     </div>
 
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- include the footer -->
   </body>
 </html>

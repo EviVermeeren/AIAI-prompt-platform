@@ -1,12 +1,44 @@
 <?php
 
-include_once("../inc/bootstrap.php");
+include_once("../inc/bootstrap.php"); // include the bootstrap file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-  header('Location: ../php/login.php');
-    exit;
+
+if (!isset($_GET['id'])) { // check if the id parameter is set
+  echo "Error: ID parameter not set"; // if not, display an error message
+  exit; // and exit the script
 }
 
+$id = $_GET['id']; // if the id parameter is set, store it in a variable
+$conn = Db::getInstance(); // connect to the database
+if (!$conn) { // check if the connection was successful
+  echo "Error: Failed to connect to database"; // if not, display an error message
+  exit; // and exit the script
+}  
+
+$sql = "SELECT * FROM prompts WHERE id = $id"; // query the database to get the prompt with the specified ID
+$result = $conn->query($sql); // execute the query
+if (!$result) { // check if the query was successful
+  echo "Error: Failed to execute query: " . $conn->error; // if not, display an error message
+  exit; // and exit the script 
+}
+
+if ($result->rowCount() > 0) { // check if the query returned any results
+  while($row = $result->fetch(PDO::FETCH_ASSOC)) { // loop through the results
+    $name = $row['name']; // store the name of the prompt in a variable
+    $user = $row['user']; // store the name of the user in a variable
+    $rating = $row['rating']; // store the rating of the prompt in a variable
+    $description = $row['description']; // store the description of the prompt in a variable
+    $price = $row['price']; // store the price of the prompt in a variable
+    $characteristics = $row['characteristics']; // store the characteristics of the prompt in a variable
+    $model = $row['model']; // store the model of the prompt in a variable
+    $prompt = $row['prompt']; // store the prompt in a variable
+    $pictures = $row['pictures']; // store the pictures of the prompt in a variable
+    $date = $row['date']; // store the date of the prompt in a variable
+  }
+} else { // if the query returned no results
+  echo "Error: No results found"; // display an error message
+  exit; // and exit the script
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,34 +52,44 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-  <?php include_once("../inc/nav.inc.php"); ?>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- include the navigation bar -->
 
-    <div class="detailheader">
-        <div class="detailimgheader"></div>
-        <div>
+  <div class="detailheader"> 
+    <div class="detailimgheader"><img class="detailimgheader" src="<?php echo $pictures ?>" alt=""></div>
+    <div>
 
-          <div class="detailinfo">
-            <h1>Animals in cinema <span>❤</span></h1> <!--Hier komt uit de database de titel aan de hand van waar je net op hebt geklikt-->
-   
-            <h2>DaBawsVL <span>🦸‍♂️</span> <span>⭐⭐⭐⭐⭐</span> </h2> <!--Hier komt uit de database de username aan de hand van waar je net op hebt geklikt-->
-  
+    <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true): ?> <!-- check if the user is logged in -->
+        <div class="detailinfo"> <!-- if the user is logged in, display the prompt details -->
+            <h1> <?php echo $name ?></h1>
+            <h2><?php echo $user ?> <span>🦸‍♂️</span> 
+                <?php 
+                    for($i=0; $i<$rating; $i++){
+                        echo '<span>⭐</span>';
+                    } 
+                ?>
+            </h2>
             <h3 class="desc">
-                Introducing our brand new mid-journey prompt - 
-                Anthropomorphic Gangsta Animals! Take your writing to the next level with these badass animal characters. <br><br>
-                Choose your subject and watch as they come to life with attitude and style.  Whether it's a gritty crime thriller 
-                or a quirky comedy, these gangsta animals will add a unique edge to your story. Impress your readers with unforgettable 
-                characters that jump off the page. With our prompt, you'll have everything you need to stand out!<br>
-            </h3> <!--Hier komt uit de database de description aan de hand van waar je net op hebt geklikt-->
-            <h2 class="money">💶 2</h2>
+            <?php echo $description ?><br>
+            </h3>
+            <h2 class="money">💶 <?php echo $price ?></h2>
         </div>
-          <div class="detailbuttondiv">
-            <a class="detailbutton" href="../php/marketplace.php">Buy prompt</a>
-            <a class="icon" href="#">📲</a>
-            <a class="icon" href="#">🏳‍🌈</a>
-          </div>
+    <?php else: ?> <!-- if the user is not logged in, display a message -->
+        <div class="detailinfo">
+            <h1> <?php echo $name ?></h1> 
+            <h3 class="desc">
+                <a href="../php/login.php">Want to see more details? Login.</a> 
+            </h3>
         </div>
-        
-      </div>
+    <?php endif; ?> <!-- end of the if statement --> 
+
+    <div class="detailbuttondiv">
+        <a class="detailbutton" href="#">Buy prompt</a> <!-- link to the buy prompt page, will go to login if not logged in -->
+        <a class="icon" href="#">📲</a> 
+        <a class="icon" href="#">🏳‍🌈</a>
+    </div>
+    </div>
+</div>
+
 
       <div class="like-comment-section">
 
@@ -87,6 +129,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     
 
 
-      <?php include_once("../inc/foot.inc.php"); ?>
+      <?php include_once("../inc/foot.inc.php"); ?> <!-- include the footer -->
   </body>
 </html>

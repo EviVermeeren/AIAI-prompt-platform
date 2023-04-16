@@ -1,15 +1,15 @@
 <?php
-  include_once("../inc/bootstrap.php");
-  include_once("../inc/functions.inc.php");
+  include_once("../inc/bootstrap.php"); // This is the bootstrap file
+  include_once("../inc/functions.inc.php"); // This is the functions file
 
-  if (isset($_POST['email']) && isset($_POST['password'])) {
-    $login = new Login($_POST['email'], $_POST['password']);
-    $login->doLogin();
-    $error = $login->getError();
+  if (isset($_POST['email']) && isset($_POST['password'])) { // if email and password are set
+    $login = new Login($_POST['email'], $_POST['password']); // create new login object
+    $login->doLogin(); // do login
+    $error = $login->getError(); // get error message
 }
 
-if (isset($_SESSION['message'])) {
-  $worked = $_SESSION['message'];
+if (isset($_SESSION['message'])) { // if message is set
+  $worked = $_SESSION['message']; // set message
   unset($_SESSION['message']); // clear the message so it only displays once
 }
 
@@ -26,29 +26,7 @@ if (isset($_SESSION['message'])) {
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-    <nav>
-      <div class="logo">
-        <a href="index.php">PromptSwap</a>
-    </div>
-
-      <div>
-        <form action="#">
-          <input
-            type="search"
-            class="search-data"
-            placeholder="Search here..."
-            required
-          />
-          <button type="submit" class="fas fas-search">→</button>
-        </form>
-      </div>
-
-      <div class="nav-items">
-        <li><a href="../php/marketplace.php">Marketplace</a></li>
-        <li><a href="../php/upload.php">Upload</a></li>
-        <li><a href="../php/login.php">Login</a></li>
-      </div>
-    </nav>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
 
     <div id="app">
       <h1 class="titlelogin">PromptSwap</h1>
@@ -57,15 +35,15 @@ if (isset($_SESSION['message'])) {
           <a href="../php/signup.php" id="tabSignIn">Sign up</a>
       </nav>
       
-      <?php if(isset($error)): ?>
-        <div class="alert"><?php echo $error ?></div>
+      <?php if(isset($error)): ?> <!-- If there is an error, display it -->
+        <div class="alert"><?php echo $error ?></div> <!-- Display the error -->
       <?php endif; ?>
 
-      <?php if(isset($worked)): ?>
-        <div class="alert"><?php echo $worked ?></div>
+      <?php if(isset($worked)): ?> <!-- If there is a message, display it -->
+        <div class="alert"><?php echo $worked ?></div> <!-- Display the message -->
       <?php endif; ?>
 
-      <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+      <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>"> <!-- Form for logging in -->
         <label for="email">Email</label>
         <input type="text" id="email" name="email">
 
@@ -78,6 +56,6 @@ if (isset($_SESSION['message'])) {
     </div>
 
 
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- This is the footer -->
   </body>
 </html>

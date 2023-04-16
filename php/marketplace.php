@@ -1,18 +1,24 @@
 <?php
-include_once("../inc/bootstrap.php");
+include_once("../inc/bootstrap.php"); // include bootstrap file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: ../php/login.php');
-    exit;
-}
-
-// Connect to database
-$conn = Db::getInstance();
+$promptsPerPage = 15; // Set the number of prompts to display per page
+$page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number from the query string, or default to 1
+$offset = ($page - 1) * $promptsPerPage; // Calculate the offset for the current page
 
 
-// Query the database to get the prompts
-$sql = "SELECT name, model, price FROM prompts ORDER BY date DESC";
-$result = $conn->query($sql);
+$conn = Db::getInstance(); // Connect to database
+
+// Query the database to get the total number of prompts
+$sql = "SELECT COUNT(*) AS count FROM prompts"; // Get the total number of prompts
+$result = $conn->query($sql); // Execute the query
+$row = $result->fetch(); // Fetch the result
+$totalPrompts = $row['count']; // Get the total number of prompts
+
+$totalPages = ceil($totalPrompts / $promptsPerPage); // Calculate the total number of pages
+
+// Query the database to get the prompts for the current page
+$sql = "SELECT * FROM prompts ORDER BY date DESC LIMIT $promptsPerPage OFFSET $offset"; // Query the database to get the prompts for the current page
+$result = $conn->query($sql); // Execute the query
 
 ?>
 
@@ -27,7 +33,7 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-  <?php include_once("../inc/nav.inc.php"); ?>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
 
     <div class="marketplacefilter">
 
@@ -93,32 +99,52 @@ $result = $conn->query($sql);
                 <h1>All prompts</h1>
             </div>
 
-            <div class="promptflex"> <!-- Hier ga je éénmaal een prompt nemen in html en daarover lussen met een foreach in php vanuit uw database, dus niet de html aanpassen-->
-                
+            <div class="promptflex">
             <?php
-                // assuming $data is the array of data from your database
-                foreach ($result as $row) {
-                    // extract the relevant data from the row
-                    $name = $row['name'];
-                    $model = $row['model'];
-                    $price = $row['price'];
+                foreach ($result as $row) { // Loop through the result and display the prompts
+                    
+                    $name = $row['name']; // Get the name of the prompt
+                    $model = $row['model']; // Get the model of the prompt
+                    $price = $row['price']; // Get the price of the prompt
+                    $pictures = $row['pictures']; // Get the pictures of the prompt
                 ?>
-                    <a href="../php/detail.php">
-                        <div class="prompt">
-                            <p class="modelboxtitle"><?php echo $model ?></p>
-                            <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p>
+                    <a href="../php/detail.php?id=<?php echo $row['id']; ?>"> <!-- Link to detailpage -->
+                        <div class="prompt" style="background-image: url('<?php echo $pictures; ?>')"> <!-- Display the prompt -->
+                            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true): ?> <!-- If the user is logged in, display the price -->
+                                <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
+                                <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p> <!-- Display the name and price -->
+                            <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false): ?> <!-- If the user is not logged in, don't display the price -->
+                                <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
+                            <?php endif; ?> 
                         </div>
                     </a>
-                <?php
-                }
-                ?>
-            </div>
+            <?php
+    }
+?> 
+</div>
+
+<!-- Add pagination links -->
+<div class="pagination"> <!-- Pagination -->
+    <?php if ($page > 1): ?> <!-- If the page is higher than 1, display the previous button -->
+        <a href="?page=<?php echo ($page - 1); ?>">Previous</a> <!-- Link to the previous page -->
+    <?php endif; ?> 
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?> <!-- Loop through the total amount of pages -->
+        <?php if ($i == $page): ?> <!-- If the current page is the same as the page number, display the page number -->
+            <span class="current-page"><?php echo $i; ?></span>  
+        <?php else: ?> <!-- If the current page is not the same as the page number, display the page number as a link -->
+            <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a> 
+        <?php endif; ?> 
+    <?php endfor; ?> 
+    <?php if ($page < $totalPages): ?> <!-- If the page is lower than the total amount of pages, display the next button -->
+        <a href="?page=<?php echo ($page + 1); ?>">Next</a> <!-- Link to the next page -->
+    <?php endif; ?> 
+</div>
 
         </div>  
 
     </div>
 
 
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- Include the footer -->
   </body>
 </html>

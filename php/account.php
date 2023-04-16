@@ -1,18 +1,18 @@
 <?php
-include_once("../inc/bootstrap.php");
-include_once("../inc/functions.inc.php");
+include_once("../inc/bootstrap.php"); //this file contains the database connection
+include_once("../inc/functions.inc.php"); //this file contains the functions that are used in this file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { //if the user is not logged in, redirect to the login page
     header('Location: ../php/login.php');
     exit;
 }
 
-$email = $_SESSION["email"];
-$user = new User($email);
-$profile_picture = $user->getProfilePicture();
-$profile_banner = $user->getProfileBanner();
-$bio = $user->getBio();
-$username = $user->getUsername();
+$email = $_SESSION["email"]; //get the email from the session
+$user = new User($email); //create a new user object
+$profile_picture = $user->getProfilePicture(); //get the profile picture from the database
+$profile_banner = $user->getProfileBanner(); //get the profile banner from the database
+$bio = $user->getBio(); //get the bio from the database
+$username = $user->getUsername(); //get the username from the database
 
 //this is the url that will be copied to the clipboard when the share button is clicked
 //it will be the url to the account page of the user that is currently logged in
@@ -20,8 +20,8 @@ $username = $user->getUsername();
 //the id is retrieved from the database
 //javascript:void(0) is added to the url so that the page doesn't reload when the button is clicked
 //the javascript function copyToClipboard() is called when the button is clicked
-$id = $user->getId();
-$share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.php?id=$id";
+$user_id = $user->getId();
+$share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.php?id=$user_id";
 
 ?>
 
@@ -37,7 +37,7 @@ $share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.
   </head>
   <body>
 
-  <?php include_once("../inc/nav.inc.php"); ?>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- Include navigation -->
 
     <div class="profile">
 
@@ -47,41 +47,34 @@ $share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.
         </div>
 
         <div class="profilename">
-            <h2 class="nameuser"><?php echo $username ?></h2>
+            <h2 class="nameuser"><?php echo $username ?></h2> <!-- Here we display the username of the user -->
             <div class="likeandfollow">
-            <a class="btnfollow" href="#">Follow</a>
-            <a class="btnfollow" href="#">Flag</a>
-            <a class="btnfollow" href="../php/editAccount.php">Edit Account</a>
-            <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a>
+            <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
+            <a class="btnfollow" href="#">Flag</a> <!-- This button will be used to flag the user -->
+            <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
+            <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url?>')">Share</a> <!-- This button will be used to share the account -->
+            
         </div>
         </div>  
 
         <div class="profilebio">
-            <p class="biotext"><?php echo $bio ?></p>
+            <p class="biotext"><?php echo $bio ?></p> <!-- Here we display the bio of the user -->
         </div>
     </div>
 
       <div class="allprompts">
         <div>
-            <h1>All prompts by <span><?php echo $username ?></span></h1><!-- Hier ga je de username nemen van het profiel waar je op zit-->
+            <h1>All prompts by <span><?php echo $username ?></span></h1> <!-- Here we display the username of the user -->
         </div>
 
         <div class="promptflex"> 
           
         <h3 style="margin-top: 50px">You don't have any prompts yet!</h3>
-        <!-- Hier ga je éénmaal een prompt nemen in html en daarover lussen met een foreach in php vanuit uw database, dus niet de html aanpassen-->    
-        <!--
-          <a href="detail.php">
-          <div class="prompt">
-                <p class="modelboxtitle">Stable Diffuson</p> --><!-- telkens de titel van de prompt, als bgi doe je dan de foto uit de database --><!--
-                <p class="promptboxtitle">Animals in cinema <span class="span">💶</span></p>--><!-- tussen de span zet je de prijs, maar dit is geen echt geld --><!--
-            </div>
-          </a>
-          -->
+        <!-- don't change the html here, you update this list with a loop with data from the database, for an example check marketplace.php -->    
 
         </div>
 
-        <?php include_once("../inc/foot.inc.php"); ?>
-        <script src="../css/script.js"></script>
+        <?php include_once("../inc/foot.inc.php"); ?> <!-- Include footer -->
+        <script src="../css/script.js"></script> <!-- Include script -->
   </body>
 </html>

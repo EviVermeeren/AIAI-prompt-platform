@@ -1,92 +1,105 @@
 <?php
-include_once("../inc/bootstrap.php");
 
-$message = "";
+include_once("../inc/bootstrap.php"); // include bootstrap file
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+$message = ""; // initialize message variable
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if user is not logged in, redirect to login page
     header('Location: ../php/login.php');
     exit;
 }
 
-$email = $_SESSION["email"];
-
-try {
-    $conn = Db::getInstance();
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    $message = "Try again later: " . $e->getMessage();
-    exit;
+$email = $_SESSION["email"]; // get email from session
+ 
+try { // connect to database
+    $conn = Db::getInstance(); // get database connection
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set error mode
+} catch(PDOException $e) { // if connection fails, display error message
+    $message = "Try again later: " . $e->getMessage(); // set error message
+    exit; // exit script
 }
 
-$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner, password FROM users WHERE email = :email");
+$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner, password FROM users WHERE email = :email"); // get user data from database
 
-$query->bindValue(":email", $email);
-$query->execute();
+$query->bindValue(":email", $email); // bind email to query
+$query->execute(); // execute query
 
-$row = $query->fetch(PDO::FETCH_ASSOC);
-$bio = $row['bio'];
-$profile_picture = $row['profile_picture'];
-$profile_banner = $row['profile_banner'];
-$hashed_password = $row['password'];
-$firstname = $row['firstname'];
-$lastname = $row['lastname'];
-$username = $row['username'];
+$row = $query->fetch(PDO::FETCH_ASSOC); // fetch data from query
+$bio = $row['bio']; // get bio from database
+$profile_picture = $row['profile_picture']; // get profile picture from database
+$profile_banner = $row['profile_banner']; // get profile banner from database
+$hashed_password = $row['password']; // get hashed password from database
+$firstname = $row['firstname']; // get firstname from database
+$lastname = $row['lastname']; // get lastname from database 
+$username = $row['username']; // get username from database
 
+$profilePictures = ProfilePicture::getDefaultPictures(); // get default profile pictures from database (array)
 
-// Define an array of default profile pictures
-$profilePictures = ProfilePicture::getDefaultPictures();
-
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $firstname = $_POST["firstname"];
-    $lastname = $_POST["lastname"];
-    $username = $_POST["username"];
-    $current_password = $_POST["password"];
-    $new_password = $_POST["newpassword"];
-    $repeat_password = $_POST["repeatnewpassword"];
-    $bio = $_POST["bio"];
-    $profile_picture = isset($_POST["profile_picture"]) ? $_POST["profile_picture"] : $profile_picture;
+  if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
+    // Get form data from POST
+    $firstname = $_POST["firstname"]; // get firstname from form
+    $lastname = $_POST["lastname"]; // get lastname from form 
+    $username = $_POST["username"]; // get username from form
+    $current_password = $_POST["password"]; // get current password from form
+    $new_password = $_POST["newpassword"]; // get new password from form
+    $repeat_password = $_POST["repeatnewpassword"]; // get repeat password from form
+    $bio = $_POST["bio"]; // get bio from form
+    $profile_picture = isset($_POST["profile_picture"]) ? $_POST["profile_picture"] : $profile_picture; // get profile picture from form
 
     // Check if new password and repeat password match
-    if (!empty($new_password) && $new_password !== $repeat_password) {
-        header("Location: ../php/editAccount.php");
-        $message = "New password and repeat password do not match";
-        exit;
+    if (!empty($new_password) && $new_password !== $repeat_password) { // if new password and repeat password do not match
+        header("Location: ../php/editAccount.php"); // redirect to edit account page
+        $message = "New password and repeat password do not match"; // set error message
+        exit; // exit script
     }
 
     // Check if current password is correct, if a new password is provided
-    if (!empty($new_password) && !password_verify($current_password, $hashed_password)) {
-        header("Location: ../php/editAccount.php");
-        $message = "Current password is incorrect";
-        exit;
-    }
+    if (!empty($new_password) && !password_verify($current_password, $hashed_password)) { // if current password is incorrect
+        header("Location: ../php/editAccount.php"); // redirect to edit account page
+        $message = "Current password is incorrect"; // set error message
+        exit; // exit script 
+    } 
 
     // Hash new password, if provided
-    if (!empty($new_password)) {
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+    if (!empty($new_password)) { // if new password is provided
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT); // hash new password
     }
+
+    // Check if the new username is already in use
+        $username_query = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username AND email != :email"); // get user data from database
+        $username_query->bindValue(":username", $username); // bind username to query
+        $username_query->bindValue(":email", $email); // bind email to query
+        $username_query->execute(); // execute query
+
+        $username_row = $username_query->fetch(PDO::FETCH_ASSOC); // fetch data from query
+
+        if ($username_row['count'] > 0) { // if username is already in use 
+            header("Location: ../php/editAccount.php"); // redirect to edit account page
+            $message = "Username already in use"; // set error message
+            exit;
+        }
 
     // Update database with form data
     $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture";
 
     // Update password, if provided
-    if (!empty($new_password)) {
-        $sql .= ", password=:hashed_password";
-        $parameters[':hashed_password'] = $hashed_password;
+    if (!empty($new_password)) { // if new password is provided 
+        $sql .= ", password=:hashed_password"; // add password to query
+        $parameters[':hashed_password'] = $hashed_password; // add password to parameters
     }
 
-    $sql .= " WHERE email=:email";
-    $parameters = array(':firstname' => $firstname, ':lastname' => $lastname, ':username' => $username, ':bio' => $bio, ':profile_picture' => $profile_picture, ':email' => $email);
+    $sql .= " WHERE email=:email"; // add email to query
+    $parameters = array(':firstname' => $firstname, ':lastname' => $lastname, ':username' => $username, ':bio' => $bio, ':profile_picture' => $profile_picture, ':email' => $email); // add parameters to array
 
-    $query = $conn->prepare($sql);
-    $result = $query->execute($parameters);
+    $query = $conn->prepare($sql); // prepare query
+    $result = $query->execute($parameters); // execute query
 
-    if ($result && $query->rowCount() > 0) {
-        header("Location: ../php/account.php");
-        exit;
-    } else {
-        $message = "Your account has not been updated";
-    }
+    if ($result && $query->rowCount() > 0) { // if query is successful
+        header("Location: ../php/account.php"); // redirect to account page
+        exit; // exit script
+    } else { // if query is not successful
+        $message = "Your account has not been updated"; // set error message
+    } 
 }
 ?>
 
@@ -101,27 +114,27 @@ $profilePictures = ProfilePicture::getDefaultPictures();
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-  <?php include_once("../inc/nav.inc.php"); ?>
+  <?php include_once("../inc/nav.inc.php"); ?> <!-- include navigation bar -->
 
     <div class="profile">
 
         <div class="profileimg">
-            <img class="banner2" src="<?php echo $profile_banner ?>" alt="">
-            <img class="pfp2" src="<?php echo $profile_picture ?>" alt="">
+            <img class="banner2" src="<?php echo $profile_banner ?>" alt=""> <!-- display profile banner -->
+            <img class="pfp2" src="<?php echo $profile_picture ?>" alt=""> <!-- display profile picture -->
         </div>
         
     <form method="post" class="editAccount">
 
-        <p class="errormessage"><?php echo $message ?></p>
+        <p class="errormessage"><?php echo $message ?></p> <!-- display error message -->
 
         <label for="title">First name</label><br>
-        <input class="inputfield" type="text" id="title" name="firstname" value="<?php echo $firstname; ?>"><br><br>
+        <input class="inputfield" type="text" id="title" name="firstname" value="<?php echo $firstname; ?>"><br><br> <!-- display current firstname -->
 
         <label for="title">Last name</label><br>
-        <input class="inputfield" type="text" id="title" name="lastname" value="<?php echo $lastname; ?>"><br><br>
+        <input class="inputfield" type="text" id="title" name="lastname" value="<?php echo $lastname; ?>"><br><br> <!-- display current lastname -->
 
         <label for="title">Username</label><br>
-        <input class="inputfield" type="text" id="title" name="username" value="<?php echo $username; ?>"><br><br>
+        <input class="inputfield" type="text" id="title" name="username" value="<?php echo $username; ?>"><br><br> <!-- display current username -->
       
         <label for="title">Current password</label><br>
         <input class="inputfield" type="password" id="title" name="password"><br><br>
@@ -137,8 +150,8 @@ $profilePictures = ProfilePicture::getDefaultPictures();
 
         <?php foreach ($profilePictures as $picture) { ?>
         <label>
-        <input type="radio" name="profile_picture" value="<?php echo $picture; ?>" <?php if ($picture === $profile_picture) echo "checked"; ?>>
-            <img src="<?php echo $picture; ?>" alt="Profile Picture" style="width: 100px;">
+        <input type="radio" name="profile_picture" value="<?php echo $picture; ?>" <?php if ($picture === $profile_picture) echo "checked"; ?>> <!-- current profile picture is selected  -->
+            <img src="<?php echo $picture; ?>" alt="Profile Picture" style="width: 100px;"> <!-- display profile pictures -->
         </label>
         <?php } ?>
 
@@ -150,11 +163,11 @@ $profilePictures = ProfilePicture::getDefaultPictures();
         <input type="file" name="profile_banner" accept="image/*"><br><br>
         -->
 
-        <input class="submitbtn" type="submit" value="Save profile">
+        <input class="submitbtn" type="submit" value="Save profile"> 
 
     </form>
 
-    <?php include_once("../inc/foot.inc.php"); ?>
+    <?php include_once("../inc/foot.inc.php"); ?> <!-- include footer -->
 
     </body>
 </html>
