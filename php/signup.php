@@ -59,9 +59,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){ // if form is submitted
         $email->setFrom("evivermeeren@hotmail.com", "PromptSwap"); // set sender 
         $email->setSubject("Verify your email address"); // set subject
         $email->addTo($_POST['email'], $_POST['username']); // set recipient
-        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/promptswap/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"); // set content
+        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"); // set content
         $email->addContent( 
-            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/promptswap/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
+            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
         ); // set content
         $sendgrid = new \SendGrid($key); // create new sendgrid object
         try { // try to send email

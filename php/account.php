@@ -21,7 +21,7 @@ $username = $user->getUsername(); //get the username from the database
 //javascript:void(0) is added to the url so that the page doesn't reload when the button is clicked
 //the javascript function copyToClipboard() is called when the button is clicked
 $user_id = $user->getId();
-$share_url = "http://localhost/promptswap/AIAI-prompt-platform-main/php/account.php?id=$user_id";
+$share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
 
 ?>
 
