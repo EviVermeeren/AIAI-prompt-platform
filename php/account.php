@@ -34,7 +34,7 @@ $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$use
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Account</title>
   <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
 </head>
 
 <body>

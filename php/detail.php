@@ -60,7 +60,7 @@ $results = $stmt->fetchAll();
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detail</title>
   <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
 </head>
 
 <body>
@@ -163,8 +163,6 @@ $results = $stmt->fetchAll();
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           location.reload();
-          const message = document.getElementById("message");
-          message.innerHTML = this.responseText;
 
         }
       };
@@ -178,9 +176,6 @@ $results = $stmt->fetchAll();
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           location.reload();
-
-          const message = document.getElementById("message");
-          message.innerHTML = this.responseText;
 
         }
       };
