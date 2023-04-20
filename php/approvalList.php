@@ -22,7 +22,7 @@ $stmt = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>">
     <script>
         function approvePrompt(id) {
             if (confirm("Are you sure you want to approve this prompt?")) {
@@ -75,6 +75,7 @@ $stmt = $conn->query($sql);
                     <th>Characteristics</th>
                     <th>Submitted By</th>
                     <th>Date Submitted</th>
+                    <th>Picture</th>
                     <th>Action</th>
                 </tr>
                 <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?> <!-- Loop through each prompt needing approval -->
@@ -84,6 +85,7 @@ $stmt = $conn->query($sql);
                         <td><?php echo isset($row["characteristics"]) ? $row["characteristics"] : "" ?></td> <!-- Display the characteristics for the prompt (if it exists) -->
                         <td><?php echo $row["user"] ?></td> <!-- Display the user who submitted the prompt -->
                         <td><?php echo $row["date"] ?></td> <!-- Display the date the prompt was submitted -->
+                        <td> <img src="../media/<?php echo $row["pictures"] ?>" alt="" class="approveimg"></td> <!-- Display the picture of the prompt -->
                         <td>
                             <button onclick="approvePrompt(<?php echo $row['id']; ?>)"> YAS QUEEN 💅</button> <!-- Button to approve the prompt Approve 👍 -->
                             <button onclick="deletePrompt(<?php echo $row['id']; ?>)">Yeet and delete 🖕</button> <!-- Button to reject the prompt Reject 👎 -->
