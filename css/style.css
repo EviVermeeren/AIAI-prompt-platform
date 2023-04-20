@@ -1,6 +1,10 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
 
+#message {
+  color: black;
+}
+
 div.pagination {
   display: flex;
   justify-content: center;

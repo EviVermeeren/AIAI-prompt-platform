@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include_once("../inc/bootstrap.php"); // include bootstrap file
 include_once("../inc/functions.inc.php"); // include functions file
@@ -8,6 +8,7 @@ class Login
     private $email; // email
     private $password; // password
     private $error; // error message
+    private $user_id; // error message
 
     public function __construct($email, $password) // constructor
     {
@@ -22,13 +23,14 @@ class Login
                 session_start(); // start session
                 $_SESSION['loggedin'] = true; // set loggedin to true
                 $_SESSION['email'] = $this->email; // set email
+                $_SESSION['user_id'] = getUserId($this->email); // set user id
 
                 header('Location: ../php/index.php'); // redirect to index page
                 exit(); // exit script
             }
         } catch (Throwable $e) { // if login is not successful
             $this->error = $e->getMessage(); // set error message
-        } 
+        }
     }
 
     public function getError() // get error message

@@ -20,8 +20,7 @@ $username = $user->getUsername(); //get the username from the database
 //the id is retrieved from the database
 //javascript:void(0) is added to the url so that the page doesn't reload when the button is clicked
 //the javascript function copyToClipboard() is called when the button is clicked
-var_dump($user);
-$user_id = $_SESSION['id']; //get the id from the session
+$user_id = $user->getId();
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
 
 ?>
@@ -56,6 +55,11 @@ $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$use
         <a class="btnfollow" href="#">Flag</a> <!-- This button will be used to flag the user -->
         <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
         <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
+
+        <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is  logged in -->
+
+          <a href="../php/favorites.php">Favorites</a>
+        <?php endif; ?>
 
       </div>
     </div>
