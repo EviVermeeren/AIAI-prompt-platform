@@ -16,8 +16,8 @@ $totalPrompts = $row['count']; // Get the total number of prompts
 $totalPages = ceil($totalPrompts / $promptsPerPage); // Calculate the total number of pages
 
 // Query the database to get the prompts for the current page
-$sql = "SELECT * FROM prompts ORDER BY date DESC LIMIT $promptsPerPage OFFSET $offset"; // Query the database to get the prompts for the current page
-$result = $conn->query($sql); // Execute the query
+$sql = "SELECT * FROM prompts WHERE approved=1 ORDER BY date DESC LIMIT $promptsPerPage OFFSET $offset";
+$result = $conn->query($sql);
 
 ?>
 
