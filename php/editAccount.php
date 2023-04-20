@@ -62,7 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
 
     // Hash new password, if provided
     if (!empty($new_password)) { // if new password is provided
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT); // hash new password
+        $options = [ // set options for password hashing
+            'cost' => 12, // set cost to 12
+        ];
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT, $options); // hash new password
     }
 
     // Check if the new username is already in use
@@ -85,16 +88,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     // Update password, if provided
     if (!empty($new_password)) { // if new password is provided 
         $sql .= ", password=:hashed_password"; // add password to query
-        $parameters[':hashed_password'] = $hashed_password; // add password to parameters
     }
 
-    $sql .= " WHERE email=:email"; // add email to query
-    $parameters = array(':firstname' => $firstname, ':lastname' => $lastname, ':username' => $username, ':bio' => $bio, ':profile_picture' => $profile_picture, ':email' => $email); // add parameters to array
+    // Prepare and execute query with parameters
+    $query = $conn->prepare($sql);
+    $query->bindValue(":firstname", $firstname);
+    $query->bindValue(":lastname", $lastname);
+    $query->bindValue(":username", $username);
+    $query->bindValue(":bio", $bio);
+    $query->bindValue(":profile_picture", $profile_picture);
 
-    $query = $conn->prepare($sql); // prepare query
-    $result = $query->execute($parameters); // execute query
+    if (!empty($new_password)) { // if new password is provided 
+        $query->bindValue(":hashed_password", $hashed_password);
+    }
+    $query->execute();
 
-    if ($result && $query->rowCount() > 0) { // if query is successful
+    if ($query->rowCount() > 0) { // if query is successful
         header("Location: ../php/account.php"); // redirect to account page
         exit; // exit script
     } else { // if query is not successful
