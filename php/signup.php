@@ -17,9 +17,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
   $number    = preg_match('@[0-9]@', $password); // check if password contains number
   $specialChars = preg_match('@[^\w]@', $password); // check if password contains special character
 
-  if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) { // if password does not meet strength requirements
-    $error = "Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character."; // set error message
-  } else {
+  // if password does not meet strength requirements
+  if (!$uppercase) { // if password does not contain uppercase letter
+    $error = "Password should include at least one upper case letter."; // set error message
+  }
+  if (!$lowercase) { // if password does not contain lowercase letter
+    $error = "Password should include at least one lower case letter."; // set error message
+  }
+  if (!$number) { // if password does not contain number
+    $error = "Password should include at least one number."; // set error message
+  }
+  if (!$specialChars) { // if password does not contain special character
+    $error = "Password should include at least one special character."; // set error message
+  }
+  if (strlen($password) < 8) { // if password is shorter than 8 characters
+    $error = "Password should be at least 8 characters in length."; // set error message
+  }
+
+  if ($uppercase && $lowercase && $number && $specialChars && strlen($password) > 8) {
     $options = [ // set options for password hashing
       'cost' => 12, // set cost to 12
     ];
@@ -31,14 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
       $conn = Db::getInstance(); // Connect to database
 
       // Check if email or username is already in use
-      $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email OR username = :username"); // prepare query
+      $query = $conn->prepare("SELECT (SELECT COUNT(*) FROM users WHERE email = :email) as email_count, (SELECT COUNT(*) FROM users WHERE username = :username) as username_count"); // prepare query
       $query->bindValue(":email", $email, PDO::PARAM_STR); // bind email to query, and set type to string, to prevent SQL injection
       $query->bindValue(":username", $username, PDO::PARAM_STR); // bind username to query, and set type to string, to prevent SQL injection
       $query->execute(); // execute query
-      $count = $query->fetchColumn(); // get result
+      $result = $query->fetch(PDO::FETCH_ASSOC); // get result
+
+      $email_count = $result['email_count'];
+      $username_count = $result['username_count'];
 
       // If email and username are not in use and are valid, create a new user
-      if ($count == 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) { // if email and username are not in use and are valid, create a new user, and set type to string, to prevent SQL injection
+      if ($email_count == 0 && $username_count == 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) { // if email and username are not in use and are valid, create a new user, and set type to string, to prevent SQL injection
 
         $verification_code = uniqid(); // Generate verification code for email verification 
 
@@ -78,7 +96,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
         header('Location: ../php/emailsent.php');
         exit;
       } else { // if email or username is already in use, set error message
-        $error = "Invalid email or username or email or username already in use.";
+        $error_messages = array();
+        if ($email_count > 0) {
+          $error_messages[] = "Email is already in use.";
+        }
+        if ($username_count > 0) {
+          $error_messages[] = "Username is already in use.";
+        }
+        $error = implode(" ", $error_messages);
       }
     } catch (PDOException $e) { // if database error, set error message
       $error = "Database error: Please try again.";
