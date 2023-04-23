@@ -113,7 +113,7 @@ $result = $conn->query($sql);
                         <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
                             <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- If the user is logged in, display the price -->
                                 <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
-                                <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p> <!-- Display the name and price -->
+                                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p> <!-- Display the name and price -->
                             <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?> <!-- If the user is not logged in, don't display the price -->
                                 <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
                             <?php endif; ?>

@@ -1793,7 +1793,7 @@ div.pagination a:hover {
 
   nav {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     height: 70px;
@@ -1807,6 +1807,7 @@ div.pagination a:hover {
     font-family: "co-headline", sans-serif;
     font-weight: 700;
     font-style: normal;
+    margin-right: 50px;
   }
 
   nav .nav-items {
@@ -1838,7 +1839,7 @@ div.pagination a:hover {
     margin-top: 10px;
     height: 25px;
     padding: 4px;
-    width: 500px;
+    width: 300px;
     border-radius: 10px;
     border: 2px solid #d9d9d9;
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.25));
@@ -1950,7 +1951,7 @@ div.pagination a:hover {
     gap: 50px;
     width: 80%;
     margin: auto;
-    margin-top: 200px;
+    margin-top: 300px;
     padding-bottom: 30px;
     padding-top: 20px;
     padding-left: 50px;
@@ -2075,10 +2076,12 @@ div.pagination a:hover {
 
   .filterlist {
     margin-top: 40px;
+    width: 20%;
   }
 
   .marketplacefilter {
     display: flex;
+    gap: 30px;
     margin-left: 30px;
   }
 
@@ -2115,7 +2118,7 @@ div.pagination a:hover {
   }
 
   .span {
-    margin-left: 50px;
+    margin-left: 10px;
   }
 
   .modelboxtitle {
@@ -2126,7 +2129,7 @@ div.pagination a:hover {
     padding-right: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    width: 100px;
+    width: 120px;
   }
 
   .promptflex {

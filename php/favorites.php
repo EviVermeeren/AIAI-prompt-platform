@@ -38,7 +38,7 @@ $result = $conn->query($sql); // Execute the query
             $pictures = $row['pictures']; // Get the pictures of the prompt
         ?>
             <a href="../php/detail.php?id=<?php echo $row['id']; ?>"> <!-- Link to detailpage -->
-                <div class="prompt" style="background-image: url('<?php echo $pictures; ?>')"> <!-- Display the prompt -->
+                <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
                     <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
                     <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p> <!-- Display the name and price -->
 

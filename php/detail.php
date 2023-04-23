@@ -40,18 +40,18 @@ if ($result->rowCount() > 0) { // check if the query returned any results
     $date = $row['date']; // store the date of the prompt in a variable
     $tags = $row['tags']; // store the tags of the prompt in a variable
 
-    $user_id = $row['user']; // store the ID of the user in a variable
-    $stmt = $conn->prepare("SELECT username FROM users WHERE email = :email"); // query the database for the username with the specified email
-    $stmt->bindParam(':email', $user_id);
-    $stmt->execute();
-    $user_row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $username = $user_row['username']; // get the username from the resulting row
 
   }
 } else { // if the query returned no results
   echo "Error: No results found"; // display an error message
   exit; // and exit the script
 }
+
+$stmt = $conn->prepare("SELECT username FROM users WHERE email = :email"); // query the database for the username with the specified email
+$stmt->bindParam(':email', $user);
+$stmt->execute();
+$user_row = $stmt->fetch(PDO::FETCH_ASSOC);
+$username = $user_row['username']; // get the username from the resulting row
 
 // Prepare SQL statement
 $stmt = $conn->prepare("SELECT * FROM favorites WHERE user_id = :user_id AND prompt_id = :id");
@@ -94,7 +94,7 @@ $results = $stmt->fetchAll();
             }
             ?>
           </h2>
-          <h3 class="desc">
+          <h3 class=" desc">
             <?php echo $description ?><br>
           </h3>
           <h3 class="desc"><?php echo $tags ?></h3>

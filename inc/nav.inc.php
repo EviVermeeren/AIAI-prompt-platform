@@ -20,6 +20,6 @@
       <li><a href="../php/logout.php">Logout</a></li>
     <?php endif; ?>
 
-    <li><a href="../php/approvalList.php">List of Approvals</a></li> <!-- Lijntje code Brend -->
+    <li><a href="../php/approvalList.php">Approvals</a></li> <!-- Lijntje code Brend -->
   </div>
 </nav>
