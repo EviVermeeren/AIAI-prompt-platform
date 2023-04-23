@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 1);
 
 require '../vendor/autoload.php'; // include sendgrid library
 include_once("../classes/User.php"); // include head
@@ -11,7 +10,6 @@ $key = $config['keys']['sendgridapikey'];
 
 if (!empty($_POST)) {
     $email = $_POST['email'];
-    var_dump($email);
     $user = new User($email);
     try {
         $correctEmail = $user->checkEmail($email);
@@ -20,7 +18,6 @@ if (!empty($_POST)) {
             $user->setResetToken(bin2hex(openssl_random_pseudo_bytes(32)));
             $user->saveResetToken();
             $user->sendResetMail($key);
-            var_dump("test");
         }
     } catch (Throwable $e) {
         $emailError = $e->getMessage();
