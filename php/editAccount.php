@@ -175,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
         -->
 
             <input class="submitbtn" type="submit" value="Save profile">
+            <a href="../php/deleteAccount.php"> Delete your account</a>
 
         </form>
 
