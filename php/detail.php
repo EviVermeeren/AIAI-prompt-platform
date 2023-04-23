@@ -38,6 +38,15 @@ if ($result->rowCount() > 0) { // check if the query returned any results
     $prompt = $row['prompt']; // store the prompt
     $pictures = $row['pictures']; // store the pictures of the prompt in a variable
     $date = $row['date']; // store the date of the prompt in a variable
+    $tags = $row['tags']; // store the tags of the prompt in a variable
+
+    $user_id = $row['user']; // store the ID of the user in a variable
+    $stmt = $conn->prepare("SELECT username FROM users WHERE email = :email"); // query the database for the username with the specified email
+    $stmt->bindParam(':email', $user_id);
+    $stmt->execute();
+    $user_row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $username = $user_row['username']; // get the username from the resulting row
+
   }
 } else { // if the query returned no results
   echo "Error: No results found"; // display an error message
@@ -52,6 +61,7 @@ $stmt->execute();
 
 // Fetch the results
 $results = $stmt->fetchAll();
+
 
 ?>
 
@@ -77,7 +87,7 @@ $results = $stmt->fetchAll();
       <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- check if the user is logged in -->
         <div class="detailinfo"> <!-- if the user is logged in, display the prompt details -->
           <h1> <?php echo $name ?></h1>
-          <h2><?php echo $user ?> <span>🦸‍♂️</span>
+          <h2><?php echo $username ?> <span>🦸‍♂️</span>
             <?php
             for ($i = 0; $i < $rating; $i++) {
               echo '<span>⭐</span>';
@@ -87,7 +97,9 @@ $results = $stmt->fetchAll();
           <h3 class="desc">
             <?php echo $description ?><br>
           </h3>
+          <h3 class="desc"><?php echo $tags ?></h3>
           <h2 class="money">💶 <?php echo $price ?></h2>
+
         </div>
       <?php else : ?> <!-- if the user is not logged in, display a message -->
         <div class="detailinfo">

@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $model = $_POST["model-type"];
   $price = $_POST["price"];
   $prompt = $_POST["prompt"];
+  $tags = $_POST["tags"];
 
   // Handle uploaded file
   $file_name = $_FILES["image-upload"]["name"];
@@ -66,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $categories_str = implode(", ", $selected_categories);
 
   // Insert data into database, including image file name
-  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt)");
+  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags)");
   $query->bindValue(":name", $name);
   $query->bindValue(":email", $email);
   $query->bindValue(":description", $description);
@@ -75,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $query->bindValue(":categories", implode(", ", $selected_categories));
   $query->bindValue(":price", $price);
   $query->bindValue(":prompt", $prompt);
+  $query->bindValue(":tags", $tags);
   $query->execute();
 
   header('Location: ../php/succes.php');
@@ -136,6 +138,9 @@ $prompts = $query->fetchAll(PDO::FETCH_ASSOC);
 
     <label for="image-upload">Image</label>
     <input class="inputfield4" type="file" id="image-upload" name="image-upload" accept="image/*" required><br><br>
+
+    <label for="title">Tags</label><br>
+    <input class="inputfield" type="text" id="tags" name="tags" required><br><br>
 
 
     <p class="filter">Category:</p>

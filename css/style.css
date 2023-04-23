@@ -1,6 +1,15 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
 
+#tag-input {
+  width: 50%;
+  color: #00a08d;
+}
+
+.taggle_text {
+  color: black;
+  color: #00a08d;
+}
 #message {
   color: black;
 }
