@@ -69,14 +69,15 @@ $stmt = $conn->query($sql);
     <div id="approvalList">
         <?php if ($stmt->rowCount() > 0) : ?> <!-- Check if there are any prompts needing approval -->
             <table>
-                <tr>
-                    <th>Model</th>
-                    <th>Name</th>
-                    <th>Characteristics</th>
-                    <th>Submitted By</th>
-                    <th>Date Submitted</th>
-                    <th>Picture</th>
-                    <th>Action</th>
+                <th>Model</th>
+                <th>Name</th>
+                <th>Characteristics</th>
+                <th>Submitted By</th>
+                <th>Date Submitted</th>
+                <th>Price</th>
+                <th>Tags</th>
+                <th>Picture</th>
+                <th>Action</th>
                 </tr>
                 <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?> <!-- Loop through each prompt needing approval -->
                     <tr>
@@ -85,7 +86,10 @@ $stmt = $conn->query($sql);
                         <td><?php echo isset($row["characteristics"]) ? $row["characteristics"] : "" ?></td> <!-- Display the characteristics for the prompt (if it exists) -->
                         <td><?php echo $row["user"] ?></td> <!-- Display the user who submitted the prompt -->
                         <td><?php echo $row["date"] ?></td> <!-- Display the date the prompt was submitted -->
+                        <td><?php echo $row["price"] ?></td> <!-- Display the price of  the prompt  -->
+                        <td><?php echo $row["tags"] ?></td> <!-- Display the tags of the prompt  -->
                         <td> <img src="../media/<?php echo $row["pictures"] ?>" alt="" class="approveimg"></td> <!-- Display the picture of the prompt -->
+                        <td>
                         <td>
                             <button onclick="approvePrompt(<?php echo $row['id']; ?>)"> YAS QUEEN 💅</button> <!-- Button to approve the prompt Approve 👍 -->
                             <button onclick="deletePrompt(<?php echo $row['id']; ?>)">Yeet and delete 🖕</button> <!-- Button to reject the prompt Reject 👎 -->
