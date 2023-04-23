@@ -7,14 +7,11 @@ if (isset($_SESSION['user_id'])) {
 // Query to check if the user is an admin
 $sql = "SELECT admin FROM users WHERE id = :user_id";
 
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(':user_id', $user_id);
-$stmt->execute();
+$admin = $conn->prepare($sql);
+$admin->bindParam(':user_id', $user_id);
+$admin->execute();
 
-if ($stmt->rowCount() > 0) {
-  // User exists in the database
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+$row = $admin->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -40,8 +37,10 @@ if ($stmt->rowCount() > 0) {
       <li><a href="../php/logout.php">Logout</a></li>
     <?php endif; ?>
 
-    <?php if ($row["admin"] == 1) : ?> <!-- if user is an admin -->
+    <?php if ($row["admin"] == 1) :
+    ?> <!-- if user is an admin -->
       <li><a href="../php/approvalList.php">Approvals</a></li>
-    <?php endif; ?>
+    <?php endif;
+    ?>
   </div>
 </nav>
