@@ -1,31 +1,60 @@
 <?php
-include_once("../inc/bootstrap.php"); // include bootstrap file
+include_once("../inc/bootstrap.php");
 
-$message = ""; // initialize message variable
+$message = "";
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if user is not logged in, redirect to login page
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   header('Location: ../php/login.php');
   exit;
 }
 
-$email = $_SESSION["email"]; // get email from session
+$email = $_SESSION["email"];
 
-try { // connect to database
-  $conn = Db::getInstance(); // get database connection
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set error mode
-} catch (PDOException $e) { // if connection fails, display error message
-  $message = "Try again later: " . $e->getMessage(); // set error message
-  exit; // exit script
+try {
+  $conn = Db::getInstance();
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+  $message = "Try again later: " . $e->getMessage();
+  exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
-  // Get form data from POST
-  $name = $_POST["title"]; // get title from form
-  $description = $_POST["description"]; // get description from form 
-  $model = $_POST["model-type"]; // get model from form
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $name = $_POST["title"];
+  $description = $_POST["description"];
+  $model = $_POST["model-type"];
+  $price = $_POST["price"];
+  $prompt = $_POST["prompt"];
 
-  // Get uploaded file data
+  // Handle uploaded file
   $file_name = $_FILES["image-upload"]["name"];
+  $file_temp_name = $_FILES["image-upload"]["tmp_name"];
+  $file_size = $_FILES["image-upload"]["size"];
+  $file_error = $_FILES["image-upload"]["error"];
+
+  if ($file_error !== UPLOAD_ERR_OK) {
+    $message = "Upload failed with error code $file_error.";
+    exit;
+  }
+
+  // Check file size
+  if ($file_size > 1000000) {
+    header('Location: ../php/fail.php');
+    exit;
+  }
+
+  // Check file name for invalid characters
+  if (!preg_match('/^[a-zA-Z0-9_]+\.[a-zA-Z0-9]{3,4}$/', $file_name)) {
+    header('Location: ../php/fail.php');
+    exit;
+  }
+
+  // Save uploaded file to disk
+  $uploads_dir = "../media/";
+  $file_path = $uploads_dir . $file_name;
+  if (!move_uploaded_file($file_temp_name, $file_path)) {
+    $message = "Failed to move uploaded file.";
+    exit;
+  }
 
   $categories = array("Animals", "3D", "Space", "Game", "Car", "Nature", "Portrait", "Anime", "Interior", "Realistic", "Geek", "Building");
   $selected_categories = array();
@@ -36,15 +65,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
   }
   $categories_str = implode(", ", $selected_categories);
 
-  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics) VALUES (:name, :email, :description, :model, :pictures, :categories)");
+  // Insert data into database, including image file name
+  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt)");
   $query->bindValue(":name", $name);
   $query->bindValue(":email", $email);
   $query->bindValue(":description", $description);
   $query->bindValue(":model", $model);
   $query->bindValue(":pictures", $file_name);
   $query->bindValue(":categories", implode(", ", $selected_categories));
+  $query->bindValue(":price", $price);
+  $query->bindValue(":prompt", $prompt);
   $query->execute();
+
+  header('Location: ../php/succes.php');
 }
+
+// Retrieve data from database, including image file name
+$query = $conn->prepare("SELECT * FROM prompts WHERE user = :email");
+$query->bindValue(":email", $email);
+$query->execute();
+$prompts = $query->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -72,6 +113,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
 
     <label for="description">Description</label><br>
     <textarea style="resize: none;" class="inputfield2" id="description" name="description" required></textarea><br><br>
+
+    <label for="description">Prompt</label><br>
+    <textarea style="resize: none;" class="inputfield2" id="prompt" name="prompt" required></textarea><br><br>
+
+    <label for="description">Price</label><br>
+    <select class="inputfield3" id="price" name="price">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select><br><br>
 
     <label for="model-type">Model</label><br>
     <select class="inputfield3" id="model-type" name="model-type">

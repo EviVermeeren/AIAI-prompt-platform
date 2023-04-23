@@ -3,12 +3,16 @@
 include_once("../inc/bootstrap.php"); // include the bootstrap file
 
 if (!isset($_GET['id'])) { // check if the id parameter is set
-  echo "Error: ID parameter not setrezrzrtge"; // if not, display an error message
+  echo "Error: ID parameter not set"; // if not, display an error message
   exit; // and exit the script
 }
 
 $id = $_GET['id']; // if the id parameter is set, store it in a variable
-$user_id = $_SESSION['user_id']; // get the ID of the currently logged-in user
+
+if (isset($_SESSION['user_id'])) {
+  $user_id = $_SESSION['user_id'];
+}
+
 $conn = Db::getInstance(); // connect to the database
 if (!$conn) { // check if the connection was successful
   echo "Error: Failed to connect to database"; // if not, display an error message
@@ -67,7 +71,7 @@ $results = $stmt->fetchAll();
   <?php include_once("../inc/nav.inc.php"); ?> <!-- include the navigation bar -->
 
   <div class="detailheader">
-    <div class="detailimgheader"><img class="detailimgheader" src="<?php echo $pictures ?>" alt=""></div>
+    <div class="detailimgheader"><img class="detailimgheader" src="../media/<?php echo $pictures ?>" alt=""></div>
     <div>
 
       <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- check if the user is logged in -->

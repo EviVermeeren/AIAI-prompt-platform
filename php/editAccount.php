@@ -85,8 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     // Update database with form data
     $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture";
 
+    // Add WHERE clause to limit the update to the logged-in user
+    $sql .= " WHERE email=:email";
+
     // Update password, if provided
-    if (!empty($new_password)) { // if new password is provided 
+    if (!empty($new_password)) { // if new password is provided
         $sql .= ", password=:hashed_password"; // add password to query
     }
 
@@ -98,10 +101,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     $query->bindValue(":bio", $bio);
     $query->bindValue(":profile_picture", $profile_picture);
 
-    if (!empty($new_password)) { // if new password is provided 
-        $query->bindValue(":hashed_password", $hashed_password);
+    // Bind email parameter to limit the update to the logged-in user
+    $query->bindValue(":email", $email);
+
+    // Bind hashed password, if provided
+    if (!empty($new_password)) { // if new password is provided
+        $query->bindValue(":hashed_password", $hashed_password); // bind hashed password to query
     }
-    $query->execute();
+
+    $query->execute(); // execute query
 
     if ($query->rowCount() > 0) { // if query is successful
         header("Location: ../php/account.php"); // redirect to account page
