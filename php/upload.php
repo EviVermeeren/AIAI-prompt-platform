@@ -1,7 +1,10 @@
 <?php
 include_once("../inc/bootstrap.php");
 
-$message = "";
+if (isset($_GET["error"])) {
+  $error = $_GET["error"];
+}
+
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   header('Location: ../php/login.php');
@@ -39,13 +42,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Check file size
   if ($file_size > 1000000) {
-    header('Location: ../php/fail.php');
+    $message = "File is too big"; // set error message
+    header("Location: ../php/upload.php?error=" . urlencode($message)); // redirect to edit account page
     exit;
   }
 
   // Check file name for invalid characters
   if (!preg_match('/^[a-zA-Z0-9_]+\.[a-zA-Z0-9]{3,4}$/', $file_name)) {
-    header('Location: ../php/fail.php');
+    $message = "File name is not correct"; // set error message
+    header("Location: ../php/upload.php?error=" . urlencode($message)); // redirect to edit account page
     exit;
   }
 
@@ -111,7 +116,9 @@ $prompts = $query->fetchAll(PDO::FETCH_ASSOC);
 
   <form class="uploadform" enctype="multipart/form-data" method="POST">
     <h2>Upload a new prompt</h2>
-    <p><?php echo $message ?></p>
+    <?php if (isset($error)) : ?> <!-- if error message is set -->
+      <p class="errormessage"><?php echo $error ?></p> <!-- display error message -->
+    <?php endif; ?>
 
     <label for="title">Title</label><br>
     <input class="inputfield" type="text" id="title" name="title" required><br><br>
