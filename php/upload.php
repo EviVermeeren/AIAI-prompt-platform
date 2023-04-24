@@ -67,7 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $categories_str = implode(", ", $selected_categories);
 
   // Insert data into database, including image file name
-  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags)");
+  $current_date = date("Y-m-d H:i:s");
+
+  $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags, date) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags, :date)");
   $query->bindValue(":name", $name);
   $query->bindValue(":email", $email);
   $query->bindValue(":description", $description);
@@ -77,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $query->bindValue(":price", $price);
   $query->bindValue(":prompt", $prompt);
   $query->bindValue(":tags", $tags);
+  $query->bindValue(":date", $current_date); // Bind the current date to the query
   $query->execute();
 
   header('Location: ../php/succes.php');

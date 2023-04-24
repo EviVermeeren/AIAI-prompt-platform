@@ -1,6 +1,11 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
 
+.messagefail {
+  font-family: "filson-pro", sans-serif;
+  margin-left: 70px;
+  font-size: 24px;
+}
 #tag-input {
   width: 50%;
   color: #00a08d;

@@ -26,7 +26,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
 
 
-    <h1>Your prompt has not been uploaded, please check if your picture is less than 1MB and that the name of your picture is 'yourprompttitle.filetype' and then try again.</h1>
+    <h1 class="messagefail">Your prompt has not been uploaded, please check if your picture is less than 1MB and that the name of the picture you want to upload has
+        this format 'yourprompttitle.filetype' and then try again.</h1>
 
 
     <?php include_once("../inc/foot.inc.php"); ?> <!-- This is the footer -->

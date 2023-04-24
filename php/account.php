@@ -1,27 +1,26 @@
 <?php
-include_once("../inc/bootstrap.php"); //this file contains the database connection
-include_once("../inc/functions.inc.php"); //this file contains the functions that are used in this file
+include_once("../inc/bootstrap.php");
+include_once("../inc/functions.inc.php");
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { //if the user is not logged in, redirect to the login page
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   header('Location: ../php/login.php');
   exit;
 }
 
-$email = $_SESSION["email"]; //get the email from the session
-$user = new User($email); //create a new user object
-$profile_picture = $user->getProfilePicture(); //get the profile picture from the database
-$profile_banner = $user->getProfileBanner(); //get the profile banner from the database
-$bio = $user->getBio(); //get the bio from the database
-$username = $user->getUsername(); //get the username from the database
+$email = $_SESSION["email"];
+$user = new User($email);
+$profile_picture = $user->getProfilePicture();
+$profile_banner = $user->getProfileBanner();
+$bio = $user->getBio();
+$username = $user->getUsername();
 
-//this is the url that will be copied to the clipboard when the share button is clicked
-//it will be the url to the account page of the user that is currently logged in
-//the id of the user is added to the url so that the account page can be loaded with the correct data
-//the id is retrieved from the database
-//javascript:void(0) is added to the url so that the page doesn't reload when the button is clicked
-//the javascript function copyToClipboard() is called when the button is clicked
 $user_id = $user->getId();
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
+
+$conn = Db::getInstance(); // Connect to database
+// get all prompts uploaded by the user
+$prompts = $conn->query("SELECT * FROM prompts WHERE user='$email'")->fetchAll();
+
 
 ?>
 
@@ -75,10 +74,28 @@ $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$use
     </div>
 
     <div class="promptflex">
+      <?php if (count($prompts) == 0) : ?> <!-- If there are no prompts, display the message -->
+        <h3 style="margin-top: 50px">You don't have any prompts yet!</h3>
+      <?php else : ?> <!-- Otherwise, display the prompts -->
+        <?php foreach ($prompts as $prompt) { // Loop through the result and display the prompts
 
-      <h3 style="margin-top: 50px">You don't have any prompts yet!</h3>
-      <!-- don't change the html here, you update this list with a loop with data from the database, for an example check marketplace.php -->
-
+          $name = $prompt['name']; // Get the name of the prompt
+          $model = $prompt['model']; // Get the model of the prompt
+          $price = $prompt['price']; // Get the price of the prompt
+          $pictures = $prompt['pictures']; // Get the pictures of the prompt
+        ?>
+          <a href="../php/detail.php?id=<?php echo $prompt['id']; ?>"> <!-- Link to detailpage -->
+            <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
+              <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- If the user is logged in, display the price -->
+                <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
+                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p> <!-- Display the name and price -->
+              <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?> <!-- If the user is not logged in, don't display the price -->
+                <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
+              <?php endif; ?>
+            </div>
+          </a>
+        <?php } ?>
+      <?php endif; ?>
     </div>
 
     <?php include_once("../inc/foot.inc.php"); ?> <!-- Include footer -->

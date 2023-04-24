@@ -1,6 +1,10 @@
 <?php
 
+include_once("../inc/bootstrap.php");
+include_once("../inc/functions.inc.php");
+
 $conn = Db::getInstance(); // connect to the database
+
 if (isset($_SESSION['user_id'])) {
   $user_id = $_SESSION['user_id'];
 }
@@ -35,12 +39,14 @@ $row = $admin->fetch(PDO::FETCH_ASSOC);
     <?php else : ?> <!-- if user is logged in -->
       <li><a href="../php/account.php">Profile</a></li>
       <li><a href="../php/logout.php">Logout</a></li>
+
+      <?php if ($row["admin"] == 1) :
+      ?> <!-- if user is an admin -->
+        <li><a href="../php/approvalList.php">Approvals</a></li>
+      <?php endif;
+      ?>
     <?php endif; ?>
 
-    <?php if ($row["admin"] == 1) :
-    ?> <!-- if user is an admin -->
-      <li><a href="../php/approvalList.php">Approvals</a></li>
-    <?php endif;
-    ?>
+
   </div>
 </nav>
