@@ -1,6 +1,24 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
 
+#btnsignup {
+  background-color: #00a08d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-family: "filson-pro", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 19px;
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+input {
+  color: white;
+}
 .others {
   margin-left: 30px;
 }

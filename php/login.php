@@ -24,7 +24,7 @@ if (isset($_SESSION['message'])) { // if message is set
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
 </head>
 
 <body>
@@ -52,7 +52,7 @@ if (isset($_SESSION['message'])) { // if message is set
             <label for="password">Password</label>
             <input type="password" id="password" name="password">
             <a href="resetPassword.php"> Forgot Password?</a>
-            <button type="submit" class="btn" id="btnSubmit">Log In</button>
+            <button type="submit" class="btn" id="btnsignup">Log In</button>
         </form>
 
     </div>

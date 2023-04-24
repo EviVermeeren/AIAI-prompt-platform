@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required />
 
-        <input type="submit" value="Sign Up" class="btn btn--primary" />
+        <input type="submit" value="Sign Up" id="btnsignup" class="btn btn--primary" />
       </form>
     </div>
   </div>

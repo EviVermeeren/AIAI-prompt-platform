@@ -2,7 +2,9 @@
 
 include_once("../inc/bootstrap.php"); // include bootstrap file
 
-$message = ""; // initialize message variable
+if (isset($_GET["error"])) {
+    $error = $_GET["error"];
+}
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if user is not logged in, redirect to login page
     header('Location: ../php/login.php');
@@ -19,7 +21,7 @@ try { // connect to database
     exit; // exit script
 }
 
-$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner, password FROM users WHERE email = :email"); // get user data from database
+$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner FROM users WHERE email = :email"); // get user data from database
 
 $query->bindValue(":email", $email); // bind email to query
 $query->execute(); // execute query
@@ -28,7 +30,6 @@ $row = $query->fetch(PDO::FETCH_ASSOC); // fetch data from query
 $bio = $row['bio']; // get bio from database
 $profile_picture = $row['profile_picture']; // get profile picture from database
 $profile_banner = $row['profile_banner']; // get profile banner from database
-$hashed_password = $row['password']; // get hashed password from database
 $firstname = $row['firstname']; // get firstname from database
 $lastname = $row['lastname']; // get lastname from database 
 $username = $row['username']; // get username from database
@@ -40,33 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     $firstname = $_POST["firstname"]; // get firstname from form
     $lastname = $_POST["lastname"]; // get lastname from form 
     $username = $_POST["username"]; // get username from form
-    $current_password = $_POST["password"]; // get current password from form
-    $new_password = $_POST["newpassword"]; // get new password from form
-    $repeat_password = $_POST["repeatnewpassword"]; // get repeat password from form
     $bio = $_POST["bio"]; // get bio from form
     $profile_picture = isset($_POST["profile_picture"]) ? $_POST["profile_picture"] : $profile_picture; // get profile picture from form
 
-    // Check if new password and repeat password match
-    if (!empty($new_password) && $new_password !== $repeat_password) { // if new password and repeat password do not match
-        header("Location: ../php/editAccount.php"); // redirect to edit account page
-        $message = "New password and repeat password do not match"; // set error message
-        exit; // exit script
-    }
-
-    // Check if current password is correct, if a new password is provided
-    if (!empty($new_password) && !password_verify($current_password, $hashed_password)) { // if current password is incorrect
-        header("Location: ../php/editAccount.php"); // redirect to edit account page
-        $message = "Current password is incorrect"; // set error message
-        exit; // exit script 
-    }
-
-    // Hash new password, if provided
-    if (!empty($new_password)) { // if new password is provided
-        $options = [ // set options for password hashing
-            'cost' => 12, // set cost to 12
-        ];
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT, $options); // hash new password
-    }
 
     // Check if the new username is already in use
     $username_query = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username AND email != :email"); // get user data from database
@@ -77,8 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     $username_row = $username_query->fetch(PDO::FETCH_ASSOC); // fetch data from query
 
     if ($username_row['count'] > 0) { // if username is already in use 
-        header("Location: ../php/editAccount.php"); // redirect to edit account page
-        $message = "Username already in use"; // set error message
+        $message = "Username is already in use"; // set error message
+        header("Location: ../php/editAccount.php?error=" . urlencode($message)); // redirect to edit account page
         exit;
     }
 
@@ -88,11 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     // Add WHERE clause to limit the update to the logged-in user
     $sql .= " WHERE email=:email";
 
-    // Update password, if provided
-    if (!empty($new_password)) { // if new password is provided
-        $sql .= ", password=:hashed_password"; // add password to query
-    }
-
     // Prepare and execute query with parameters
     $query = $conn->prepare($sql);
     $query->bindValue(":firstname", $firstname);
@@ -100,14 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     $query->bindValue(":username", $username);
     $query->bindValue(":bio", $bio);
     $query->bindValue(":profile_picture", $profile_picture);
-
     // Bind email parameter to limit the update to the logged-in user
     $query->bindValue(":email", $email);
-
-    // Bind hashed password, if provided
-    if (!empty($new_password)) { // if new password is provided
-        $query->bindValue(":hashed_password", $hashed_password); // bind hashed password to query
-    }
 
     $query->execute(); // execute query
 
@@ -144,7 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
 
         <form method="post" class="editAccount">
 
-            <p class="errormessage"><?php echo $message ?></p> <!-- display error message -->
+            <?php if (isset($error)) : ?> <!-- if error message is set -->
+                <p class="errormessage"><?php echo $error ?></p> <!-- display error message -->
+            <?php endif; ?>
 
             <label for="title">First name</label><br>
             <input class="inputfield" type="text" id="title" name="firstname" value="<?php echo $firstname; ?>"><br><br> <!-- display current firstname -->
@@ -154,15 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
 
             <label for="title">Username</label><br>
             <input class="inputfield" type="text" id="title" name="username" value="<?php echo $username; ?>"><br><br> <!-- display current username -->
-
-            <label for="title">Current password</label><br>
-            <input class="inputfield" type="password" id="title" name="password"><br><br>
-
-            <label for="title">New password</label><br>
-            <input class="inputfield" type="password" id="title" name="newpassword"><br><br>
-
-            <label for="title">Repeat new password</label><br>
-            <input class="inputfield" type="password" id="title" name="repeatnewpassword"><br><br>
 
             <label for="title">Bio</label><br>
             <textarea class="inputfield" id="bio" name="bio"><?php echo $bio ?></textarea><br><br>
