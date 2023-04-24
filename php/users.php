@@ -31,7 +31,7 @@ if (isset($_GET['user_id'])) {
 
     <?php include_once("../inc/nav.inc.php"); ?> <!-- Include navigation -->
 
-    <h1>Other users on PromptSwap</h1>
+    <h1 class="others">Other users on PromptSwap</h1>
     <div class="promptflex">
         <?php
         foreach ($users as $user) { // Loop through the result and display the user
@@ -39,9 +39,9 @@ if (isset($_GET['user_id'])) {
             $name = $user['username']; // Get the name of the user
             $picture = $user['profile_picture']; // Get the picture of the user
         ?>
-            <a href="<?php echo $profile_url . $user['id']; ?>"><?php echo $user['username']; ?></a>
-            <div class="prompt" style="background-image: url('../media/<?php echo $picture; ?>')">
-                <p class="promptboxtitle"><?php echo $name; ?></p> <!-- Display the name -->
+
+            <div class="userdiv" style="background-image: url('../media/<?php echo $picture; ?>')">
+                <a class="userbox" href="<?php echo $profile_url . $user['id']; ?>"><?php echo $user['username']; ?></a>
             </div>
             </a>
         <?php

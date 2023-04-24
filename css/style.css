@@ -1,6 +1,40 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
 
+.others {
+  margin-left: 30px;
+}
+
+.userbox {
+  display: block;
+  background-color: #00a08d;
+  border-radius: 10px;
+  height: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  width: 85%;
+  color: white;
+}
+
+.userdiv {
+  width: 200px;
+  height: 200px;
+  margin-top: 75px;
+  margin-left: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.25));
+  border-radius: 10px;
+}
+
+.userdiv a {
+  margin-top: 155px;
+  font-family: "filson-pro", sans-serif;
+}
+
 .messagefail {
   font-family: "filson-pro", sans-serif;
   margin-left: 70px;
