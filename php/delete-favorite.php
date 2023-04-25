@@ -2,7 +2,7 @@
 include_once("../inc/bootstrap.php"); // include the bootstrap file
 
 if (!isset($_POST['id'])) { // check if the id parameter is set
-    echo "Error: ID parameter not setBLA"; // if not, display an error message
+    echo "Error: ID parameter not set"; // if not, display an error message
     exit; // and exit the script
 }
 
@@ -21,12 +21,5 @@ if (!$conn) { // check if the connection was successful
     exit; // and exit the script
 }
 
-$sql = "DELETE FROM favorites WHERE prompt_id = :prompt_id AND user_id = :user_id"; // delete the row from the favorites table
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(":prompt_id", $id);
-$stmt->bindParam(":user_id", $user_id);
-if ($stmt->execute()) { // check if the query was successful
-    echo "Prompt removed from favorites!"; // if so, display a success message
-} else {
-    echo "Error: Failed to remove prompt from favorites"; // if not, display an error message
-}
+$favoritesManager = new FavoritesManager($conn);
+$favoritesManager->removeFavorite($id, $user_id);

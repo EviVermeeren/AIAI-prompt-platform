@@ -1,48 +1,121 @@
 <?php
 
-class Prompt {
-  private $title;
-  private $description;
-  private $model;
+class Prompt
+{
+  private $id;
+  private $name;
   private $user;
-  private $filename;
+  private $rating;
+  private $description;
+  private $price;
+  private $characteristics;
+  private $model;
+  private $prompt;
+  private $pictures;
+  private $date;
+  private $tags;
 
-  public function __construct($title, $description, $model, $user, $filename) {
-    $this->title = $title;
-    $this->description = $description;
-    $this->model = $model;
+  public function __construct($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags)
+  {
+    $this->id = $id;
+    $this->name = $name;
     $this->user = $user;
-    $this->filename = $filename;
+    $this->rating = $rating;
+    $this->description = $description;
+    $this->price = $price;
+    $this->characteristics = $characteristics;
+    $this->model = $model;
+    $this->prompt = $prompt;
+    $this->pictures = $pictures;
+    $this->date = $date;
+    $this->tags = $tags;
   }
 
-  public function getTitle() {
-    return $this->title;
+  public function getId()
+  {
+    return $this->id;
   }
 
-  public function getDescription() {
-    return $this->description;
+  public function getName()
+  {
+    return $this->name;
   }
 
-  public function getModel() {
-    return $this->model;
-  }
-
-  public function getUser() {
+  public function getUser()
+  {
     return $this->user;
   }
 
-  public function getFilename() {
-    return $this->filename;
+  public function getRating()
+  {
+    return $this->rating;
   }
 
-    public function save() {
-        $db = Db::getInstance();
-        $stmt = $db->prepare("INSERT INTO prompt (title, description, model, user, filename) VALUES (:title, :description, :model, :user, :filename)");
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':model', $this->model);
-        $stmt->bindParam(':user', $this->user);
-        $stmt->bindParam(':filename', $this->filename);
-        return $stmt->execute();
-    }
+  public function getDescription()
+  {
+    return $this->description;
+  }
+
+  public function getPrice()
+  {
+    return $this->price;
+  }
+
+  public function getCharacteristics()
+  {
+    return $this->characteristics;
+  }
+
+  public function getModel()
+  {
+    return $this->model;
+  }
+
+  public function getPrompt()
+  {
+    return $this->prompt;
+  }
+
+  public function getPictures()
+  {
+    return $this->pictures;
+  }
+
+  public function getDate()
+  {
+    return $this->date;
+  }
+
+  public function getTags()
+  {
+    return $this->tags;
+  }
+
+  public function isFavorite($user_id)
+  {
+    $db = Db::getInstance();
+    $stmt = $db->prepare("SELECT * FROM favorites WHERE user_id = :user_id AND prompt_id = :prompt_id");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':prompt_id', $this->id);
+    $stmt->execute();
+    return $stmt->rowCount() > 0;
+  }
+
+  public function save()
+  {
+    $db = Db::getInstance();
+    $stmt = $db->prepare("INSERT INTO prompts (name, user, rating, description, price, characteristics, model, prompt, pictures, date, tags) VALUES (:name, :user, :rating, :description, :price, :characteristics, :model, :prompt, :pictures, :date, :tags)");
+    $stmt->bindParam(':name', $this->name);
+    $stmt->bindParam(':user', $this->user);
+    $stmt->bindParam(':rating', $this->rating);
+    $stmt->bindParam(':description', $this->description);
+    $stmt->bindParam(':price', $this->price);
+    $stmt->bindParam(':characteristics', $this->characteristics);
+    $stmt->bindParam(':model', $this->model);
+    $stmt->bindParam(':prompt', $this->prompt);
+    $stmt->bindParam(':pictures', $this->pictures);
+    $stmt->bindParam(':date', $this->date);
+    $stmt->bindParam(':tags', $this->tags);
+    $stmt->execute();
+  }
 }

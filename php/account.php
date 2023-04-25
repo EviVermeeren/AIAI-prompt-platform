@@ -1,4 +1,5 @@
 <?php
+
 include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
@@ -8,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 $email = $_SESSION["email"];
-$user = new User($email);
+$user = new User($email, Db::getInstance());
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();
@@ -17,10 +18,12 @@ $username = $user->getUsername();
 $user_id = $user->getId();
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
 
-$conn = Db::getInstance(); // Connect to database
 // get all prompts uploaded by the user
-$prompts = $conn->query("SELECT * FROM prompts WHERE user='$email'")->fetchAll();
-
+$conn = Db::getInstance();
+$stmt = $conn->prepare("SELECT * FROM prompts WHERE user=:user");
+$stmt->bindParam(":user", $email);
+$stmt->execute();
+$prompts = $stmt->fetchAll();
 
 ?>
 

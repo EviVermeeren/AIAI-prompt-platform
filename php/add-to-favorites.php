@@ -2,29 +2,20 @@
 include_once("../inc/bootstrap.php"); // include the bootstrap file
 
 if (!isset($_POST['id'])) { // check if the id parameter is set
-    echo "Error: ID parameter not set"; // if not, display an error message
-    exit; // and exit the script
+    echo "Error: ID parameter not set"; // if not, display an error
+    exit; // exit the script
 }
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    echo "Error: no user id found";
-    exit;
+
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) { // check if the user is logged in
+    echo "Error: no user id found"; // if not, display an error
+    exit; // exit the script
 }
-$id = $_POST['id']; // if the id parameter is set, store it in a variable
-$user_id = $_SESSION['user_id']; // get the ID of the currently logged-in user
-var_dump($user_id);
+
+$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT); // get the id from the post request and sanitize it to prevent SQL injection
+$user_id = $_SESSION['user_id']; // get the user id from the session
 
 $conn = Db::getInstance(); // connect to the database
-if (!$conn) { // check if the connection was successful
-    echo "Error: Failed to connect to database"; // if not, display an error message
-    exit; // and exit the script
-}
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set the PDO error mode to exception
 
-$sql = "INSERT INTO favorites (prompt_id, user_id) VALUES (:prompt_id, :user_id)"; // insert the prompt into the favorites table
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(":prompt_id", $id);
-$stmt->bindParam(":user_id", $user_id);
-if ($stmt->execute()) { // check if the query was successful
-    echo "Prompt added to favorites!"; // if so, display a success message
-} else {
-    echo "Error: Failed to add prompt to favorites"; // if not, display an error message
-}
+$favoritesManager = new FavoritesManager($conn); // create a new instance of the FavoritesManager class
+$favoritesManager->addFavorite($id, $user_id); // call the addFavorite method on the FavoritesManager instance
