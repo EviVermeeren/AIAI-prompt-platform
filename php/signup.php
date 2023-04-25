@@ -10,31 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
   $lastname = htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8'); // get lastname from form, and sanitize it to prevent XSS attacks
   $username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8'); // get username from form, and sanitize it to prevent XSS attacks
 
-  // Check if password meets strength requirements
-  $password = $_POST['password']; // get password from form
-  $uppercase = preg_match('@[A-Z]@', $password); // check if password contains uppercase letter 
-  $lowercase = preg_match('@[a-z]@', $password); // check if password contains lowercase letter
-  $number    = preg_match('@[0-9]@', $password); // check if password contains number
-  $specialChars = preg_match('@[^\w]@', $password); // check if password contains special character
-
-  // if password does not meet strength requirements
-  if (!$uppercase) { // if password does not contain uppercase letter
-    $error = "Password should include at least one upper case letter."; // set error message
-  }
-  if (!$lowercase) { // if password does not contain lowercase letter
-    $error = "Password should include at least one lower case letter."; // set error message
-  }
-  if (!$number) { // if password does not contain number
-    $error = "Password should include at least one number."; // set error message
-  }
-  if (!$specialChars) { // if password does not contain special character
-    $error = "Password should include at least one special character."; // set error message
-  }
-  if (strlen($password) < 8) { // if password is shorter than 8 characters
-    $error = "Password should be at least 8 characters in length."; // set error message
-  }
-
-  if ($uppercase && $lowercase && $number && $specialChars && strlen($password) > 8) {
+  $passwordVerifier = new PasswordVerifier($_POST['password']);
+  if (!$passwordVerifier->isStrong()) { // if password does not meet strength requirements
+    $error = $passwordVerifier->getError(); // set error message
+  } else {
+    $password = $passwordVerifier->getHashedPassword(); // get hashed password
     $options = [ // set options for password hashing
       'cost' => 12, // set cost to 12
     ];
