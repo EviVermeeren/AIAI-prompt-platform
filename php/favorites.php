@@ -1,14 +1,17 @@
 <?php
 include_once("../inc/bootstrap.php"); // include bootstrap file
 
-$conn = Db::getInstance(); // Connect to database
+// Connect to database
+$conn = Db::getInstance();
 
 // Get the ID of the logged-in user
 $user_id = $_SESSION['user_id'];
 
-// Query the database to get the prompts in the user's favorites
-$sql = "SELECT prompts.* FROM prompts INNER JOIN favorites ON prompts.id = favorites.prompt_id WHERE favorites.user_id = $user_id ORDER BY date DESC";
-$result = $conn->query($sql); // Execute the query
+// Instantiate the FavoritePrompts class
+$favorite_prompts = new FavoritePrompts($conn);
+
+// Get the favorite prompts for the user
+$favorites = $favorite_prompts->getFavorites($user_id);
 
 ?>
 
@@ -30,7 +33,7 @@ $result = $conn->query($sql); // Execute the query
     <h1>Your favorite prompts</h1>
     <div class="promptflex">
         <?php
-        foreach ($result as $row) { // Loop through the result and display the prompts
+        foreach ($favorites as $row) { // Loop through the result and display the prompts
 
             $name = $row['name']; // Get the name of the prompt
             $model = $row['model']; // Get the model of the prompt

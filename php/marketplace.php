@@ -1,23 +1,20 @@
 <?php
-include_once("../inc/bootstrap.php"); // include bootstrap file
 
-$promptsPerPage = 15; // Set the number of prompts to display per page
-$page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number from the query string, or default to 1
-$offset = ($page - 1) * $promptsPerPage; // Calculate the offset for the current page
+include_once("../inc/bootstrap.php"); // Include bootstrap file
 
 $conn = Db::getInstance(); // Connect to database
 
-// Query the database to get the total number of prompts
-$sql = "SELECT COUNT(*) AS count FROM prompts"; // Get the total number of prompts
-$result = $conn->query($sql); // Execute the query
-$row = $result->fetch(); // Fetch the result
-$totalPrompts = $row['count']; // Get the total number of prompts
+// Instantiate the Prompts class
+$prompts = new GetPrompt($conn);
 
-$totalPages = ceil($totalPrompts / $promptsPerPage); // Calculate the total number of pages
+$promptsPerPage = 15; // Set the number of prompts to display per page
+$page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number from the query string, or default to 1
 
-// Query the database to get the prompts for the current page
-$sql = "SELECT * FROM prompts WHERE approved=1 ORDER BY date DESC LIMIT $promptsPerPage OFFSET $offset";
-$result = $conn->query($sql);
+// Get the prompts for the current page
+$promptsData = $prompts->getPrompts($promptsPerPage, $page);
+
+$totalPages = $promptsData['totalPages']; // Get the total number of pages
+$prompts = $promptsData['prompts']; // Get the prompts for the current page
 
 ?>
 
@@ -102,7 +99,7 @@ $result = $conn->query($sql);
 
             <div class="promptflex">
                 <?php
-                foreach ($result as $row) { // Loop through the result and display the prompts
+                foreach ($prompts as $row) { // Loop through the result and display the prompts
 
                     $name = $row['name']; // Get the name of the prompt
                     $model = $row['model']; // Get the model of the prompt
@@ -111,17 +108,13 @@ $result = $conn->query($sql);
                 ?>
                     <a href="../php/detail.php?id=<?php echo $row['id']; ?>"> <!-- Link to detailpage -->
                         <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
-                            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- If the user is logged in, display the price -->
-                                <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
-                                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p> <!-- Display the name and price -->
-                            <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?> <!-- If the user is not logged in, don't display the price -->
-                                <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
-                            <?php endif; ?>
+                            <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
+                            <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p> <!-- Display the name and price -->
+
                         </div>
-                    </a>
-                <?php
-                }
-                ?>
+                    </a> <?php
+                        }
+                            ?>
             </div>
 
             <!-- Add pagination links -->

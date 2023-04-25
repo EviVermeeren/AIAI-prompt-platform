@@ -5,7 +5,6 @@ if (isset($_GET["error"])) {
   $error = $_GET["error"];
 }
 
-
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   header('Location: ../php/login.php');
   exit;
