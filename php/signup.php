@@ -18,37 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
     $options = [ // set options for password hashing
       'cost' => 12, // set cost to 12
     ];
-
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
 
     try {
 
       $conn = Db::getInstance(); // Connect to database
 
-      // Check if email or username is already in use
-      $query = $conn->prepare("SELECT (SELECT COUNT(*) FROM users WHERE email = :email) as email_count, (SELECT COUNT(*) FROM users WHERE username = :username) as username_count"); // prepare query
-      $query->bindValue(":email", $email, PDO::PARAM_STR); // bind email to query, and set type to string, to prevent SQL injection
-      $query->bindValue(":username", $username, PDO::PARAM_STR); // bind username to query, and set type to string, to prevent SQL injection
-      $query->execute(); // execute query
-      $result = $query->fetch(PDO::FETCH_ASSOC); // get result
-
-      $email_count = $result['email_count'];
-      $username_count = $result['username_count'];
-
-      // If email and username are not in use and are valid, create a new user
-      if ($email_count == 0 && $username_count == 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) { // if email and username are not in use and are valid, create a new user, and set type to string, to prevent SQL injection
+      $userChecker = new UserChecker($conn);
+      if ($userChecker->checkEmailAndUsername($email, $username)) {
 
         $verification_code = uniqid(); // Generate verification code for email verification 
 
-        // Insert user into database with verification code
-        $query = $conn->prepare("INSERT INTO users (email, password, firstname, lastname, username, profile_picture, profile_banner, verification_code) VALUES (:email, :password, :firstname, :lastname, :username, '../media/pickachu.png', '../media/achtergrond.jpg', :verification_code)"); // prepare query
-        $query->bindValue(":email", $email, PDO::PARAM_STR); // bind email to query, and set type to string, to prevent SQL injection
-        $query->bindValue(":password", $password, PDO::PARAM_STR); // bind password to query, and set type to string, to prevent SQL injection
-        $query->bindValue(":firstname", $firstname, PDO::PARAM_STR); // bind firstname to query, and set type to string, to prevent SQL injection
-        $query->bindValue(":lastname", $lastname, PDO::PARAM_STR); // bind lastname to query, and set type to string, to prevent SQL injection
-        $query->bindValue(":username", $username, PDO::PARAM_STR); // bind username to query, and set type to string, to prevent SQL injection
-        $query->bindValue(":verification_code", $verification_code, PDO::PARAM_STR); // bind verification code to query, and set type to string, to prevent SQL injection
-        $query->execute(); // execute query
+        $insertUser = new InsertUser($conn);
+        $insertUser->insert($email, $password, $firstname, $lastname, $username, $verification_code);
 
         // Send email to user
         require '../vendor/autoload.php'; // include sendgrid library
@@ -75,15 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
         // Redirect to login page
         header('Location: ../php/emailsent.php');
         exit;
-      } else { // if email or username is already in use, set error message
-        $error_messages = array();
-        if ($email_count > 0) {
-          $error_messages[] = "Email is already in use.";
-        }
-        if ($username_count > 0) {
-          $error_messages[] = "Username is already in use.";
-        }
-        $error = implode(" ", $error_messages);
+      } else {
+        $error = "Email or username already exists.";
       }
     } catch (PDOException $e) { // if database error, set error message
       $error = "Database error: Please try again.";
