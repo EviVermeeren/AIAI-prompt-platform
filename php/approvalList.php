@@ -62,13 +62,13 @@ $stmt = $conn->query($sql);
 <body>
     <?php include_once("../inc/nav.inc.php"); ?>
 
-    <div id="header">
+    <div id="headerApproval">
         <h1>Prompts Approval List</h1>
     </div>
 
     <div id="approvalList">
         <?php if ($stmt->rowCount() > 0) : ?> <!-- Check if there are any prompts needing approval -->
-            <table>
+            <table id="approveList">
                 <tr>
                     <th>Model</th>
                     <th>Name</th>
@@ -91,8 +91,8 @@ $stmt = $conn->query($sql);
                         <td><?php echo $row["tags"] ?></td> <!-- Display the tags of the prompt  -->
                         <td> <img src="../media/<?php echo $row["pictures"] ?>" alt="" class="approveimg"></td> <!-- Display the picture of the prompt -->
                         <td>
-                            <button onclick="approvePrompt(<?php echo $row['id']; ?>)"> YAS QUEEN 💅</button> <!-- Button to approve the prompt Approve 👍 -->
-                            <button onclick="deletePrompt(<?php echo $row['id']; ?>)">Yeet and delete 🖕</button> <!-- Button to reject the prompt Reject 👎 -->
+                            <button class="approvePromtList" onclick="approvePrompt(<?php echo $row['id']; ?>)"> YAS QUEEN 💅</button> <!-- Button to approve the prompt Approve 👍 -->
+                            <button class="deletePromtList" onclick="deletePrompt(<?php echo $row['id']; ?>)">Yeet and delete 🖕</button> <!-- Button to reject the prompt Reject 👎 -->
                         </td>
                     </tr>
                 <?php endwhile; ?>

@@ -3,21 +3,27 @@
 include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
-$id = $_GET['user_id'] ?? null; // if the id parameter is set, store it in a variable
+$id = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT); // Validate and sanitize the id parameter
 
 if (!$id) { // If id parameter is not set, redirect to homepage
     header("Location: ../index.php");
     exit;
 }
 
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: ../php/login.php');
+    exit;
+}
+
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/profile.php?id=$id";
 
 $conn = Db::getInstance(); // Connect to database
-$sql = "SELECT * FROM users WHERE id = $id";
-$result = $conn->query($sql); // execute the query
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = :id"); // Prepare the query
+$stmt->bindParam(':id', $id, PDO::PARAM_INT); // Bind the parameter
+$stmt->execute(); // Execute the query
 
-if ($result) {
-    $row = $result->fetch(PDO::FETCH_ASSOC); // fetch the results as an associative array
+if ($stmt) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC); // fetch the results as an associative array
     $profile_banner = $row['profile_banner'];
     $profile_picture = $row['profile_picture'];
     $profile_name = $row['username'];
@@ -63,13 +69,13 @@ $prompts = $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
             <h2 class="nameuser"><?php echo $username ?></h2> <!-- Here we display the username of the user -->
             <div class="likeandfollow">
                 <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
-                <a class="btnfollow" href="#">Flag</a> <!-- This button will be used to flag the user -->
+                <a class="btnfollow" href="#">Flag 🚩</a> <!-- This button will be used to flag the user -->
                 <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
                 <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
 
                 <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is  logged in -->
 
-                    <a href="../php/favorites.php">Favorites</a>
+                    <a class="btnfollow" href="../php/favorites.php">Favorites ⭐</a>
                 <?php endif; ?>
 
             </div>

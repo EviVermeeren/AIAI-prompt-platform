@@ -1,5 +1,115 @@
 /* begin mobile devices */
 @import url("https://use.typekit.net/kqy0ynu.css");
+.form__error {
+  background-color: #efeef1;
+  border: 1px solid #e91c24;
+  border-radius: 5px;
+  border-left-width: 5px;
+  padding: 0.5em;
+  color: #e91c24;
+}
+
+.form__error p {
+  color: black;
+}
+
+.profile {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.likeandfollow {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: flex-start;
+}
+
+.btnfollow {
+  background: #00a08d;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  color: white;
+  font-family: "filson-pro", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+#headerApproval {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 25px;
+  font-family: "informa-pro", sans-serif;
+  color: #3e3e3e;
+}
+
+#approvalList {
+  max-width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  justify-content: center;
+  font-family: "informa-pro", sans-serif;
+  color: #3e3e3e;
+}
+
+th {
+  padding-right: 5px;
+}
+
+#approveList {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "informa-pro", sans-serif;
+  color: #3e3e3e;
+  background: #ffffff;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #00a08d;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.approvePromtList {
+  background: #01bd40;
+  border-radius: 10px;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  color: white;
+  font-family: "filson-pro", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.deletePromtList {
+  background: #c00000;
+  border-radius: 10px;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  color: white;
+  font-family: "filson-pro", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+}
 
 #btnsignup {
   background-color: #00a08d;
@@ -458,11 +568,11 @@ div.pagination a:hover {
     display: flex;
     flex-direction: column;
     flex-grow: 2;
-    border-bottom: 2px solid #3e3e3e;
-    height: 80px;
-    margin-bottom: 700px;
     margin-left: auto;
     margin-right: auto;
+    border-bottom: 2px solid #3e3e3e;
+    height: 80px;
+    max-width: 1400px;
   }
 
   .prompt {
@@ -1314,11 +1424,11 @@ div.pagination a:hover {
     display: flex;
     flex-direction: column;
     flex-grow: 2;
-    border-bottom: 2px solid #3e3e3e;
-    height: 80px;
-    margin-bottom: 700px;
     margin-left: auto;
     margin-right: auto;
+    border-bottom: 2px solid #3e3e3e;
+    height: 80px;
+    max-width: 1400px;
   }
 
   .prompt {
@@ -2146,9 +2256,11 @@ div.pagination a:hover {
     display: flex;
     flex-direction: column;
     flex-grow: 2;
-    margin-left: 50px;
+    margin-left: auto;
+    margin-right: auto;
     border-bottom: 2px solid #3e3e3e;
     height: 80px;
+    max-width: 1400px;
   }
 
   .prompt {

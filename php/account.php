@@ -54,13 +54,14 @@ $prompts = $stmt->fetchAll();
       <h2 class="nameuser"><?php echo $username ?></h2> <!-- Here we display the username of the user -->
       <div class="likeandfollow">
         <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
-        <a class="btnfollow" href="#">Flag</a> <!-- This button will be used to flag the user -->
+
+        <a class="btnfollow" href="#">Flag 🚩</a> <!-- This button will be used to flag the user -->
         <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
         <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
 
         <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is  logged in -->
 
-          <a href="../php/favorites.php">Favorites</a>
+          <a class="btnfollow" href="../php/favorites.php">Favorites ⭐</a>
         <?php endif; ?>
 
       </div>

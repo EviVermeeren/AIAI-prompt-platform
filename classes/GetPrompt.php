@@ -23,8 +23,12 @@ class GetPrompt
         $totalPages = ceil($totalPrompts / $promptsPerPage); // Calculate the total number of pages
 
         // Query the database to get the prompts for the current page
-        $sql = "SELECT * FROM prompts WHERE approved=1 ORDER BY date DESC LIMIT $promptsPerPage OFFSET $offset";
-        $result = $this->conn->query($sql);
+        $sql = "SELECT * FROM prompts WHERE approved=1 ORDER BY date DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':limit', $promptsPerPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
 
         return array('prompts' => $result, 'totalPages' => $totalPages);
     }
