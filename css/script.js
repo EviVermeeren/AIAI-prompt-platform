@@ -8,3 +8,39 @@ function copyToClipboard(text) {
   document.body.removeChild(input); // Remove it from the <body> element
   alert("Link copied to clipboard!"); // Alert the copied text
 }
+
+function approvePrompt(id) {
+  if (confirm("Are you sure you want to approve this prompt?")) {
+    fetch("approvePrompt.php?id=" + id, {
+      method: "GET",
+    })
+      .then((response) => response.text())
+      .then((result) => {
+        if (result === "success") {
+          alert("Prompt approved successfully.");
+          location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+function deletePrompt(id) {
+  if (confirm("Are you sure you want to delete this prompt?")) {
+    fetch("rejectPrompt.php?id=" + id, {
+      method: "GET",
+    })
+      .then((response) => response.text())
+      .then((result) => {
+        if (result === "success") {
+          alert("Prompt deleted successfully.");
+          location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}

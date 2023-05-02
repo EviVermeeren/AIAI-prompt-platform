@@ -23,40 +23,6 @@ $stmt = $conn->query($sql);
     <title>Detail</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css">
     <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>">
-    <script>
-        function approvePrompt(id) {
-            if (confirm("Are you sure you want to approve this prompt?")) {
-                var xhttp = new XMLHttpRequest(); // creates a new XMLHttpRequest object
-                location.reload(); // reloads the current page
-                xhttp.onreadystatechange = function() { // sets a callback function to run when the readyState property changes
-                    if (this.readyState == 4 && this.status == 200) { // checks if the request has been completed and the response status is OK
-                        if (this.responseText == "success") { // checks if the response text is "success"
-                            alert("Prompt approved successfully."); // displays a success message
-                            location.reload(); // reloads the current page
-                        }
-                    }
-                };
-                xhttp.open("GET", "approvePrompt.php?id=" + id, true); // opens a GET request to the specified URL
-                xhttp.send(); // sends the request to the server
-            }
-        }
-
-        function deletePrompt(id) {
-            if (confirm("Are you sure you want to delete this prompt?")) {
-                var xhttp = new XMLHttpRequest(); // creates a new XMLHttpRequest object
-                xhttp.onreadystatechange = function() { // sets a callback function to run when the readyState property changes
-                    if (this.readyState == 4 && this.status == 200) { // checks if the request has been completed and the response status is OK
-                        if (this.responseText == "success") { // checks if the response text is "success"
-                            alert("Prompt deleted successfully."); // displays a success message
-                            location.reload(); // reloads the current page
-                        }
-                    }
-                };
-                xhttp.open("GET", "rejectPrompt.php?id=" + id, true); // opens a GET request to the specified URL
-                xhttp.send(); // sends the request to the server      
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -103,6 +69,7 @@ $stmt = $conn->query($sql);
     </div>
 
     <?php include_once("../inc/foot.inc.php"); ?>
+    <script src="../css/script.js"></script>
 </body>
 
 </html>

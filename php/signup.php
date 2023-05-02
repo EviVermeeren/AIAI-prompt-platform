@@ -9,7 +9,6 @@ $firstname_value = isset($_POST["firstname"]) ? htmlspecialchars($_POST["firstna
 $lastname_value = isset($_POST["lastname"]) ? htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8') : '';
 $username_value = isset($_POST["username"]) ? htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8') : '';
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
   $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8'); // get email from form, and sanitize it to prevent XSS attacks 
   $firstname = htmlspecialchars($_POST["firstname"], ENT_QUOTES, 'UTF-8'); // get firstname from form, and sanitize it to prevent XSS attacks

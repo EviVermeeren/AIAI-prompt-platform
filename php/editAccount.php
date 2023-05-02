@@ -141,8 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
         <input type="file" name="profile_banner" accept="image/*"><br><br>
         -->
 
+            <a href="../php/customProfilePicture.php"> Change Profile picture</a><br><br>
+
             <input class="submitbtn" type="submit" value="Save profile">
             <a href="../php/deleteAccount.php"> Delete your account</a>
+            <a href="../php/change-password.php"> Change Password</a>
 
         </form>
 
