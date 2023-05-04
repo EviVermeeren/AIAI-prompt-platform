@@ -22,38 +22,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
 
     try {
-
       $conn = Db::getInstance(); // Connect to database
 
-      $userChecker = new UserChecker($conn);
-      if ($userChecker->checkEmailAndUsername($email, $username)) {
+      $user = new Users($conn);
 
+      if ($user->checkEmailAndUsername($email, $username)) {
         $verification_code = uniqid(); // Generate verification code for email verification 
 
-        $insertUser = new InsertUser($conn);
-        $insertUser->insert($email, $password, $firstname, $lastname, $username, $verification_code);
+        $user->setEmail($email);
+        $user->setPassword($password);
+        $user->setFirstName($firstname);
+        $user->setLastName($lastname);
+        $user->setUsername($username);
+        $user->setVerificationCode($verification_code);
 
-        // Send email to user
-        require '../vendor/autoload.php'; // include sendgrid library
+        $user->save();
 
-        $email = new \SendGrid\Mail\Mail(); // create new email
-        $email->setFrom("evivermeeren@hotmail.com", "PromptSwap"); // set sender 
-        $email->setSubject("Verify your email address"); // set subject
-        $email->addTo($_POST['email'], $_POST['username']); // set recipient
-        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"); // set content
-        $email->addContent(
-          "text/html",
-          "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
-        ); // set content
-        $sendgrid = new \SendGrid($key); // create new sendgrid object
-        try { // try to send email
-          $response = $sendgrid->send($email);
-          print $response->statusCode() . "\n";
-          print_r($response->headers());
-          print $response->body() . "\n";
-        } catch (Exception $e) { // if email could not be sent, print error
-          echo 'Caught exception: ' . $e->getMessage() . "\n";
-        }
+        $emailSender = new EmailSender($key);
+        $emailSender->sendEmail(
+          "evivermeeren@hotmail.com",
+          $_POST['email'],
+          "Verify your email address",
+          "Hi {$_POST['username']}! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code",
+          "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
+        );
 
         // Redirect to login page
         header('Location: ../php/emailsent.php');
