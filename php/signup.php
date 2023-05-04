@@ -16,46 +16,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
     $error = $passwordVerifier->getError(); // set error message
   } else {
     $password = $passwordVerifier->getHashedPassword(); // get hashed password
-    $options = [ // set options for password hashing
-      'cost' => 12, // set cost to 12
-    ];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
+  }
 
-    try {
-      $conn = Db::getInstance(); // Connect to database
+  try {
+    $conn = Db::getInstance(); // Connect to database
 
-      $user = new Users($conn);
+    $user = new Users($conn);
 
-      if ($user->checkEmailAndUsername($email, $username)) {
-        $verification_code = uniqid(); // Generate verification code for email verification 
+    if ($user->checkEmailAndUsername($email, $username)) {
+      $verification_code = uniqid(); // Generate verification code for email verification 
 
-        $user->setEmail($email);
-        $user->setPassword($password);
-        $user->setFirstName($firstname);
-        $user->setLastName($lastname);
-        $user->setUsername($username);
-        $user->setVerificationCode($verification_code);
+      $user->setEmail($email);
+      $user->setPassword($password);
+      $user->setFirstName($firstname);
+      $user->setLastName($lastname);
+      $user->setUsername($username);
+      $user->setVerificationCode($verification_code);
 
-        $user->save();
+      $user->save();
 
-        $emailSender = new EmailSender($key);
-        $emailSender->sendEmail(
-          "evivermeeren@hotmail.com",
-          $_POST['email'],
-          "Verify your email address",
-          "Hi {$_POST['username']}! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code",
-          "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
-        );
+      $emailSender = new EmailSender($key);
+      $emailSender->sendEmail(
+        "evivermeeren@hotmail.com",
+        $_POST['email'],
+        "Verify your email address",
+        "Hi {$_POST['username']}! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code",
+        "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
+      );
 
-        // Redirect to login page
-        header('Location: ../php/emailsent.php');
-        exit;
-      } else {
-        $error = "Email or username already exists.";
-      }
-    } catch (PDOException $e) { // if database error, set error message
-      $error = "Database error: Please try again.";
+      // Redirect to login page
+      header('Location: ../php/emailsent.php');
+      exit;
+    } else {
+      $error = "Email or username already exists.";
     }
+  } catch (PDOException $e) { // if database error, set error message
+    $error = "Database error: Please try again.";
   }
 }
 ?>

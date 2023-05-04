@@ -46,7 +46,10 @@ class PasswordVerifier
         } elseif (strlen($this->password) < 8) { // if password is shorter than 8 characters
             $this->error = "Password should be at least 8 characters in length.";
         } else {
-            $this->hashedPassword = $this->password;
+            $options = [ // set options for password hashing
+                'cost' => 12, // set cost to 12
+            ];
+            $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT, $options); // hash password
         }
     }
 }
