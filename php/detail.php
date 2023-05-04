@@ -39,8 +39,6 @@ if ($result->rowCount() > 0) { // check if the query returned any results
     $pictures = $row['pictures']; // store the pictures of the prompt in a variable
     $date = $row['date']; // store the date of the prompt in a variable
     $tags = $row['tags']; // store the tags of the prompt in a variable
-
-
   }
 } else { // if the query returned no results
   echo "Error: No results found"; // display an error message
@@ -61,7 +59,6 @@ $stmt->execute();
 
 // Fetch the results
 $results = $stmt->fetchAll();
-
 
 ?>
 
@@ -125,6 +122,11 @@ $results = $stmt->fetchAll();
         <p id="message"></p>
 
         <a class="icon" href="#">🏳‍🌈</a>
+
+        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $user_id) : ?>
+          <button type="submit" class="delete-button">Delete this (my) prompt</button>
+        <?php endif; ?>
+
       </div>
     </div>
   </div>

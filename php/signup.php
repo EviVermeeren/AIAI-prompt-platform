@@ -4,16 +4,12 @@ include_once("../inc/bootstrap.php"); // include bootstrap file
 $config = parse_ini_file('../config/config.ini', true); // include config file
 $key = $config['keys']['sendgridapikey']; // get sendgrid api key
 
-$email_value = isset($_POST["email"]) ? htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8') : '';
-$firstname_value = isset($_POST["firstname"]) ? htmlspecialchars($_POST["firstname"], ENT_QUOTES, 'UTF-8') : '';
-$lastname_value = isset($_POST["lastname"]) ? htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8') : '';
-$username_value = isset($_POST["username"]) ? htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8') : '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
-  $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8'); // get email from form, and sanitize it to prevent XSS attacks 
-  $firstname = htmlspecialchars($_POST["firstname"], ENT_QUOTES, 'UTF-8'); // get firstname from form, and sanitize it to prevent XSS attacks
-  $lastname = htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8'); // get lastname from form, and sanitize it to prevent XSS attacks
-  $username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8'); // get username from form, and sanitize it to prevent XSS attacks
+
+  $email = $_POST["email"];
+  $firstname = $_POST["firstname"];
+  $lastname = $_POST["lastname"];
+  $username = $_POST["username"];
 
   $passwordVerifier = new PasswordVerifier($_POST['password']);
   if (!$passwordVerifier->isStrong()) { // if password does not meet strength requirements
@@ -103,16 +99,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
     <div class="form form--login">
       <form method="post">
         <label for="firstname">First Name</label>
-        <input type="text" id="firstname" name="firstname" value="<?php echo $firstname_value; ?>" required />
+        <input type="text" id="firstname" name="firstname" value="<?php echo isset($_POST['firstname']) ? Sanitizer::sanitize($_POST['firstname']) : ''; ?>" required />
 
         <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" name="lastname" value="<?php echo $lastname_value; ?>" required />
+        <input type="text" id="lastname" name="lastname" value="<?php echo isset($_POST['lastname']) ? Sanitizer::sanitize($_POST['lastname']) : ''; ?>" required />
 
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" value="<?php echo $username_value; ?>" required />
+        <input type="text" id="username" name="username" value="<?php echo isset($_POST['username']) ? Sanitizer::sanitize($_POST['username']) : ''; ?>" required />
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="<?php echo $email_value; ?>" required />
+        <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? Sanitizer::sanitize($_POST['email']) : ''; ?>" required />
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required />
