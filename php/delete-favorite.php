@@ -21,5 +21,5 @@ if (!$conn) { // check if the connection was successful
     exit; // and exit the script
 }
 
-$favoritesManager = new FavoritesManager($conn);
+$favoritesManager = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn); // create a new instance of the FavoritesManager class
 $favoritesManager->removeFavorite($id, $user_id);

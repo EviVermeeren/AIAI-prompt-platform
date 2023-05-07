@@ -17,5 +17,5 @@ $user_id = $_SESSION['user_id']; // get the user id from the session
 $conn = Db::getInstance(); // connect to the database
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set the PDO error mode to exception
 
-$favoritesManager = new FavoritesManager($conn); // create a new instance of the FavoritesManager class
+$favoritesManager = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn); // create a new instance of the FavoritesManager class
 $favoritesManager->addFavorite($id, $user_id); // call the addFavorite method on the FavoritesManager instance
