@@ -1,5 +1,7 @@
 <?php
 
+include_once("../inc/bootstrap.php"); // include bootstrap file
+
 class Prompt
 {
   private $id;
@@ -14,8 +16,9 @@ class Prompt
   private $pictures;
   private $date;
   private $tags;
+  private $conn;
 
-  public function __construct($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags)
+  public function __construct($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn)
   {
     $this->id = $id;
     $this->name = $name;
@@ -29,6 +32,30 @@ class Prompt
     $this->pictures = $pictures;
     $this->date = $date;
     $this->tags = $tags;
+    $this->conn = $conn;
+  }
+
+  public function getPrompts($promptsPerPage, $page)
+  {
+    $offset = ($page - 1) * $promptsPerPage; // Calculate the offset for the current page
+
+    // Query the database to get the total number of prompts
+    $sql = "SELECT COUNT(*) AS count FROM prompts"; // Get the total number of prompts
+    $result = $this->conn->query($sql); // Execute the query
+    $row = $result->fetch(); // Fetch the result
+    $totalPrompts = $row['count']; // Get the total number of prompts
+
+    $totalPages = ceil($totalPrompts / $promptsPerPage); // Calculate the total number of pages
+
+    // Query the database to get the prompts for the current page
+    $sql = "SELECT * FROM prompts WHERE approved=1 ORDER BY date DESC LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindValue(':limit', $promptsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    return array('prompts' => $result, 'totalPages' => $totalPages);
   }
 
   public function getId()

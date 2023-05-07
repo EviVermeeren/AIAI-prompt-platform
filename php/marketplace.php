@@ -4,8 +4,21 @@ include_once("../inc/bootstrap.php"); // Include bootstrap file
 
 $conn = Db::getInstance(); // Connect to database
 
+$id = "";
+$name = "";
+$user = "";
+$rating = "";
+$description = "";
+$price = "";
+$characteristics = "";
+$model = "";
+$prompt = "";
+$pictures = "";
+$date = "";
+$tags = "";
+
 // Instantiate the Prompts class
-$prompts = new GetPrompt($conn);
+$prompts = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn);
 
 $promptsPerPage = 15; // Set the number of prompts to display per page
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number from the query string, or default to 1
