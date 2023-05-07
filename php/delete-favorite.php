@@ -21,5 +21,23 @@ if (!$conn) { // check if the connection was successful
     exit; // and exit the script
 }
 
-$favoritesManager = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn); // create a new instance of the FavoritesManager class
+// Create a new instance of the Prompt class
+$favoritesManager = new Prompt();
+$favoritesManager->setConnection($conn); // Set the connection property
+
+// Set the required properties using the setter methods
+$favoritesManager->setId($id);
+$favoritesManager->setName($name);
+$favoritesManager->setUser($user);
+$favoritesManager->setRating($rating);
+$favoritesManager->setDescription($description);
+$favoritesManager->setPrice($price);
+$favoritesManager->setCharacteristics($characteristics);
+$favoritesManager->setModel($model);
+$favoritesManager->setPrompt($prompt);
+$favoritesManager->setPictures($pictures);
+$favoritesManager->setDate($date);
+$favoritesManager->setTags($tags);
+
+// Call the removeFavorite method
 $favoritesManager->removeFavorite($id, $user_id);

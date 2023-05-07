@@ -17,5 +17,23 @@ $user_id = $_SESSION['user_id']; // get the user id from the session
 $conn = Db::getInstance(); // connect to the database
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set the PDO error mode to exception
 
-$favoritesManager = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn); // create a new instance of the FavoritesManager class
-$favoritesManager->addFavorite($id, $user_id); // call the addFavorite method on the FavoritesManager instance
+
+$favoritesManager = new Prompt();
+$favoritesManager->setConnection($conn); // Set the connection property
+
+// Set the required properties using the setter methods
+$favoritesManager->setId($id);
+$favoritesManager->setName($name);
+$favoritesManager->setUser($user);
+$favoritesManager->setRating($rating);
+$favoritesManager->setDescription($description);
+$favoritesManager->setPrice($price);
+$favoritesManager->setCharacteristics($characteristics);
+$favoritesManager->setModel($model);
+$favoritesManager->setPrompt($prompt);
+$favoritesManager->setPictures($pictures);
+$favoritesManager->setDate($date);
+$favoritesManager->setTags($tags);
+
+// Call the removeFavorite method
+$favoritesManager->addFavorite($id, $user_id);

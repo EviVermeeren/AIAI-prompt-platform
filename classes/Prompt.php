@@ -18,20 +18,68 @@ class Prompt
   private $tags;
   private $conn;
 
-  public function __construct($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn)
+  public function setId($id)
   {
     $this->id = $id;
+  }
+
+  public function setName($name)
+  {
     $this->name = $name;
+  }
+
+  public function setUser($user)
+  {
     $this->user = $user;
+  }
+
+  public function setRating($rating)
+  {
     $this->rating = $rating;
+  }
+
+  public function setDescription($description)
+  {
     $this->description = $description;
+  }
+
+  public function setPrice($price)
+  {
     $this->price = $price;
+  }
+
+  public function setCharacteristics($characteristics)
+  {
     $this->characteristics = $characteristics;
+  }
+
+  public function setModel($model)
+  {
     $this->model = $model;
+  }
+
+  public function setPrompt($prompt)
+  {
     $this->prompt = $prompt;
+  }
+
+  public function setPictures($pictures)
+  {
     $this->pictures = $pictures;
+  }
+
+  public function setDate($date)
+  {
     $this->date = $date;
+  }
+
+  public function setTags($tags)
+  {
     $this->tags = $tags;
+  }
+
+  public function setConnection($conn)
+  {
     $this->conn = $conn;
   }
 

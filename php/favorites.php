@@ -4,24 +4,13 @@ include_once("../inc/bootstrap.php"); // include bootstrap file
 // Connect to database
 $conn = Db::getInstance();
 
-$id = "";
-$name = "";
-$user = "";
-$rating = "";
-$description = "";
-$price = "";
-$characteristics = "";
-$model = "";
-$prompt = "";
-$pictures = "";
-$date = "";
-$tags = "";
 
 // Get the ID of the logged-in user
 $user_id = $_SESSION['user_id'];
 
 // Instantiate the FavoritePrompts class
-$favorite_prompts = new Prompt($id, $name, $user, $rating, $description, $price, $characteristics, $model, $prompt, $pictures, $date, $tags, $conn);
+$favorite_prompts = new Prompt();
+$favorite_prompts->setConnection($conn); // Set the connection property
 
 // Get the favorite prompts for the user
 $favorites = $favorite_prompts->getFavorites($user_id);

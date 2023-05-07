@@ -123,9 +123,9 @@ $results = $stmt->fetchAll();
 
         <a class="icon" href="#">🏳‍🌈</a>
 
-        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $user_id) : ?>
-          <button type="submit" class="delete-button">Delete this (my) prompt</button>
-        <?php endif; ?>
+
+        <button type="submit" class="delete-button">Delete this (my) prompt</button>
+
 
       </div>
     </div>
