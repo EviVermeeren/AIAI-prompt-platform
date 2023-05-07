@@ -34,7 +34,7 @@ $firstname = $row['firstname']; // get firstname from database
 $lastname = $row['lastname']; // get lastname from database 
 $username = $row['username']; // get username from database
 
-$profilePictures = ProfilePicture::getDefaultPictures(); // get default profile pictures from database (array)
+$profilePictures = User::getDefaultPictures(); // get default profile pictures from database (array)
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     // Get form data from POST

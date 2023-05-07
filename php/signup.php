@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
       'cost' => 12, // set cost to 12
     ];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
-
   }
 
   try {
