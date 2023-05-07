@@ -234,7 +234,8 @@ class Prompt
 
   public function getPromptsByUser($email)
   {
-    $stmt = $this->conn->prepare("SELECT * FROM prompts WHERE user=:user");
+    $conn = Db::getInstance();
+    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user=:user");
     $stmt->bindParam(":user", $email);
     $stmt->execute();
     $prompts = $stmt->fetchAll();
@@ -331,5 +332,12 @@ class Prompt
     $query->bindValue(":tags", $tags);
     $query->bindValue(":date", date("Y-m-d H:i:s"));
     $query->execute();
+  }
+
+  public function getPromptsByEmail($email)
+  {
+    $conn = Db::getInstance(); // Connect to the database
+    $email = $conn->quote($email);
+    return $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
   }
 }

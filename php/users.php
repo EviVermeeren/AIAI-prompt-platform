@@ -34,14 +34,16 @@ if (isset($_GET['user_id'])) {
         <?php
         foreach ($users as $user) { // Loop through the result and display the user
 
-            $name = $user['username']; // Get the name of the user
-            $picture = $user['profile_picture']; // Get the picture of the user
+            $name = $user['username'] ?? ''; // Get the name of the user
+            $picture = $user['profile_picture'] ?? ''; // Get the picture of the user
+            $userId = $user['id'] ?? ''; // Get the user ID
+
         ?>
 
             <div class="userdiv" style="background-image: url('../media/<?php echo $picture; ?>')">
-                <a class="userbox" href="<?php echo $profile_url . $user['id']; ?>"><?php echo $user['username']; ?></a>
+                <a class="userbox" href="../php/profile.php?id=<?php echo $userId; ?>"><?php echo $name; ?></a>
             </div>
-            </a>
+
         <?php
         }
         ?>

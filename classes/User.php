@@ -497,4 +497,18 @@ class User
             $message = "Your account has not been updated"; // set error message
         }
     }
+
+    public function getUserDataByID($id)
+    {
+        $conn = Db::getInstance(); // Connect to the database
+        $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id"); // Prepare the query
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Bind the parameter
+        $stmt->execute(); // Execute the query
+
+        if ($stmt) {
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the results as an associative array
+        } else {
+            return false; // Return false if the query failed
+        }
+    }
 }

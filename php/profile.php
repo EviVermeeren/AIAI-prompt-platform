@@ -1,37 +1,22 @@
 <?php
-
 include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
-$id = $_POST['id'];
+$id = $_GET['id'] ?? '';
 
-$user = new User();
-if (!$user->isAuthenticated()) {
-    $user->redirectToLogin();
+$users = new User();
+$user = $users->getUserDataByID($id);
+
+$email = $user['email'];
+
+if ($user) {
+    $username = $user['username'];
+    $profile_banner = $user['profile_banner'];
+    $profile_picture = $user['profile_picture'];
+    $bio = $user['bio'];
+    $new = new Prompt();
+    $prompts = $new->getPromptsByUser($email); // Retrieve prompts associated with the user
 }
-
-$conn = Db::getInstance(); // Connect to database
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = :id"); // Prepare the query
-$stmt->bindParam(':id', $id, PDO::PARAM_INT); // Bind the parameter
-$stmt->execute(); // Execute the query
-
-if ($stmt) {
-    $row = $stmt->fetch(PDO::FETCH_ASSOC); // fetch the results as an associative array
-    $profile_banner = $row['profile_banner'];
-    $profile_picture = $row['profile_picture'];
-    $profile_name = $row['username'];
-    $profile_bio = $row['bio'];
-    $username = $row['username'];
-    $bio = $row['bio'];
-    $email = $row['email'];
-} else {
-    echo "Error: Failed to execute query: " . $conn->error; // if not, display an error message
-    exit; // and exit the script
-}
-
-$email = $conn->quote($row['email']);
-$prompts = $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
-
 
 ?>
 
@@ -63,14 +48,7 @@ $prompts = $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
             <div class="likeandfollow">
                 <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
                 <a class="btnfollow" href="#">Flag 🚩</a> <!-- This button will be used to flag the user -->
-                <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
                 <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
-
-                <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is  logged in -->
-
-                    <a class="btnfollow" href="../php/favorites.php">Favorites ⭐</a>
-                <?php endif; ?>
-
             </div>
         </div>
 
@@ -81,34 +59,33 @@ $prompts = $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
 
     <div class="allprompts">
         <div>
-            <h1>All prompts by <span><?php echo $username ?></span></h1> <!-- Here we display the username of the user -->
+            <h1>All prompts by <span><?php echo $username ?></span></h1>
         </div>
 
         <div class="promptflex">
-            <?php if (count($prompts) == 0) : ?> <!-- If there are no prompts, display the message -->
+            <?php if (count($prompts) == 0) : ?>
                 <h3 style="margin-top: 50px">You don't have any prompts yet!</h3>
-            <?php else : ?> <!-- Otherwise, display the prompts -->
-                <?php foreach ($prompts as $prompt) { // Loop through the result and display the prompts
+            <?php else : ?>
+                <?php foreach ($prompts as $prompt) {
 
-                    $name = $prompt['name']; // Get the name of the prompt
-                    $model = $prompt['model']; // Get the model of the prompt
-                    $price = $prompt['price']; // Get the price of the prompt
-                    $pictures = $prompt['pictures']; // Get the pictures of the prompt
+                    $name = $prompt['name'];
+                    $model = $prompt['model'];
+                    $price = $prompt['price'];
+                    $pictures = $prompt['pictures'];
                 ?>
-                    <a href="../php/detail.php?id=<?php echo $prompt['id']; ?>"> <!-- Link to detailpage -->
-                        <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
-                            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- If the user is logged in, display the price -->
-                                <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
-                                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p> <!-- Display the name and price -->
-                            <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?> <!-- If the user is not logged in, don't display the price -->
-                                <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
+                    <a href="../php/detail.php?id=<?php echo $prompt['id']; ?>">
+                        <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')">
+                            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
+                                <p class="modelboxtitle"><?php echo $model ?></p>
+                                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p>
+                            <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?>
+                                <p class="promptboxtitle"><?php echo $name ?></p>
                             <?php endif; ?>
                         </div>
                     </a>
                 <?php } ?>
             <?php endif; ?>
         </div>
-
         <?php include_once("../inc/foot.inc.php"); ?> <!-- Include footer -->
         <script src="../css/script.js"></script> <!-- Include script -->
 </body>
