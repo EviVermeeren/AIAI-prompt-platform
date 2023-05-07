@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST["username"];
   $password = $_POST["password"];
 
-  $passwordVerifier = new PasswordVerifier();
+  $passwordVerifier = new User();
   $passwordVerifier->setPassword($password);
 
   if (!$passwordVerifier->isStrong()) {
@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $user->setLastName($lastname);
       $user->setUsername($username);
       $user->setConnection($conn);
-
 
       if ($user->checkEmailAndUsername($email, $username)) {
         $verification_code = uniqid();
