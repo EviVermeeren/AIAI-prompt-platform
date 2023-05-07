@@ -394,4 +394,20 @@ class User
             "../media/pickachu.png"
         );
     }
+
+    public function setDbConnection()
+    {
+        $this->conn = Db::getInstance();
+    }
+
+    public function getUsers()
+    {
+        $query = $this->conn->query("SELECT * FROM users");
+        return $query->fetchAll();
+    }
+
+    public function getProfileUrl($user_id)
+    {
+        return "../php/profile.php?user_id=" . $user_id;
+    }
 }

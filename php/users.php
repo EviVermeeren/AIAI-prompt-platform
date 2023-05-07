@@ -1,16 +1,15 @@
 <?php
 include_once("../inc/bootstrap.php");
 
-$conn = Db::getInstance();
-
-$query = $conn->query("SELECT * FROM users");
-$users = $query->fetchAll();
+$user = new User();
+$user->setDbConnection();
+$users = $user->getUsers();
 
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
-    $profile_url = "../php/profile.php?user_id=" . $user_id;
+    $profile_url = $user->getProfileUrl($user_id);
 } else {
-    $profile_url = "../php/profile.php?user_id=";
+    $profile_url = $user->getProfileUrl("");
 }
 
 ?>
