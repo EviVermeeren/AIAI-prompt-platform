@@ -1,21 +1,15 @@
 <?php
 include_once("../inc/bootstrap.php");
 
-if (!isset($_POST['id'])) {
-    echo "Error: ID parameter not set";
-    exit;
+$user = new User();
+if (!$user->isAuthenticated()) {
+    $user->redirectToLogin();
 }
 
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    echo "Error: no user id found";
-    exit;
-}
-
-$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+$id = $_POST['id'];
 $user_id = $_SESSION['user_id'];
 
 $conn = Db::getInstance();
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $favoritesManager = new Prompt();
 $favoritesManager->setConnection($conn);
