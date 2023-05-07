@@ -4,6 +4,7 @@ include_once("../inc/functions.inc.php"); // This is the functions file
 
 $verification_code = "";
 $password = "";
+$conn = "";
 
 if (isset($_POST['email']) && isset($_POST['password'])) { // if email and password are set
     $login = new User($_POST['email'], $conn, $verification_code, $_POST['password']); // create new login object //LOGIN MOET IN USER CLASS
