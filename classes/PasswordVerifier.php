@@ -1,12 +1,11 @@
 <?php
-// PasswordVerifier class
 class PasswordVerifier
 {
     private $password;
     private $error;
     private $hashedPassword;
 
-    public function __construct($password)
+    public function setPassword($password)
     {
         $this->password = $password;
         $this->verifyPassword();
@@ -29,27 +28,26 @@ class PasswordVerifier
 
     private function verifyPassword()
     {
-        $uppercase = preg_match('@[A-Z]@', $this->password); // check if password contains uppercase letter 
-        $lowercase = preg_match('@[a-z]@', $this->password); // check if password contains lowercase letter
-        $number    = preg_match('@[0-9]@', $this->password); // check if password contains number
-        $specialChars = preg_match('@[^\w]@', $this->password); // check if password contains special character
+        $uppercase = preg_match('@[A-Z]@', $this->password);
+        $lowercase = preg_match('@[a-z]@', $this->password);
+        $number = preg_match('@[0-9]@', $this->password);
+        $specialChars = preg_match('@[^\w]@', $this->password);
 
-        // if password does not meet strength requirements
-        if (!$uppercase) { // if password does not contain uppercase letter
+        if (!$uppercase) {
             $this->error = "Password should include at least one upper case letter.";
-        } elseif (!$lowercase) { // if password does not contain lowercase letter
+        } elseif (!$lowercase) {
             $this->error = "Password should include at least one lower case letter.";
-        } elseif (!$number) { // if password does not contain number
+        } elseif (!$number) {
             $this->error = "Password should include at least one number.";
-        } elseif (!$specialChars) { // if password does not contain special character
+        } elseif (!$specialChars) {
             $this->error = "Password should include at least one special character.";
-        } elseif (strlen($this->password) < 8) { // if password is shorter than 8 characters
+        } elseif (strlen($this->password) < 8) {
             $this->error = "Password should be at least 8 characters in length.";
         } else {
-            $options = [ // set options for password hashing
-                'cost' => 12, // set cost to 12
+            $options = [
+                'cost' => 12,
             ];
-            $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT, $options); // hash password
+            $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT, $options);
         }
     }
 }

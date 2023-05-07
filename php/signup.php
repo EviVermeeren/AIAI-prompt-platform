@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST["username"];
   $password = $_POST["password"];
 
-  $passwordVerifier = new PasswordVerifier($password);
+  $passwordVerifier = new PasswordVerifier();
+  $passwordVerifier->setPassword($password);
+
   if (!$passwordVerifier->isStrong()) {
     $error = $passwordVerifier->getError();
   } else {
