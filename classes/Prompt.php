@@ -261,4 +261,75 @@ class Prompt
     $username = $user_row['username'];
     return $username;
   }
+
+  public function getAllByUser($email)
+  {
+    $query = $this->conn->prepare("SELECT * FROM prompts WHERE user = :email");
+    $query->bindValue(":email", $email);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function handleFileUpload($file)
+  {
+    $file_name = $file["name"];
+    $file_temp_name = $file["tmp_name"];
+    $file_size = $file["size"];
+    $file_error = $file["error"];
+
+    if ($file_error !== UPLOAD_ERR_OK) {
+      $error = "Upload failed with error code $file_error.";
+      exit;
+    }
+
+    if ($file_size > 1000000) {
+      $error = "File is too big"; // set error message
+      header("Location: ../php/upload.php?error=" . urlencode($error)); // redirect to edit account page
+      exit;
+    }
+
+    if (!preg_match('/^[a-zA-Z0-9_]+\.[a-zA-Z0-9]{3,4}$/', $file_name)) {
+      $error = "File name is not correct"; // set error message
+      header("Location: ../php/upload.php?error=" . urlencode($error)); // redirect to edit account page
+      exit;
+    }
+
+    $uploads_dir = "../media/";
+    $file_path = $uploads_dir . $file_name;
+    if (!move_uploaded_file($file_temp_name, $file_path)) {
+      $error = "Failed to move uploaded file.";
+      exit;
+    }
+
+    return $file_name;
+  }
+
+  public function createPrompt(
+    $name,
+    $email,
+    $description,
+    $model,
+    $file_name,
+    $selected_categories,
+    $price,
+    $prompt_text,
+    $tags
+  ) {
+    // Your create logic goes here, using the provided arguments
+
+    // Perform the database insertion
+    $conn = Db::getInstance();
+    $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags, date) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags, :date)");
+    $query->bindValue(":name", $name);
+    $query->bindValue(":email", $email);
+    $query->bindValue(":description", $description);
+    $query->bindValue(":model", $model);
+    $query->bindValue(":pictures", $file_name);
+    $query->bindValue(":categories", implode(", ", $selected_categories));
+    $query->bindValue(":price", $price);
+    $query->bindValue(":prompt", $prompt_text);
+    $query->bindValue(":tags", $tags);
+    $query->bindValue(":date", date("Y-m-d H:i:s"));
+    $query->execute();
+  }
 }
