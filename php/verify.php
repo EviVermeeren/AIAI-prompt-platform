@@ -1,15 +1,18 @@
 <?php
 
-include_once("../inc/bootstrap.php"); // include bootstrap file
-include_once("../inc/functions.inc.php"); // include functions file
+include_once("../inc/bootstrap.php");
+include_once("../inc/functions.inc.php");
 
-if (isset($_GET['verification_code'])) { // if verification code is set
-    $verification_code = $_GET['verification_code']; // get verification code 
-    $verification = new User($email, $conn, $verification_code, $password); // create new verification object
-    if ($verification->verify()) { // if verification is successful
-        $_SESSION['message'] = "Your account has been verified. Please log in."; // set message
-        header("Location: ../php/login.php"); // redirect to login page
-    } else { // if verification is not successful
-        echo "Invalid verification code"; // display error message
+if (isset($_GET['verification_code'])) {
+    $verification_code = $_GET['verification_code'];
+    $conn = Db::getInstance(); // Create a database connection
+    $verification = new User(); // Create a new User object
+    $verification->setConnection($conn); // Set the database connection
+    $verification->setVerificationCode($verification_code); // Set the verification code
+    if ($verification->verify($verification_code)) {
+        $_SESSION['message'] = "Your account has been verified. Please log in.";
+        header("Location: ../php/login.php");
+    } else {
+        echo "Invalid verification code";
     }
 }

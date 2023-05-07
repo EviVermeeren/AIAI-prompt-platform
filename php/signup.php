@@ -22,18 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
       $conn = Db::getInstance();
 
-      $user = new User($email, $conn, $password, $firstname, $lastname, $username);
+      $user = new User();
+      $user->setEmail($email);
+      $user->setPassword($hashedPassword);
+      $user->setFirstName($firstname);
+      $user->setLastName($lastname);
+      $user->setUsername($username);
+      $user->setConnection($conn);
+
 
       if ($user->checkEmailAndUsername($email, $username)) {
         $verification_code = uniqid();
 
-        $user->setEmail($email);
-        $user->setFirstName($firstname);
-        $user->setLastName($lastname);
-        $user->setUsername($username);
         $user->setVerificationCode($verification_code);
-        $user->setPassword($hashedPassword); // Store the hashed password
-
         $user->save();
 
         $emailSender = new EmailSender();

@@ -12,6 +12,16 @@ class User
     private $verification_code;
     private $error;
 
+    public function setConnection($conn)
+    {
+        $this->conn = $conn;
+    }
+
+    public function initialize($conn)
+    {
+        $this->setConnection($conn);
+    }
+
     public function doLogin()
     {
         try {
@@ -34,13 +44,12 @@ class User
         return $this->error; // return error message
     }
 
-    public function verify() // verify account
+    public function verify($verification_code)
     {
-        $result = checkVerifyToken($this->verification_code); // check if verification code is valid
+        $result = checkVerifyToken($verification_code); // check if verification code is valid
         if ($result) { // if verification code is valid
-            $conn = Db::getInstance(); // get database connection
-            $statement = $conn->prepare("UPDATE users SET activated = 1 WHERE verification_code = :verification_code"); // update database
-            $statement->bindValue(":verification_code", $this->verification_code); // bind verification code to query
+            $statement = $this->conn->prepare("UPDATE users SET activated = 1 WHERE verification_code = :verification_code"); // update database
+            $statement->bindValue(":verification_code", $verification_code); // bind verification code to query
             $statement->execute(); // execute query
             return true; // return true
         } else {
