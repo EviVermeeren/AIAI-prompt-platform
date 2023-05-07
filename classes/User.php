@@ -15,6 +15,8 @@ class User
     private $error;
     private $key;
     private $hashedPassword;
+    private $bio;
+    private $profile_picture;
 
     public function isAuthenticated()
     {
@@ -409,5 +411,90 @@ class User
     public function getProfileUrl($user_id)
     {
         return "../php/profile.php?user_id=" . $user_id;
+    }
+
+    function getUserData($conn, $email)
+    {
+        $conn = Db::getInstance();
+        $query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner FROM users WHERE email = :email");
+        $query->bindValue(":email", $email);
+        $query->execute();
+
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+
+        $userData = array(
+            'bio' => $row['bio'],
+            'profile_picture' => $row['profile_picture'],
+            'profile_banner' => $row['profile_banner'],
+            'firstname' => $row['firstname'],
+            'lastname' => $row['lastname'],
+            'username' => $row['username']
+        );
+
+        return $userData;
+    }
+
+    public static function checkIfUsernameExists($conn, $username, $email)
+    {
+        $username_query = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username AND email != :email");
+        $username_query->bindValue(":username", $username);
+        $username_query->bindValue(":email", $email);
+        $username_query->execute();
+
+        $username_row = $username_query->fetch(PDO::FETCH_ASSOC);
+
+        if ($username_row['count'] > 0) {
+            return true; // Username already exists
+        } else {
+            return false; // Username does not exist
+        }
+    }
+
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    public function setBio($bio)
+    {
+        $this->bio = $bio;
+    }
+
+    public function setProfilePicture($profile_picture)
+    {
+        $this->profile_picture = $profile_picture;
+    }
+
+    public static function updateUserData($conn, $firstname, $lastname, $username, $bio, $profile_picture, $email)
+    {
+        // Update database with form data
+        $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture";
+
+        // Add WHERE clause to limit the update to the logged-in user
+        $sql .= " WHERE email=:email";
+
+        // Prepare and execute query with parameters
+        $query = $conn->prepare($sql);
+        $query->bindValue(":firstname", $firstname);
+        $query->bindValue(":lastname", $lastname);
+        $query->bindValue(":username", $username);
+        $query->bindValue(":bio", $bio);
+        $query->bindValue(":profile_picture", $profile_picture);
+        // Bind email parameter to limit the update to the logged-in user
+        $query->bindValue(":email", $email);
+
+        $query->execute(); // execute query
+
+        if ($query->rowCount() > 0) { // if query is successful
+            header("Location: ../php/account.php"); // redirect to account page
+            exit; // exit script
+        } else { // if query is not successful
+            $message = "Your account has not been updated"; // set error message
+        }
     }
 }

@@ -20,19 +20,14 @@ try { // connect to database
     $message = "Try again later: " . $e->getMessage(); // set error message
     exit; // exit script
 }
-
-$query = $conn->prepare("SELECT firstname, lastname, username, bio, profile_picture, profile_banner FROM users WHERE email = :email"); // get user data from database
-
-$query->bindValue(":email", $email); // bind email to query
-$query->execute(); // execute query
-
-$row = $query->fetch(PDO::FETCH_ASSOC); // fetch data from query
-$bio = $row['bio']; // get bio from database
-$profile_picture = $row['profile_picture']; // get profile picture from database
-$profile_banner = $row['profile_banner']; // get profile banner from database
-$firstname = $row['firstname']; // get firstname from database
-$lastname = $row['lastname']; // get lastname from database 
-$username = $row['username']; // get username from database
+$user = new User();
+$userData = $user->getUserData($conn, $email);
+$bio = $userData['bio'];
+$profile_picture = $userData['profile_picture'];
+$profile_banner = $userData['profile_banner'];
+$firstname = $userData['firstname'];
+$lastname = $userData['lastname'];
+$username = $userData['username'];
 
 $profilePictures = User::getDefaultPictures(); // get default profile pictures from database (array)
 
@@ -44,45 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // if form is submitted
     $bio = $_POST["bio"]; // get bio from form
     $profile_picture = isset($_POST["profile_picture"]) ? $_POST["profile_picture"] : $profile_picture; // get profile picture from form
 
-
     // Check if the new username is already in use
-    $username_query = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username AND email != :email"); // get user data from database
-    $username_query->bindValue(":username", $username); // bind username to query
-    $username_query->bindValue(":email", $email); // bind email to query
-    $username_query->execute(); // execute query
-
-    $username_row = $username_query->fetch(PDO::FETCH_ASSOC); // fetch data from query
-
-    if ($username_row['count'] > 0) { // if username is already in use 
-        $message = "Username is already in use"; // set error message
-        header("Location: ../php/editAccount.php?error=" . urlencode($message)); // redirect to edit account page
+    if (User::checkIfUsernameExists($conn, $username, $email)) {
+        $message = "Username is already in use";
+        header("Location: ../php/editAccount.php?error=" . urlencode($message));
         exit;
     }
 
-    // Update database with form data
-    $sql = "UPDATE users SET firstname=:firstname, lastname=:lastname, username=:username, bio=:bio, profile_picture=:profile_picture";
-
-    // Add WHERE clause to limit the update to the logged-in user
-    $sql .= " WHERE email=:email";
-
-    // Prepare and execute query with parameters
-    $query = $conn->prepare($sql);
-    $query->bindValue(":firstname", $firstname);
-    $query->bindValue(":lastname", $lastname);
-    $query->bindValue(":username", $username);
-    $query->bindValue(":bio", $bio);
-    $query->bindValue(":profile_picture", $profile_picture);
-    // Bind email parameter to limit the update to the logged-in user
-    $query->bindValue(":email", $email);
-
-    $query->execute(); // execute query
-
-    if ($query->rowCount() > 0) { // if query is successful
-        header("Location: ../php/account.php"); // redirect to account page
-        exit; // exit script
-    } else { // if query is not successful
-        $message = "Your account has not been updated"; // set error message
-    }
+    User::updateUserData($conn, $firstname, $lastname, $username, $bio, $profile_picture, $email); // update user in database
 }
 ?>
 
