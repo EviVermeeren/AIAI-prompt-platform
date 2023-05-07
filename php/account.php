@@ -13,7 +13,13 @@ $verification_code = "";
 $password = "";
 
 $email = $_SESSION["email"];
-$user = new User($email, $conn, $verification_code, $password);
+// Remove the constructor arguments from the User instantiation
+$user = new User();
+
+// Set the email using the setEmail method
+$user->setEmail($_SESSION["email"]);
+
+// Use the User object to retrieve the required data
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();
@@ -21,6 +27,7 @@ $username = $user->getUsername();
 
 $user_id = $user->getId();
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
+
 
 // get all prompts uploaded by the user
 $conn = Db::getInstance();

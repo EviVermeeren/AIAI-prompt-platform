@@ -1,39 +1,31 @@
 <?php
 
 class User
-{ // class User
-    private $email; // email
-    private string $resetToken; // reset token
-    private string $password; // password
+{
+    private $email;
+    private string $resetToken;
+    private string $password;
     private $conn;
     private $firstname;
     private $lastname;
     private $username;
     private $verification_code;
-    private $error; // error message
+    private $error;
 
-    public function __construct($email, $conn, $verification_code, $password)
-    { // constructor
-        $this->email = $email; // set email
-        $this->conn = $conn;
-        $this->verification_code = $verification_code;
-        $this->password = htmlspecialchars($password, ENT_QUOTES, 'UTF-8'); // set password, and sanitize it to prevent XSS
-    }
-
-    public function doLogin() // do login
+    public function doLogin()
     {
-        try { // try to login
-            if (canLogin($this->email, $this->password)) { // if login is successful
-                session_start(); // start session
-                $_SESSION['loggedin'] = true; // set loggedin to true
-                $_SESSION['email'] = $this->email; // set email
-                $_SESSION['user_id'] = getUserId($this->email); // set user id
+        try {
+            if (canLogin($this->email, $this->password)) {
+                session_start();
+                $_SESSION['loggedin'] = true;
+                $_SESSION['email'] = $this->email;
+                $_SESSION['user_id'] = getUserId($this->email);
 
-                header('Location: ../php/index.php'); // redirect to index page
-                exit(); // exit script
+                header('Location: ../php/index.php');
+                exit();
             }
-        } catch (Throwable $e) { // if login is not successful
-            $this->error = $e->getMessage(); // set error message
+        } catch (Throwable $e) {
+            $this->error = $e->getMessage();
         }
     }
 
@@ -187,11 +179,8 @@ class User
      */
     public function setEmail($email)
     {
-        //check if email is valid
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->email = $email;
-
-            return $this;
         } else {
             throw new Exception("Email is not valid.");
         }
@@ -213,8 +202,6 @@ class User
     public function setResetToken($resetToken)
     {
         $this->resetToken = $resetToken;
-
-        return $this;
     }
 
     public function saveResetToken()

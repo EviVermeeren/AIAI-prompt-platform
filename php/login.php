@@ -2,12 +2,11 @@
 include_once("../inc/bootstrap.php"); // This is the bootstrap file
 include_once("../inc/functions.inc.php"); // This is the functions file
 
-$verification_code = "";
-$password = "";
-$conn = "";
 
 if (isset($_POST['email']) && isset($_POST['password'])) { // if email and password are set
-    $login = new User($_POST['email'], $conn, $verification_code, $_POST['password']); // create new login object //LOGIN MOET IN USER CLASS
+    $login = new User(); // create a new instance of the User class
+    $login->setEmail($_POST['email']); // set the email using the setEmail method
+    $login->setPassword($_POST['password']); // set the password using the setPassword method
     $login->doLogin(); // do login
     $error = $login->getError(); // get error message
 }
@@ -16,7 +15,6 @@ if (isset($_SESSION['message'])) { // if message is set
     $worked = $_SESSION['message']; // set message
     unset($_SESSION['message']); // clear the message so it only displays once
 }
-
 ?>
 
 <!DOCTYPE html>
