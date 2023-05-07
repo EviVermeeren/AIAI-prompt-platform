@@ -11,10 +11,25 @@ class User
     private $username;
     private $verification_code;
 
-    public function __construct($email, $conn)
+    public function __construct($email, $conn, $verification_code)
     { // constructor
         $this->email = $email; // set email
         $this->conn = $conn;
+        $this->verification_code = $verification_code;
+    }
+
+    public function verify() // verify account
+    {
+        $result = checkVerifyToken($this->verification_code); // check if verification code is valid
+        if ($result) { // if verification code is valid
+            $conn = Db::getInstance(); // get database connection
+            $statement = $conn->prepare("UPDATE users SET activated = 1 WHERE verification_code = :verification_code"); // update database
+            $statement->bindValue(":verification_code", $this->verification_code); // bind verification code to query
+            $statement->execute(); // execute query
+            return true; // return true
+        } else {
+            return false; // return false
+        }
     }
 
     public function checkEmailAndUsername($email, $username)

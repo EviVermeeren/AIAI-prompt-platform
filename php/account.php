@@ -8,8 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   exit;
 }
 
+$conn = "";
+$verification_code = "";
+
 $email = $_SESSION["email"];
-$user = new User($email, Db::getInstance());
+$user = new User($email, $conn, $verification_code);
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();

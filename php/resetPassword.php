@@ -10,7 +10,7 @@ $key = $config['keys']['sendgridapikey'];
 
 if (!empty($_POST)) {
     $email = $_POST['email'];
-    $user = new User($email);
+    $user = new User($email, $conn, $verification_code);
     try {
         $correctEmail = $user->checkEmail($email);
         if ($correctEmail == true) {
