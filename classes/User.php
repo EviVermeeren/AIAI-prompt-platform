@@ -14,7 +14,7 @@ class User
     public function __construct($email, $conn)
     { // constructor
         $this->email = $email; // set email
-        $this->conn = Db::getInstance();
+        $this->conn = $conn;
     }
 
     public function checkEmailAndUsername($email, $username)
@@ -38,7 +38,6 @@ class User
         $query->bindValue(":verification_code", $verification_code);
         $query->execute();
         $this->setEmail($email); // set email after insert
-        $this->setPassword($password); // set password after insert
         $this->setFirstName($firstname); // set firstname after insert
         $this->setLastName($lastname); // set lastname after insert
         $this->setUsername($username); // set username after insert
@@ -265,12 +264,9 @@ class User
      */
     public function setPassword($password)
     {
-        $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
-
         $this->password = $password;
-
-        return $this;
     }
+
     public function updatePassword()
     {
         $conn = Db::getInstance();

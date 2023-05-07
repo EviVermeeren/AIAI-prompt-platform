@@ -16,23 +16,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
     $error = $passwordVerifier->getError(); // set error message
   } else {
     $password = $passwordVerifier->getHashedPassword(); // get hashed password
+    $options = [ // set options for password hashing
+      'cost' => 12, // set cost to 12
+    ];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
+
   }
 
   try {
     $conn = Db::getInstance(); // Connect to database
 
-    $user = new User($conn, $email, $password, $firstname, $lastname, $username);
+    $user = new User($email, $conn, $password, $firstname, $lastname, $username);
 
     if ($user->checkEmailAndUsername($email, $username)) {
       $verification_code = uniqid(); // Generate verification code for email verification 
 
       $user->setEmail($email);
-      $user->setPassword($password);
       $user->setFirstName($firstname);
       $user->setLastName($lastname);
       $user->setUsername($username);
       $user->setVerificationCode($verification_code);
-
+      $user->setPassword($password);
       $user->save();
 
       $emailSender = new EmailSender($key);
