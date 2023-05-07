@@ -12,12 +12,13 @@ class User
     private $verification_code;
     private $error; // error message
 
-    public function __construct($email, $conn, $verification_code, $password)
+    public function __construct($email, $conn, $verification_code, $password, $plainTextPassword)
     { // constructor
         $this->email = $email; // set email
         $this->conn = $conn;
         $this->verification_code = $verification_code;
         $this->password = htmlspecialchars($password, ENT_QUOTES, 'UTF-8'); // set password, and sanitize it to prevent XSS
+        $this->setPassword($plainTextPassword);
     }
 
     public function doLogin() // do login
@@ -301,9 +302,13 @@ class User
      *
      * @return  self
      */
-    public function setPassword($password)
+    public function setPassword($plainTextPassword)
     {
-        $this->password = $password;
+        $options = [
+            'cost' => 12,
+        ];
+        $hashedPassword = password_hash($plainTextPassword, PASSWORD_DEFAULT, $options);
+        $this->password = $hashedPassword;
     }
 
     public function updatePassword()

@@ -13,7 +13,7 @@ $verification_code = "";
 $password = "";
 
 $email = $_SESSION["email"];
-$user = new User($email, $conn, $verification_code, $password);
+$user = new User($email, $conn, $verification_code, $password, $plainTextPassword);
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();

@@ -1,62 +1,60 @@
 <?php
 
-include_once("../inc/bootstrap.php"); // include bootstrap file
-$config = parse_ini_file('../config/config.ini', true); // include config file
-$key = $config['keys']['sendgridapikey']; // get sendgrid api key
+include_once("../inc/bootstrap.php");
+$config = parse_ini_file('../config/config.ini', true);
+$key = $config['keys']['sendgridapikey'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $email = $_POST["email"];
   $firstname = $_POST["firstname"];
   $lastname = $_POST["lastname"];
   $username = $_POST["username"];
+  $password = $_POST["password"];
 
-  $passwordVerifier = new PasswordVerifier($_POST['password']);
-  if (!$passwordVerifier->isStrong()) { // if password does not meet strength requirements
-    $error = $passwordVerifier->getError(); // set error message
+  $passwordVerifier = new PasswordVerifier($password);
+  if (!$passwordVerifier->isStrong()) {
+    $error = $passwordVerifier->getError();
   } else {
-    $password = $passwordVerifier->getHashedPassword(); // get hashed password
-    $options = [ // set options for password hashing
-      'cost' => 12, // set cost to 12
-    ];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options); // hash password
-  }
+    $hashedPassword = $passwordVerifier->getHashedPassword();
 
-  try {
-    $conn = Db::getInstance(); // Connect to database
+    try {
+      $conn = Db::getInstance();
 
-    $user = new User($email, $conn, $password, $firstname, $lastname, $username);
+      $user = new User($email, $conn, $password, $firstname, $lastname, $username);
 
-    if ($user->checkEmailAndUsername($email, $username)) {
-      $verification_code = uniqid(); // Generate verification code for email verification 
+      if ($user->checkEmailAndUsername($email, $username)) {
+        $verification_code = uniqid();
 
-      $user->setEmail($email);
-      $user->setFirstName($firstname);
-      $user->setLastName($lastname);
-      $user->setUsername($username);
-      $user->setVerificationCode($verification_code);
-      $user->setPassword($password);
-      $user->save();
+        $user->setEmail($email);
+        $user->setFirstName($firstname);
+        $user->setLastName($lastname);
+        $user->setUsername($username);
+        $user->setVerificationCode($verification_code);
+        $user->setPassword($hashedPassword); // Store the hashed password
 
-      $emailSender = new EmailSender($key);
-      $emailSender->sendEmail(
-        "evivermeeren@hotmail.com",
-        $_POST['email'],
-        "Verify your email address",
-        "Hi {$_POST['username']}! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code",
-        "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
-      );
+        $user->save();
 
-      // Redirect to login page
-      header('Location: ../php/emailsent.php');
-      exit;
-    } else {
-      $error = "Email or username already exists.";
+        $emailSender = new EmailSender($key);
+        $emailSender->sendEmail(
+          "evivermeeren@hotmail.com",
+          $_POST['email'],
+          "Verify your email address",
+          "Hi {$_POST['username']}! Please activate your email. Here is the activation link http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code",
+          "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
+        );
+
+        // Redirect to login page
+        header('Location: ../php/emailsent.php');
+        exit;
+      } else {
+        $error = "Email or username already exists.";
+      }
+    } catch (PDOException $e) {
+      $error = "Database error: Please try again.";
     }
-  } catch (PDOException $e) { // if database error, set error message
-    $error = "Database error: Please try again.";
   }
 }
+
 ?>
 
 <!DOCTYPE html>
