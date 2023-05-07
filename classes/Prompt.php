@@ -237,6 +237,8 @@ class Prompt
     $stmt = $this->conn->prepare("SELECT * FROM prompts WHERE user=:user");
     $stmt->bindParam(":user", $email);
     $stmt->execute();
-    return $stmt->fetchAll();
+    $prompts = $stmt->fetchAll();
+
+    return $prompts;
   }
 }

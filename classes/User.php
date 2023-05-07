@@ -16,6 +16,17 @@ class User
     private $key;
     private $hashedPassword;
 
+    public function isAuthenticated()
+    {
+        return isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+    }
+
+    public function redirectToLogin()
+    {
+        header('Location: ../php/login.php');
+        exit;
+    }
+
     public function setPassword($password)
     {
         $this->password = $password;

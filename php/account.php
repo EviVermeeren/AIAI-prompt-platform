@@ -3,28 +3,23 @@
 include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-  header('Location: ../php/login.php');
-  exit;
+$user = new User();
+if (!$user->isAuthenticated()) {
+  $user->redirectToLogin();
 }
 
 $email = $_SESSION["email"];
-$user = new User();
-
-$user->setEmail($_SESSION["email"]);
-
-$profile_picture = $user->getProfilePicture();
-$profile_banner = $user->getProfileBanner();
-$bio = $user->getBio();
-$username = $user->getUsername();
-
-$user_id = $user->getId();
-$share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
+$user->setEmail($email);
 
 $conn = Db::getInstance();
 $prompt = new Prompt();
 $prompt->setConnection($conn);
 $prompts = $prompt->getPromptsByUser($email);
+
+$profile_picture = $user->getProfilePicture();
+$profile_banner = $user->getProfileBanner();
+$bio = $user->getBio();
+$username = $user->getUsername();
 
 ?>
 
