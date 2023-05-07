@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           "Hi {$_POST['username']}! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/AIAI-prompt-platform-main/php/verify.php?verification_code=$verification_code"
         );
 
-        // Redirect to login page
         header('Location: ../php/emailsent.php');
         exit;
       } else {

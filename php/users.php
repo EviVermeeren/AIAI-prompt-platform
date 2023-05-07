@@ -1,9 +1,8 @@
 <?php
-include_once("../inc/bootstrap.php"); // include bootstrap file
+include_once("../inc/bootstrap.php");
 
-$conn = Db::getInstance(); // Connect to database
+$conn = Db::getInstance();
 
-// Get all users from the database
 $query = $conn->query("SELECT * FROM users");
 $users = $query->fetchAll();
 

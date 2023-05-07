@@ -1,10 +1,9 @@
 <?php 
-include_once("../inc/bootstrap.php"); // This is the bootstrap file
+include_once("../inc/bootstrap.php");
 
-if (session_status() === PHP_SESSION_ACTIVE) { // if session is active
-  session_destroy(); // destroy session, so you logout
+if (session_status() === PHP_SESSION_ACTIVE) {
+  session_destroy();
 }
 
-header('Location: ../php/login.php'); // redirect to login page
-exit(); // exit script
-?>
+header('Location: ../php/login.php');
+exit();

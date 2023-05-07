@@ -1,22 +1,19 @@
 <?php
 
-include_once("../inc/bootstrap.php"); // Include bootstrap file
+include_once("../inc/bootstrap.php");
 
-$conn = Db::getInstance(); // Connect to database
+$conn = Db::getInstance();
 
-// Instantiate the Prompts class
 $prompts = new Prompt();
-$prompts->setConnection($conn); // Set the connection property
+$prompts->setConnection($conn);
 
+$promptsPerPage = 15;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-$promptsPerPage = 15; // Set the number of prompts to display per page
-$page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number from the query string, or default to 1
-
-// Get the prompts for the current page
 $promptsData = $prompts->getPrompts($promptsPerPage, $page);
 
-$totalPages = $promptsData['totalPages']; // Get the total number of pages
-$prompts = $promptsData['prompts']; // Get the prompts for the current page
+$totalPages = $promptsData['totalPages'];
+$prompts = $promptsData['prompts'];
 
 ?>
 
@@ -33,15 +30,14 @@ $prompts = $promptsData['prompts']; // Get the prompts for the current page
 </head>
 
 <body>
-    <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
+    <?php include_once("../inc/nav.inc.php"); ?>
 
     <div class="marketplacefilter">
 
-        <div class="filterlist"> <!-- Ik denk dat we hier ipv alle categoriën apart te benoemen, kunnen werken met een lijstje in php die zichzelf loopt over de categoriën en modellen uit de database -->
-            <a class="clearfilter" href="#">Clear filters</a>
+        <div class="filterlist">
             <p class="filter">Sort by</p>
             <form action="/action_page.php">
-                <input type="checkbox" class="popularity" name="popularity" value="popularity"> <!-- in database staan parameters zoals populariteit, model, categorie..., hierop filteren. -->
+                <input type="checkbox" class="popularity" name="popularity" value="popularity">
                 <label for="popularity"> Popularity </label><br>
                 <input type="checkbox" id="date" name="date" value="date">
                 <label for="date"> Date</label><br>
@@ -101,38 +97,36 @@ $prompts = $promptsData['prompts']; // Get the prompts for the current page
 
             <div class="promptflex">
                 <?php
-                foreach ($prompts as $row) { // Loop through the result and display the prompts
+                foreach ($prompts as $row) {
 
-                    $name = $row['name']; // Get the name of the prompt
-                    $model = $row['model']; // Get the model of the prompt
-                    $price = $row['price']; // Get the price of the prompt
-                    $pictures = $row['pictures']; // Get the pictures of the prompt
+                    $name = $row['name'];
+                    $model = $row['model'];
+                    $price = $row['price'];
+                    $pictures = $row['pictures'];
                 ?>
-                    <a href="../php/detail.php?id=<?php echo $row['id']; ?>"> <!-- Link to detailpage -->
-                        <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
-                            <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
-                            <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p> <!-- Display the name and price -->
-
+                    <a href="../php/detail.php?id=<?php echo $row['id']; ?>">
+                        <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')">
+                            <p class="modelboxtitle"><?php echo $model ?></p>
+                            <p class="promptboxtitle"><?php echo $name ?> <span class="span"><?php echo $price ?></span></p>
                         </div>
                     </a> <?php
                         }
                             ?>
             </div>
 
-            <!-- Add pagination links -->
-            <div class="pagination"> <!-- Pagination -->
-                <?php if ($page > 1) : ?> <!-- If the page is higher than 1, display the previous button -->
-                    <a href="?page=<?php echo ($page - 1); ?>">Previous</a> <!-- Link to the previous page -->
+            <div class="pagination">
+                <?php if ($page > 1) : ?>
+                    <a href="?page=<?php echo ($page - 1); ?>">Previous</a>
                 <?php endif; ?>
-                <?php for ($i = 1; $i <= $totalPages; $i++) : ?> <!-- Loop through the total amount of pages -->
-                    <?php if ($i == $page) : ?> <!-- If the current page is the same as the page number, display the page number -->
+                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                    <?php if ($i == $page) : ?>
                         <span class="current-page"><?php echo $i; ?></span>
-                    <?php else : ?> <!-- If the current page is not the same as the page number, display the page number as a link -->
+                    <?php else : ?>
                         <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                     <?php endif; ?>
                 <?php endfor; ?>
-                <?php if ($page < $totalPages) : ?> <!-- If the page is lower than the total amount of pages, display the next button -->
-                    <a href="?page=<?php echo ($page + 1); ?>">Next</a> <!-- Link to the next page -->
+                <?php if ($page < $totalPages) : ?>
+                    <a href="?page=<?php echo ($page + 1); ?>">Next</a>
                 <?php endif; ?>
             </div>
 
@@ -141,7 +135,7 @@ $prompts = $promptsData['prompts']; // Get the prompts for the current page
     </div>
 
 
-    <?php include_once("../inc/foot.inc.php"); ?> <!-- Include the footer -->
+    <?php include_once("../inc/foot.inc.php"); ?>
 </body>
 
 </html>

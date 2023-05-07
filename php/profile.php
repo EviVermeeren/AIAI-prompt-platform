@@ -3,19 +3,12 @@
 include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
-$id = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT); // Validate and sanitize the id parameter
+$id = $_POST['id'];
 
-if (!$id) { // If id parameter is not set, redirect to homepage
-    header("Location: ../index.php");
-    exit;
+$user = new User();
+if (!$user->isAuthenticated()) {
+    $user->redirectToLogin();
 }
-
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: ../php/login.php');
-    exit;
-}
-
-$share_url = "http://localhost/AIAI-prompt-platform-main/php/profile.php?id=$id";
 
 $conn = Db::getInstance(); // Connect to database
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id"); // Prepare the query

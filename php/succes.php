@@ -1,15 +1,3 @@
-<?php
-include_once("../inc/bootstrap.php");
-
-$message = "";
-
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: ../php/login.php');
-    exit;
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,12 +11,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 </head>
 
 <body>
-    <?php include_once("../inc/nav.inc.php"); ?> <!-- This is the nav bar -->
-
+    <?php include_once("../inc/nav.inc.php"); ?>
 
     <h1 class="messagefail">Your prompt has been uploaded succesfully, and will now be reviewed by one of our moderators. Thank you!</h1>
 
-    <?php include_once("../inc/foot.inc.php"); ?> <!-- This is the footer -->
+    <?php include_once("../inc/foot.inc.php"); ?>
 </body>
 
 </html>
