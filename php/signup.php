@@ -37,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user->setVerificationCode($verification_code);
         $user->save();
 
-        $emailSender = new EmailSender();
-        $emailSender->setKey($key);
-        $emailSender->sendEmail(
+        $user = new User();
+        $user->setKey($config['keys']['sendgridapikey']);
+        $user->sendEmail(
           "evivermeeren@hotmail.com",
           $_POST['email'],
           "Verify your email address",
