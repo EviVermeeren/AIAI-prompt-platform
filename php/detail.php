@@ -19,46 +19,31 @@ if (!$conn) { // check if the connection was successful
   exit; // and exit the script
 }
 
-$sql = "SELECT * FROM prompts WHERE id = $id"; // query the database to get the prompt with the specified ID
-$result = $conn->query($sql); // execute the query
-if (!$result) { // check if the query was successful
-  echo "Error: Failed to execute query: " . $conn->error; // if not, display an error message
-  exit; // and exit the script 
+$new = new Prompt();
+$prompt = $new->getPromptById($id);
+
+if ($prompt) {
+  $name = $prompt['name'];
+  $user = $prompt['user'];
+  $rating = $prompt['rating'];
+  $description = $prompt['description'];
+  $price = $prompt['price'];
+  $characteristics = $prompt['characteristics'];
+  $model = $prompt['model'];
+  $promptContent = $prompt['prompt'];
+  $pictures = $prompt['pictures'];
+  $date = $prompt['date'];
+  $tags = $prompt['tags'];
+} else {
+  echo "Error: No results found";
+  exit;
 }
 
-if ($result->rowCount() > 0) { // check if the query returned any results
-  while ($row = $result->fetch(PDO::FETCH_ASSOC)) { // loop through the results
-    $name = $row['name']; // store the name of the prompt in a variable
-    $user = $row['user']; // store the name of the user in a variable
-    $rating = $row['rating']; // store the rating of the prompt in a variable
-    $description = $row['description']; // store the description of the prompt in a variable
-    $price = $row['price']; // store the price of the prompt in a variable
-    $characteristics = $row['characteristics']; // store the characteristics of the prompt in a variable
-    $model = $row['model']; // store the model of the prompt in a variable
-    $prompt = $row['prompt']; // store the prompt
-    $pictures = $row['pictures']; // store the pictures of the prompt in a variable
-    $date = $row['date']; // store the date of the prompt in a variable
-    $tags = $row['tags']; // store the tags of the prompt in a variable
-  }
-} else { // if the query returned no results
-  echo "Error: No results found"; // display an error message
-  exit; // and exit the script
-}
+$userz = new User();
+$username = $userz->getUsernameByEmail($user);
 
-$stmt = $conn->prepare("SELECT username FROM users WHERE email = :email"); // query the database for the username with the specified email
-$stmt->bindParam(':email', $user);
-$stmt->execute();
-$user_row = $stmt->fetch(PDO::FETCH_ASSOC);
-$username = $user_row['username']; // get the username from the resulting row
-
-// Prepare SQL statement
-$stmt = $conn->prepare("SELECT * FROM favorites WHERE user_id = :user_id AND prompt_id = :id");
-$stmt->bindParam(':user_id', $user_id);
-$stmt->bindParam(':id', $id);
-$stmt->execute();
-
-// Fetch the results
-$results = $stmt->fetchAll();
+$usera = new User();
+$results = $usera->getFavoritesByUserID($user_id, $id);
 
 ?>
 

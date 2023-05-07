@@ -340,4 +340,20 @@ class Prompt
     $email = $conn->quote($email);
     return $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
   }
+
+  public function getDetailPromptByID($id)
+  {
+    $conn = Db::getInstance();
+    $sql = "SELECT * FROM prompts WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(":id", $id);
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $row;
+    } else {
+      return false;
+    }
+  }
 }

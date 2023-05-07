@@ -511,4 +511,32 @@ class User
             return false; // Return false if the query failed
         }
     }
+
+    public function getUsernameByEmail($email)
+    {
+        $conn = Db::getInstance();
+        $stmt = $conn->prepare("SELECT username FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $username = $userRow['username'];
+        return $username;
+    }
+
+    public function getFavoritesByUserID($user_id, $id)
+    {
+        $conn = Db::getInstance();
+        $stmt = $conn->prepare("SELECT * FROM favorites WHERE user_id = :user_id AND prompt_id = :id");
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        // Fetch the results
+        $results = $stmt->fetchAll();
+        return $results;
+    }
+
+
+    // Prepare SQL statement
+
 }
