@@ -1,27 +1,25 @@
 <?php
-include_once("../inc/bootstrap.php"); // include the bootstrap file
+include_once("../inc/bootstrap.php");
 
-if (!isset($_POST['id'])) { // check if the id parameter is set
-    echo "Error: ID parameter not set"; // if not, display an error
-    exit; // exit the script
+if (!isset($_POST['id'])) {
+    echo "Error: ID parameter not set";
+    exit;
 }
 
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) { // check if the user is logged in
-    echo "Error: no user id found"; // if not, display an error
-    exit; // exit the script
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+    echo "Error: no user id found";
+    exit;
 }
 
-$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT); // get the id from the post request and sanitize it to prevent SQL injection
-$user_id = $_SESSION['user_id']; // get the user id from the session
+$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+$user_id = $_SESSION['user_id'];
 
-$conn = Db::getInstance(); // connect to the database
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set the PDO error mode to exception
-
+$conn = Db::getInstance();
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $favoritesManager = new Prompt();
-$favoritesManager->setConnection($conn); // Set the connection property
+$favoritesManager->setConnection($conn);
 
-// Set the required properties using the setter methods
 $favoritesManager->setId($id);
 $favoritesManager->setName($name);
 $favoritesManager->setUser($user);
@@ -35,5 +33,4 @@ $favoritesManager->setPictures($pictures);
 $favoritesManager->setDate($date);
 $favoritesManager->setTags($tags);
 
-// Call the removeFavorite method
 $favoritesManager->addFavorite($id, $user_id);

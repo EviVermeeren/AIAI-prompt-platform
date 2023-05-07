@@ -241,4 +241,24 @@ class Prompt
 
     return $prompts;
   }
+
+  public function getPromptById($id)
+  {
+    $conn = Db::getInstance();
+    $stmt = $conn->prepare("SELECT * FROM prompts WHERE id=:id");
+    $stmt->bindParam(":id", $id);
+    $stmt->execute();
+    $prompt = $stmt->fetch();
+    return $prompt;
+  }
+
+  public function getUsernameByEmail($email)
+  {
+    $stmt = $this->conn->prepare("SELECT username FROM users WHERE email = :email");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $user_row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $username = $user_row['username'];
+    return $username;
+  }
 }
