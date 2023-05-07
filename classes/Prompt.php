@@ -231,4 +231,12 @@ class Prompt
     $result = $stmt->fetchAll(); // Get the result set
     return $result;
   }
+
+  public function getPromptsByUser($email)
+  {
+    $stmt = $this->conn->prepare("SELECT * FROM prompts WHERE user=:user");
+    $stmt->bindParam(":user", $email);
+    $stmt->execute();
+    return $stmt->fetchAll();
+  }
 }

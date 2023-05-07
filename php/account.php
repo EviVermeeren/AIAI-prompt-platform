@@ -8,18 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   exit;
 }
 
-$conn = "";
-$verification_code = "";
-$password = "";
-
 $email = $_SESSION["email"];
-// Remove the constructor arguments from the User instantiation
 $user = new User();
 
-// Set the email using the setEmail method
 $user->setEmail($_SESSION["email"]);
 
-// Use the User object to retrieve the required data
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
 $bio = $user->getBio();
@@ -28,13 +21,10 @@ $username = $user->getUsername();
 $user_id = $user->getId();
 $share_url = "http://localhost/AIAI-prompt-platform-main/php/account.php?id=$user_id";
 
-
-// get all prompts uploaded by the user
 $conn = Db::getInstance();
-$stmt = $conn->prepare("SELECT * FROM prompts WHERE user=:user");
-$stmt->bindParam(":user", $email);
-$stmt->execute();
-$prompts = $stmt->fetchAll();
+$prompt = new Prompt();
+$prompt->setConnection($conn);
+$prompts = $prompt->getPromptsByUser($email);
 
 ?>
 
@@ -52,7 +42,7 @@ $prompts = $stmt->fetchAll();
 
 <body>
 
-  <?php include_once("../inc/nav.inc.php"); ?> <!-- Include navigation -->
+  <?php include_once("../inc/nav.inc.php"); ?>
 
   <div class="profile">
 
@@ -62,15 +52,15 @@ $prompts = $stmt->fetchAll();
     </div>
 
     <div class="profilename">
-      <h2 class="nameuser"><?php echo $username ?></h2> <!-- Here we display the username of the user -->
+      <h2 class="nameuser"><?php echo $username ?></h2>
       <div class="likeandfollow">
-        <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
+        <a class="btnfollow" href="#">Follow</a>
 
-        <a class="btnfollow" href="#">Flag 🚩</a> <!-- This button will be used to flag the user -->
-        <a class="btnfollow" href="../php/editAccount.php">Edit Account</a> <!-- This button will be used to edit the account -->
-        <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
+        <a class="btnfollow" href="#">Flag 🚩</a>
+        <a class="btnfollow" href="../php/editAccount.php">Edit Account</a>
+        <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a>
 
-        <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is  logged in -->
+        <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?>
 
           <a class="btnfollow" href="../php/favorites.php">Favorites ⭐</a>
         <?php endif; ?>
@@ -79,33 +69,33 @@ $prompts = $stmt->fetchAll();
     </div>
 
     <div class="profilebio">
-      <p class="biotext"><?php echo $bio ?></p> <!-- Here we display the bio of the user -->
+      <p class="biotext"><?php echo $bio ?></p>
     </div>
   </div>
 
   <div class="allprompts">
     <div>
-      <h1>All prompts by <span><?php echo $username ?></span></h1> <!-- Here we display the username of the user -->
+      <h1>All prompts by <span><?php echo $username ?></span></h1>
     </div>
 
     <div class="promptflex">
-      <?php if (count($prompts) == 0) : ?> <!-- If there are no prompts, display the message -->
+      <?php if (count($prompts) == 0) : ?>
         <h3 style="margin-top: 50px">You don't have any prompts yet!</h3>
-      <?php else : ?> <!-- Otherwise, display the prompts -->
-        <?php foreach ($prompts as $prompt) { // Loop through the result and display the prompts
+      <?php else : ?>
+        <?php foreach ($prompts as $prompt) {
 
-          $name = $prompt['name']; // Get the name of the prompt
-          $model = $prompt['model']; // Get the model of the prompt
-          $price = $prompt['price']; // Get the price of the prompt
-          $pictures = $prompt['pictures']; // Get the pictures of the prompt
+          $name = $prompt['name'];
+          $model = $prompt['model'];
+          $price = $prompt['price'];
+          $pictures = $prompt['pictures'];
         ?>
-          <a href="../php/detail.php?id=<?php echo $prompt['id']; ?>"> <!-- Link to detailpage -->
-            <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')"> <!-- Display the prompt -->
-              <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?> <!-- If the user is logged in, display the price -->
-                <p class="modelboxtitle"><?php echo $model ?></p> <!-- Display the model -->
-                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p> <!-- Display the name and price -->
-              <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?> <!-- If the user is not logged in, don't display the price -->
-                <p class="promptboxtitle"><?php echo $name ?></p> <!-- Display the name -->
+          <a href="../php/detail.php?id=<?php echo $prompt['id']; ?>">
+            <div class="prompt" style="background-image: url('../media/<?php echo $pictures; ?>')">
+              <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
+                <p class="modelboxtitle"><?php echo $model ?></p>
+                <p class="promptboxtitle"><?php echo $name ?> <span class="span">💶<?php echo $price ?></span></p>
+              <?php elseif (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) : ?>
+                <p class="promptboxtitle"><?php echo $name ?></p>
               <?php endif; ?>
             </div>
           </a>
@@ -113,8 +103,8 @@ $prompts = $stmt->fetchAll();
       <?php endif; ?>
     </div>
 
-    <?php include_once("../inc/foot.inc.php"); ?> <!-- Include footer -->
-    <script src="../css/script.js"></script> <!-- Include script -->
+    <?php include_once("../inc/foot.inc.php"); ?>
+    <script src="../css/script.js"></script>
 </body>
 
 </html>
