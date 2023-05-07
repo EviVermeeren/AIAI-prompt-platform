@@ -1,14 +1,14 @@
 <?php
 
-include_once("../inc/bootstrap.php"); // include bootstrap file
-$config = parse_ini_file('../config/config.ini', true); // include config file
-$key = $config['keys']['sendgridapikey']; // get sendgrid api key
+include_once("../inc/bootstrap.php");
+$config = parse_ini_file('../config/config.ini', true);
+$key = $config['keys']['sendgridapikey'];
 
 class EmailSender
 {
     private $key;
 
-    public function __construct($key)
+    public function setKey($key)
     {
         $this->key = $key;
         require_once('../vendor/autoload.php');

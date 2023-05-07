@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user->save();
 
-        $emailSender = new EmailSender($key);
+        $emailSender = new EmailSender();
+        $emailSender->setKey($key);
         $emailSender->sendEmail(
           "evivermeeren@hotmail.com",
           $_POST['email'],
