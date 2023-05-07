@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // if form is submitted
   try {
     $conn = Db::getInstance(); // Connect to database
 
-    $user = new Users($conn);
+    $user = new User($conn, $email, $password, $firstname, $lastname, $username);
 
     if ($user->checkEmailAndUsername($email, $username)) {
       $verification_code = uniqid(); // Generate verification code for email verification 
