@@ -14,6 +14,7 @@ if (!empty($_POST)) {
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    //test
 
     // check of image file is a actual image or fake image
 
