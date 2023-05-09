@@ -5,7 +5,7 @@ include_once("../classes/Db.php"); // include head
 
 ini_set('display_errors', 1);
 
-$user = new User("oepsConstructor");
+$user = new User();
 $userDetails = $user->getUserDetails();
 $profilePicture = $userDetails['profile_picture'];
 
