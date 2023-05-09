@@ -235,7 +235,7 @@ class Prompt
   public function getPromptsByUser($email)
   {
     $conn = Db::getInstance();
-    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user=:user");
+    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user=:user AND approved=1 ORDER BY date DESC");
     $stmt->bindParam(":user", $email);
     $stmt->execute();
     $prompts = $stmt->fetchAll();
