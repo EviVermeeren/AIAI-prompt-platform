@@ -18,6 +18,46 @@ class User
     private $bio;
     private $profile_picture;
 
+    // code for the profile picture
+
+    /**
+     * Get the value of profile_picture
+     */
+    public function getProfile_picture()
+    {
+        return $this->profile_picture;
+    }
+
+    /**
+     * Set the value of profile_picture
+     *
+     * @return  self
+     */
+    public function setProfile_picture($profile_picture)
+    {
+        $this->profile_picture = $profile_picture;
+
+        return $this;
+    }
+
+    public function saveProfilePicture()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET profile_picture = :profile_picture WHERE id = 1");
+        $statement->bindValue(":profile_picture", $this->getProfile_picture());
+        $result = $statement->execute();
+        return $result;
+    }
+
+    public function getUserDetails()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE id = 1");
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public function isAuthenticated()
     {
         return isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
