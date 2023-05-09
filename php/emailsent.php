@@ -1,3 +1,9 @@
+<?php
+
+include_once("../inc/bootstrap.php");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
