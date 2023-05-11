@@ -2,15 +2,15 @@
 
 require_once "../inc/bootstrap.php";
 require_once "../inc/functions.inc.php";
-$conn = Db::getInstance();
+$conn = Db::getInstance(); // connect to the database
 
 if (!$conn) {
     echo "Error: Failed to connect to database";
     exit;
 }
 
-$sql = "SELECT * FROM prompts WHERE approved = 0";
-$stmt = $conn->query($sql);
+$sql = "SELECT * FROM prompts WHERE approved = 0"; // SQL statement to select all prompts that have not been approved
+$stmt = $conn->query($sql); // Execute the SQL statement and return the result set
 ?>
 
 <!DOCTYPE html>
@@ -21,20 +21,21 @@ $stmt = $conn->query($sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
-    <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css">
-    <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css"> <!-- Import the font -->
+    <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>"> <!-- Import the CSS file -->
+    <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
 </head>
 
 <body>
     <?php include_once("../inc/nav.inc.php"); ?>
 
     <div id="headerApproval">
-        <h1>Prompts Approval List</h1>
+        <h1>Prompts Approval List</h1> <!-- Display the page heading -->
     </div>
 
     <div id="approvalList">
         <?php if ($stmt->rowCount() > 0) : ?> <!-- Check if there are any prompts needing approval -->
-            <table id="approveList">
+            <table id="approveList"> <!-- Create a table to display the prompts -->
                 <tr>
                     <th>Model</th>
                     <th>Name</th>
@@ -46,7 +47,7 @@ $stmt = $conn->query($sql);
                     <th>Picture</th>
                     <th>Action</th>
                 </tr>
-                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?> <!-- Loop through each prompt needing approval -->
+                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?> <!-- Loop through the result set and display each prompt --> <!-- Loop through each prompt needing approval -->
                     <tr>
                         <td><?php echo $row["model"] ?></td> <!-- Display the model name for the prompt -->
                         <td><?php echo isset($row["name"]) ? $row["name"] : "" ?></td> <!-- Display the name for the prompt (if it exists) -->
@@ -69,7 +70,6 @@ $stmt = $conn->query($sql);
     </div>
 
     <?php include_once("../inc/foot.inc.php"); ?>
-    <script src="../css/script.js"></script>
 </body>
 
 </html>

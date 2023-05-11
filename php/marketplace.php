@@ -27,6 +27,7 @@ $prompts = $promptsData['prompts'];
     <title>Marketplace</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
     <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
+    <script src="../css/script.js"></script>
 </head>
 
 <body>
