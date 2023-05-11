@@ -35,16 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $current_date = date("Y-m-d H:i:s");
   $file_name = $prompt->handleFileUpload($_FILES["image-upload"]);
 
+  $prompt->setPictures($file_name);
   $prompt->createPrompt(
-    $prompt->getName(),
-    $email,
-    $prompt->getDescription(),
-    $prompt->getModel(),
-    $file_name,
-    $prompt->getCharacteristics(),
-    $prompt->getPrice(),
-    $prompt->getPrompt(),
-    $prompt->getTags()
+    $prompt->getPictures()
   );
 
   header('Location: ../php/succes.php');

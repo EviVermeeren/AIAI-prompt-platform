@@ -17,6 +17,8 @@ class Prompt
   private $date;
   private $tags;
   private $conn;
+  private $file_name;
+  private $email;
 
   public function setId($id)
   {
@@ -302,34 +304,33 @@ class Prompt
       exit;
     }
 
+    $this->setFileName($file_name);
+
     return $file_name;
   }
 
-  public function createPrompt(
-    $name,
-    $email,
-    $description,
-    $model,
-    $file_name,
-    $selected_categories,
-    $price,
-    $prompt_text,
-    $tags
-  ) {
-    // Your create logic goes here, using the provided arguments
+  public function getSessionId($email)
+  {
+    $conn = Db::getInstance(); // get database connection
+    $query = $conn->prepare("SELECT id FROM users WHERE email = :email"); // get id from database
+    $query->bindValue(":email", $email); // bind email to query
+    $query->execute(); // execute query
+    return $query->fetchColumn(); // fetch data from query
+  }
 
-    // Perform the database insertion
+  public function createPrompt()
+  {
     $conn = Db::getInstance();
     $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags, date) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags, :date)");
-    $query->bindValue(":name", $name);
-    $query->bindValue(":email", $email);
-    $query->bindValue(":description", $description);
-    $query->bindValue(":model", $model);
-    $query->bindValue(":pictures", $file_name);
-    $query->bindValue(":categories", implode(", ", $selected_categories));
-    $query->bindValue(":price", $price);
-    $query->bindValue(":prompt", $prompt_text);
-    $query->bindValue(":tags", $tags);
+    $query->bindValue(":name", $this->getName());
+    $query->bindValue(":email", $_SESSION["email"]);
+    $query->bindValue(":description", $this->getDescription());
+    $query->bindValue(":model", $this->getModel());
+    $query->bindValue(":pictures", $this->getFileName());
+    $query->bindValue(":categories", implode(", ", $this->getCharacteristics()));
+    $query->bindValue(":price", $this->getPrice());
+    $query->bindValue(":prompt", $this->getPrompt());
+    $query->bindValue(":tags", $this->getTags());
     $query->bindValue(":date", date("Y-m-d H:i:s"));
     $query->execute();
   }
@@ -355,5 +356,37 @@ class Prompt
     } else {
       return false;
     }
+  }
+
+  /**
+   * Get the value of file_name
+   */
+  public function getFileName()
+  {
+    return $this->file_name;
+  }
+
+  /**
+   * Set the value of file_name
+   *
+   * @return  self
+   */
+  public function setFileName($file_name)
+  {
+    $this->file_name = $file_name;
+
+    return $this;
+  }
+
+  /**
+   * Set the value of email
+   *
+   * @return  self
+   */
+  public function setEmail($email)
+  {
+    $this->email = $email;
+
+    return $this;
   }
 }
