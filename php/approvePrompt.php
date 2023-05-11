@@ -10,7 +10,7 @@ if (!$conn) {
     exit;
 }
 
-// Get the ID of the prompt to be deleted from the GET request
+// Get the ID of the prompt to be approved from the GET request
 $id = $_GET["id"];
 
 // Prepare the SQL statement to update the prompt with the given ID

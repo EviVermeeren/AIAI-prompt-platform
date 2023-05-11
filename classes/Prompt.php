@@ -118,4 +118,6 @@ class Prompt
     $stmt->bindParam(':tags', $this->tags);
     $stmt->execute();
   }
+
+
 }
