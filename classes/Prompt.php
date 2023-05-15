@@ -1,7 +1,4 @@
 <?php
-
-include_once("../inc/bootstrap.php"); // include bootstrap file
-
 class Prompt
 {
   private $id;

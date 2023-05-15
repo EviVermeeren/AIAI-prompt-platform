@@ -1,7 +1,5 @@
 <?php
 
-$config = parse_ini_file('../config/config.ini', true);
-
 class User
 {
     private $email;
@@ -65,7 +63,7 @@ class User
 
     public function redirectToLogin()
     {
-        header('Location: ../php/login.php');
+        header('Location: /AIAI-prompt-platform-main/php/login.php');
         exit;
     }
 
@@ -152,7 +150,7 @@ class User
                 $_SESSION['email'] = $this->email;
                 $_SESSION['user_id'] = getUserId($this->email);
 
-                header('Location: ../php/index.php');
+                header('Location: /AIAI-prompt-platform-main/index.php');
                 exit();
             }
         } catch (Throwable $e) {
