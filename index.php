@@ -48,7 +48,7 @@ if (!$user->isAuthenticated()) {
 
   <nav>
     <div class="logo">
-      <a href="/AIAI-prompt-platform-main/php/marketplace.php">PromptSwap</a>
+      <a href="/php/marketplace.php">PromptSwap</a>
     </div>
 
     <div>
@@ -60,18 +60,18 @@ if (!$user->isAuthenticated()) {
     </div>
 
     <div class="nav-items">
-      <li><a href="/AIAI-prompt-platform-main/php/marketplace.php">Marketplace</a></li>
-      <li><a href="/AIAI-prompt-platform-main/php/upload.php">Upload</a></li>
+      <li><a href="/php/marketplace.php">Marketplace</a></li>
+      <li><a href="/php/upload.php">Upload</a></li>
       <?php if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?> <!-- if user is not logged in -->
-        <li><a href="/AIAI-prompt-platform-main/php/login.php">Login</a></li>
+        <li><a href="/php/login.php">Login</a></li>
       <?php else : ?> <!-- if user is logged in -->
-        <li><a href="/AIAI-prompt-platform-main/php/account.php">Profile</a></li>
-        <li><a href="/AIAI-prompt-platform-main/php/logout.php">Logout</a></li>
+        <li><a href="/php/account.php">Profile</a></li>
+        <li><a href="/php/logout.php">Logout</a></li>
 
         <?php if ($row["admin"] == 1) :
         ?> <!-- if user is an admin -->
-          <li><a href="/AIAI-prompt-platform-main/php/approvalList.php">Approvals</a></li>
-          <li><a href="/AIAI-prompt-platform-main/php/report.php">Reports</a></li>
+          <li><a href="/php/approvalList.php">Approvals</a></li>
+          <li><a href="/php/report.php">Reports</a></li>
         <?php endif;
         ?>
       <?php endif; ?>
@@ -93,8 +93,8 @@ if (!$user->isAuthenticated()) {
         </h3>
       </div>
       <div class="buttondiv">
-        <a class="button" href="/AIAI-prompt-platform-main/php/marketplace.php">Find a prompt</a>
-        <a class="button" href="/AIAI-prompt-platform-main/php/upload.php">Upload a prompt</a>
+        <a class="button" href="/php/marketplace.php">Find a prompt</a>
+        <a class="button" href="/php/upload.php">Upload a prompt</a>
       </div>
     </div>
 
@@ -116,10 +116,10 @@ if (!$user->isAuthenticated()) {
       <div class="footer-item-2">
         <h5>Menu</h5>
         <ul>
-          <li><a href="/AIAI-prompt-platform-main/php/marketplace.php">Marketplace</a></li>
-          <li><a href="/AIAI-prompt-platform-main/php/upload.php">Upload</a></li>
-          <li><a href="/AIAI-prompt-platform-main/php/account.php">Account</a></li>
-          <li><a href="/AIAI-prompt-platform-main/php/users.php">Find other users</a></li>
+          <li><a href="/php/marketplace.php">Marketplace</a></li>
+          <li><a href="/php/upload.php">Upload</a></li>
+          <li><a href="/php/account.php">Account</a></li>
+          <li><a href="/php/users.php">Find other users</a></li>
         </ul>
       </div>
 

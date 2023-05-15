@@ -150,7 +150,7 @@ class User
                 $_SESSION['email'] = $this->email;
                 $_SESSION['user_id'] = getUserId($this->email);
 
-                header('Location: /AIAI-prompt-platform-main/index.php');
+                header('Location:/index.php');
                 exit();
             }
         } catch (Throwable $e) {
@@ -342,7 +342,7 @@ class User
         $result = $statement->execute();
         return $result;
     }
-    //$email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link http://localhost/AIAI-prompt-platform-main-echte/create-new-password.php?token=$token");
+    //$email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link https://promptswap.azurewebsites.net/create-new-password.php?token=$token");
     public function sendResetMail($key)
     {
         $token = $this->resetToken;
@@ -353,10 +353,10 @@ class User
         $email->setFrom("evivermeeren@hotmail.com", "PromptSwap");
         $email->setSubject("Reset email");
         $email->addTo($this->email);
-        $email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link http://localhost/AIAI-prompt-platform-main/php/reset.php?token=$token");
+        $email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link http://promptswap.azurewebsites.net/php/reset.php?token=$token");
         $email->addContent(
             "text/html",
-            "Hi! Please reset your password. <strong>Here is the reset link :</strong> http://localhost/AIAI-prompt-platform-main/php/reset.php?token=$token"
+            "Hi! Please reset your password. <strong>Here is the reset link :</strong> http://promptswap.azurewebsites.net/php/reset.php?token=$token"
         );
 
         $sendgrid = new \SendGrid($key);
