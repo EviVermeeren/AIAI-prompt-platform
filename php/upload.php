@@ -36,9 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $file_name = $prompt->handleFileUpload($_FILES["image-upload"]);
 
   $prompt->setPictures($file_name);
-  $prompt->createPrompt(
-    $prompt->getPictures()
-  );
+  $prompt->createPrompt();
 
   header('Location: ../php/succes.php');
   exit();

@@ -326,7 +326,7 @@ class Prompt
     $query->bindValue(":email", $_SESSION["email"]);
     $query->bindValue(":description", $this->getDescription());
     $query->bindValue(":model", $this->getModel());
-    $query->bindValue(":pictures", $this->getFileName());
+    $query->bindValue(":pictures", $this->getPictures());
     $query->bindValue(":categories", implode(", ", $this->getCharacteristics()));
     $query->bindValue(":price", $this->getPrice());
     $query->bindValue(":prompt", $this->getPrompt());
