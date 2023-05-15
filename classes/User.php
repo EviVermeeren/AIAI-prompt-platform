@@ -63,7 +63,7 @@ class User
 
     public function redirectToLogin()
     {
-        header('Location: /AIAI-prompt-platform-main/php/login.php');
+        header('Location: /php/login.php');
         exit;
     }
 
