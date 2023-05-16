@@ -54,7 +54,7 @@ $username = $user->getUsername();
 
         <a class="btnfollow" href="#">Flag 🚩</a>
         <a class="btnfollow" href="../php/editAccount.php">Edit Account</a>
-        <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a>
+        <!--<a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a>-->
 
         <?php if (isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) : ?>
 
