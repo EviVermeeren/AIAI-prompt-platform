@@ -28,3 +28,11 @@ $favoritesManager->setDate($date);
 $favoritesManager->setTags($tags);
 
 $favoritesManager->removeFavorite($id, $user_id);
+
+$response = array(
+    "success" => true
+);
+
+// Send the response as JSON
+header('Content-Type: application/json');
+echo json_encode($response);

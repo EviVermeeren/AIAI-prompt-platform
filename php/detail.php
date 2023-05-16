@@ -159,27 +159,51 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
 
 
   <script>
-    document.getElementById("add-to-favorites").addEventListener("click", function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "add-to-favorites.php", true);
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          location.reload();
+    // Attach the event listener to a parent element using event delegation
+    document.addEventListener("click", function(event) {
+      var target = event.target;
+      if (target.id === "add-to-favorites") {
+        var button = target;
 
-        }
-      };
-      xhr.send("id=<?php echo $id; ?>");
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "add-to-favorites.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+
+            location.reload();
+            // Handle the response here
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.success) {
+              // Update the button text dynamically
+              button.textContent = "Delete from Favorites";
+              button.id = "delete-favorite"; // Update the button ID
+              button.setAttribute("onclick", "deleteFavorite()"); // Add onclick attribute
+            }
+          }
+        };
+        xhr.send("id=<?php echo $id; ?>");
+      }
     });
 
     function deleteFavorite() {
+      var button = document.getElementById("delete-favorite");
+
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "delete-favorite.php", true);
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           location.reload();
-
+          // Handle the response here
+          var response = JSON.parse(xhr.responseText);
+          if (response.success) {
+            // Update the button text dynamically
+            button.textContent = "Add to Favorites";
+            button.id = "add-to-favorites"; // Update the button ID
+            button.setAttribute("onclick", null); // Remove onclick attribute
+          }
         }
       };
       xhr.send("id=<?php echo $id; ?>&_method=DELETE");
