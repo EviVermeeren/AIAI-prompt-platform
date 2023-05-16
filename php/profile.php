@@ -3,6 +3,7 @@ include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
 $id = $_GET['id'] ?? '';
+$user_id = $_SESSION['user_id'];
 
 $users = new User();
 $user = $users->getUserDataByID($id);

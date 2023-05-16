@@ -12,6 +12,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // if use
 }
 
 $email = $_SESSION["email"]; // get email from session
+$user_id = $_SESSION['user_id'];
 
 try { // connect to database
     $conn = Db::getInstance(); // get database connection

@@ -15,6 +15,8 @@ if (isset($_SESSION['message'])) { // if message is set
     $worked = $_SESSION['message']; // set message
     unset($_SESSION['message']); // clear the message so it only displays once
 }
+
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>

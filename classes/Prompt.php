@@ -318,7 +318,7 @@ class Prompt
   public function createPrompt()
   {
     $conn = Db::getInstance();
-    $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags, date) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags, :date)");
+    $query = $conn->prepare("INSERT INTO prompts (name, user, description, model, pictures, characteristics, price, prompt, tags, date, user_id) VALUES (:name, :email, :description, :model, :pictures, :categories, :price, :prompt, :tags, :date, :user_id)");
     $query->bindValue(":name", $this->getName());
     $query->bindValue(":email", $_SESSION["email"]);
     $query->bindValue(":description", $this->getDescription());
@@ -329,14 +329,15 @@ class Prompt
     $query->bindValue(":prompt", $this->getPrompt());
     $query->bindValue(":tags", $this->getTags());
     $query->bindValue(":date", date("Y-m-d H:i:s"));
+    $query->bindValue(":user_id", $_SESSION["user_id"]);
     $query->execute();
   }
 
-  public function getPromptsByEmail($email)
+  public function getPromptsByEmail($user_id)
   {
     $conn = Db::getInstance(); // Connect to the database
-    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user = :email");
-    $stmt->bindParam(':email', $email);
+    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     return $stmt->fetchAll();
   }

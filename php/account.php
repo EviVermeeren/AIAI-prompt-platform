@@ -10,6 +10,7 @@ if (!$user->isAuthenticated()) {
 
 $email = $_SESSION["email"];
 $user->setEmail($email);
+$user_id = $_SESSION['user_id'];
 
 $conn = Db::getInstance();
 $prompt = new Prompt();

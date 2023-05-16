@@ -1,5 +1,6 @@
 <?php
 include_once("../inc/bootstrap.php");
+$user_id = $_SESSION['user_id'];
 
 $user = new User();
 $user->setDbConnection();

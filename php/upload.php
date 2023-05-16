@@ -12,6 +12,7 @@ if (!$user->isAuthenticated()) {
 
 $email = $_SESSION["email"];
 $conn = Db::getInstance();
+$user_id = $_SESSION['user_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $prompt = new Prompt();
