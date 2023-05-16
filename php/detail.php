@@ -165,48 +165,70 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
       if (target.id === "add-to-favorites") {
         var button = target;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "add-to-favorites.php", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
+        fetch("add-to-favorites.php", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/x-www-form-urlencoded"
+            },
+            body: "id=<?php echo $id; ?>"
+          })
+          .then(function(response) {
+            if (response.ok) {
+              return response.json();
 
-            location.reload();
+            } else {
+              throw new Error("Request failed.");
+            }
+          })
+          .then(function(data) {
             // Handle the response here
-            var response = JSON.parse(xhr.responseText);
-
-            if (response.success) {
+            if (data.success) {
               // Update the button text dynamically
               button.textContent = "Delete from Favorites";
               button.id = "delete-favorite"; // Update the button ID
               button.setAttribute("onclick", "deleteFavorite()"); // Add onclick attribute
+
             }
-          }
-        };
-        xhr.send("id=<?php echo $id; ?>");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+        location.reload(); // Reload the page
       }
     });
 
     function deleteFavorite() {
       var button = document.getElementById("delete-favorite");
 
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "delete-favorite.php", true);
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          location.reload();
+      fetch("delete-favorite.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded"
+          },
+          body: "id=<?php echo $id; ?>&_method=DELETE"
+        })
+        .then(function(response) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Request failed.");
+          }
+        })
+        .then(function(data) {
           // Handle the response here
-          var response = JSON.parse(xhr.responseText);
-          if (response.success) {
+          if (data.success) {
             // Update the button text dynamically
             button.textContent = "Add to Favorites";
             button.id = "add-to-favorites"; // Update the button ID
             button.setAttribute("onclick", null); // Remove onclick attribute
+
           }
-        }
-      };
-      xhr.send("id=<?php echo $id; ?>&_method=DELETE");
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
+      location.reload(); // Reload the page
     }
   </script>
 
