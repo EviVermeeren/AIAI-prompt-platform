@@ -335,8 +335,10 @@ class Prompt
   public function getPromptsByEmail($email)
   {
     $conn = Db::getInstance(); // Connect to the database
-    $email = $conn->quote($email);
-    return $conn->query("SELECT * FROM prompts WHERE user=$email")->fetchAll();
+    $stmt = $conn->prepare("SELECT * FROM prompts WHERE user = :email");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    return $stmt->fetchAll();
   }
 
   public function getDetailPromptByID($id)
