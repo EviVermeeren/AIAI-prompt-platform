@@ -39,12 +39,16 @@ if ($prompt) {
   exit;
 }
 
-$userz = new User();
-$username = $userz->getUsernameByEmail($user);
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+  $userz = new User();
+  $username = $userz->getUsernameByEmail($user);
+}
 
-$usera = new User();
-$results = $usera->getFavoritesByUserID($user_id, $id);
-
+//only make User object if user is logged in
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+  $usera = new User();
+  $results = $usera->getFavoritesByUserID($user_id, $id);
+}
 ?>
 
 <!DOCTYPE html>
