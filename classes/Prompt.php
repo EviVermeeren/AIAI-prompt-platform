@@ -333,7 +333,7 @@ class Prompt
     $query->execute();
   }
 
-  public function getPromptsByEmail($user_id)
+  public function getPromptsByUserID($user_id)
   {
     $conn = Db::getInstance(); // Connect to the database
     $stmt = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id");
