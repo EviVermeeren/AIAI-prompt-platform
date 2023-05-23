@@ -60,22 +60,161 @@ function deletePrompt(id) {
   }
 }
 
-// Function to handle the search bar
-document
-  .getElementById("search-data")
-  .addEventListener("keyup", function (event) {
-    // Prevent the default behavior of the enter key
-    event.preventDefault();
-    // Check if the enter key was pressed
-    if (event.keyCode === 13) {
-      // Get the search term from the input element
-      const searchTerm = encodeURIComponent(
-        document.getElementById("search-data").value.trim()
-      );
-      // Check if a search term was entered
-      if (searchTerm) {
-        // Redirect the user to the search page with the search term as a query parameter
-        window.location.href = "searchPrompt.php?q=" + searchTerm;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+
+// Define the flagUser function
+function reportUser() {
+  // Get the ID of the user to flag from the query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+  
+  // Show a confirmation dialog to the user before proceeding
+  if (confirm("Are you sure you want to flag this user?")) {
+    // Send a GET request to the server to flag the user
+    fetch(`reportUser.php?id=${id}`, {
+      method: "GET",
+    })
+      // Parse the response as text
+      .then((response) => response.text())
+      // Check if the response was successful
+      .then((result) => {
+        if (result === "success") {
+          // Alert the user that the user was flagged successfully
+          alert("User flagged successfully.");
+          // Reload the page to reflect the changes
+          location.reload();
+        }
+      })
+      // Log any errors that occur during the request
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+function reportPrompt(promptId) {
+  fetch(`report_prompt.php?id=${promptId}`)
+    .then(response => {
+      if (response.ok) {
+        alert('Prompt reported successfully');
+      } else {
+        alert('Error reporting prompt');
       }
-    }
-  });
+    })
+    .catch(error => {
+      console.error('Error reporting prompt:', error);
+      alert('Error reporting prompt');
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+function flagUser() {
+  // Get the user ID from the URL query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('id');
+
+  // Show a confirmation dialog to the user before proceeding
+  if (confirm("Are you sure you want to flag this user?")) {
+    // Send a GET request to the server to flag the user
+    fetch(`reportUser.php?id=${userId}`, {
+      method: "GET",
+    })
+      // Parse the response as text
+      .then((response) => response.text())
+      // Check if the response was successful
+      .then((result) => {
+        if (result === "success") {
+          // Alert the user that the user was flagged successfully
+          alert("User flagged successfully.");
+          // Reload the page to reflect the changes
+          location.reload();
+        }
+      })
+      // Log any errors that occur during the request
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// This function frees a user with the given ID
+function freeUser(id) {
+  // Show a confirmation dialog to the user before proceeding
+  if (confirm("Are you sure you want to free this user?")) {
+    // Send a GET request to the server to free the user
+    fetch("free_user.php?id=" + id, {
+      method: "GET",
+    })
+      // Parse the response as text
+      .then((response) => response.text())
+      // Check if the response was successful
+      .then((result) => {
+        if (result === "success") {
+          // Alert the user that the user was freed successfully
+          alert("User freed successfully.");
+          // Reload the page to reflect the changes
+          location.reload();
+        }
+      })
+      // Log any errors that occur during the request
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+// This function bans a user with the given ID
+function banUser(id) {
+  // Show a confirmation dialog to the user before proceeding
+  if (confirm("Are you sure you want to ban this user?")) {
+    // Send a GET request to the server to ban the user
+    fetch("banUser.php?id=" + id, {
+      method: "GET",
+    })
+      // Parse the response as text
+      .then((response) => response.text())
+      // Check if the response was successful
+      .then((result) => {
+        if (result === "success") {
+          // Alert the user that the user was banned successfully
+          alert("User banned successfully.");
+          // Reload the page to reflect the changes
+          location.reload();
+        }
+      })
+      // Log any errors that occur during the request
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// This function frees a user with the given ID
+function unBlock(id) {
+  // Show a confirmation dialog to the user before proceeding
+  if (confirm("Are you sure you want to unblock this user?")) {
+    // Send a GET request to the server to unblock the user
+    fetch("unBlock_User.php?id=" + id)
+      .then((response) => {
+        if (response.ok) {
+          // Alert the user that the user was unblocked successfully
+          alert("User unblocked successfully.");
+          // Reload the page to reflect the changes
+          location.reload();
+        } else {
+          // Display an error message
+          alert("Error unblocking user.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error unblocking user.");
+      });
+  }
+}

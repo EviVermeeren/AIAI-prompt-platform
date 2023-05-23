@@ -57,6 +57,7 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
   <title>Detail</title>
   <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
   <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
+  <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
 </head>
 
 <body>
@@ -97,19 +98,19 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
 
 
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && count($results) == 0) : ?>
-          <button id="add-to-favorites">Add to favorites</button>
+          <button class="detailbutton"  id="add-to-favorites">Add to favorites ⭐</button>
         <?php endif ?>
 
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && count($results) > 0) : ?>
-          <button id="delete-favorite" onclick="deleteFavorite()">Delete from favorites</button>
+          <button class="detailbutton"  id="delete-favorite" onclick="deleteFavorite()">Delete from favorites</button>
         <?php endif ?>
 
         <p id="message"></p>
 
-        <a class="icon" href="#">🏳‍🌈</a>
+        <a class="detailbutton" href="#" onclick="reportPrompt(promptId)">Report prompt 🏳‍🌈</a>
 
         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $user_id) : ?>
-          <button type="submit" class="delete-button">Delete this (my) prompt</button>
+          <button type="submit"  class="detailbutton">Delete this (my) prompt</button>
         <?php endif; ?>
 
       </div>
