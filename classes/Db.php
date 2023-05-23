@@ -11,7 +11,7 @@ class Db
         if (self::$db !== null) { // Connection already established, reuse it
 
             return self::$db;
-        } else { // Create a new connection
+        } else { // Create a new connections
 
             $dsn = 'mysql:host=ID391480_promptswap.db.webhosting.be;dbname=ID391480_promptswap'; // Data Source Name
             $username = 'ID391480_promptswap';

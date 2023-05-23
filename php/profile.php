@@ -3,7 +3,6 @@ include_once("../inc/bootstrap.php");
 include_once("../inc/functions.inc.php");
 
 $id = $_GET['id'] ?? '';
-$user_id = $_SESSION['user_id'];
 
 $users = new User();
 $user = $users->getUserDataByID($id);
@@ -31,7 +30,7 @@ if ($user) {
     <title>Account</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
     <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
-    <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
+    <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
 </head>
 
 <body>
@@ -49,7 +48,7 @@ if ($user) {
             <h2 class="nameuser"><?php echo $username ?></h2> <!-- Here we display the username of the user -->
             <div class="likeandfollow">
                 <a class="btnfollow" href="#">Follow</a> <!-- This button will be used to follow the user -->
-                <a class="btnfollow" href="#">Flag 🚩</a> <!-- This button will be used to flag the user -->
+                <button class="btnfollow" onclick="reportUser()"> Flag user 🚩 </button> <!-- Button to flag the user -->
                 <a class="btnfollow" id="share-btn" href="javascript:void(0)" onclick="copyToClipboard('<?php echo $share_url ?>')">Share</a> <!-- This button will be used to share the account -->
             </div>
         </div>

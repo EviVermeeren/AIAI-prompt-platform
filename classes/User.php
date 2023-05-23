@@ -411,8 +411,6 @@ class User
         return $this->password;
     }
 
-
-
     public function updatePassword()
     {
         $conn = Db::getInstance();

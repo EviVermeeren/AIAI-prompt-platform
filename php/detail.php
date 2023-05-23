@@ -39,16 +39,12 @@ if ($prompt) {
   exit;
 }
 
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-  $userz = new User();
-  $username = $userz->getUsernameByEmail($user);
-}
+$userz = new User();
+$username = $userz->getUsernameByEmail($user);
 
-//only make User object if user is logged in
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-  $usera = new User();
-  $results = $usera->getFavoritesByUserID($user_id, $id);
-}
+$usera = new User();
+$results = $usera->getFavoritesByUserID($user_id, $id);
+
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +57,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
   <title>Detail</title>
   <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
   <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
-  <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
+  <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
 </head>
 
 <body>
@@ -102,19 +98,19 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
 
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && count($results) == 0) : ?>
-          <button id="add-to-favorites">Add to favorites</button>
+          <button class="detailbutton" id="add-to-favorites">Add to favorites ⭐</button>
         <?php endif ?>
 
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && count($results) > 0) : ?>
-          <button id="delete-favorite" onclick="deleteFavorite()">Delete from favorites</button>
+          <button class="detailbutton" id="delete-favorite" onclick="deleteFavorite()">Delete from favorites</button>
         <?php endif ?>
 
         <p id="message"></p>
 
-        <a class="icon" href="#">🏳‍🌈</a>
+        <a class="detailbutton" href="#" onclick="reportPrompt(promptId)">Report prompt 🏳‍🌈</a>
 
         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $user_id) : ?>
-          <button type="submit" class="delete-button">Delete this (my) prompt</button>
+          <button type="submit" class="detailbutton">Delete this (my) prompt</button>
         <?php endif; ?>
 
       </div>
@@ -164,76 +160,30 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
 
   <script>
-    // Attach the event listener to a parent element using event delegation
-    document.addEventListener("click", function(event) {
-      var target = event.target;
-      if (target.id === "add-to-favorites") {
-        var button = target;
+    document.getElementById("add-to-favorites").addEventListener("click", function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "add-to-favorites.php", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          location.reload();
 
-        fetch("add-to-favorites.php", {
-            method: "POST",
-            headers: {
-              "Content-type": "application/x-www-form-urlencoded"
-            },
-            body: "id=<?php echo $id; ?>"
-          })
-          .then(function(response) {
-            if (response.ok) {
-              return response.json();
-
-            } else {
-              throw new Error("Request failed.");
-            }
-          })
-          .then(function(data) {
-            // Handle the response here
-            if (data.success) {
-              // Update the button text dynamically
-              button.textContent = "Delete from Favorites";
-              button.id = "delete-favorite"; // Update the button ID
-              button.setAttribute("onclick", "deleteFavorite()"); // Add onclick attribute
-
-            }
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
-        location.reload(); // Reload the page
-      }
+        }
+      };
+      xhr.send("id=<?php echo $id; ?>");
     });
 
     function deleteFavorite() {
-      var button = document.getElementById("delete-favorite");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "delete-favorite.php", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          location.reload();
 
-      fetch("delete-favorite.php", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/x-www-form-urlencoded"
-          },
-          body: "id=<?php echo $id; ?>&_method=DELETE"
-        })
-        .then(function(response) {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Request failed.");
-          }
-        })
-        .then(function(data) {
-          // Handle the response here
-          if (data.success) {
-            // Update the button text dynamically
-            button.textContent = "Add to Favorites";
-            button.id = "add-to-favorites"; // Update the button ID
-            button.setAttribute("onclick", null); // Remove onclick attribute
-
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-
-      location.reload(); // Reload the page
+        }
+      };
+      xhr.send("id=<?php echo $id; ?>&_method=DELETE");
     }
   </script>
 

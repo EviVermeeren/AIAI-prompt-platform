@@ -45,7 +45,7 @@ $searchTerm = isset($_GET["q"]) ? trim($_GET["q"]) : ""; // get the search term 
       <?php if ($row["admin"] == 1) :
       ?> <!-- if user is an admin -->
         <li><a href="../php/approvalList.php">Approvals</a></li>
-        <li><a href="../php/report.php">Reports</a></li>
+        <li><a href="../php/reportList.php">Reports</a></li>
       <?php endif;
       ?>
     <?php endif; ?>
