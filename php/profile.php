@@ -31,6 +31,7 @@ if ($user) {
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
     <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
     <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
+    <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
 </head>
 
 <body>

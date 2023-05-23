@@ -30,6 +30,7 @@ $stmt3 = $conn->query($sql3); // Execute the SQL statement and return the result
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css"> <!-- Import the font -->
     <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>"> <!-- Import the CSS file -->
     <script src="../css/script.js"></script> <!-- Import the JavaScript file -->
+    <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
 </head>
 
 <body>
