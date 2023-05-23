@@ -56,6 +56,7 @@ if (isset($_GET['q'])) {
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css">
     <link rel="stylesheet" href="../css/style.css?v=<?= time(); ?>">
     <script defer src="../js/script.js"></script>
+    <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
 </head>
 
 <body>

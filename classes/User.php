@@ -574,7 +574,6 @@ class User
         return $results;
     }
 
-
     // Prepare SQL statement
 
 }

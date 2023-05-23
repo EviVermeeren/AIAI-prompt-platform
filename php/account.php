@@ -34,6 +34,7 @@ $username = $user->getUsername();
   <title>Account</title>
   <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css" />
   <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>" />
+  <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
 </head>
 
 <body>

@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);   
+ini_set('display_errors', 1);
 include_once("../inc/bootstrap.php");
 try {
     if (isset($_GET['token'])) {
@@ -33,23 +33,27 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="../media/favicon.ico">
 </head>
+
 <body>
-    <?php 
-    if (isset($error)): ?>
+    <?php
+    if (isset($error)) : ?>
         <p><?php echo $error ?></p>
-    <?php else: ?>
+    <?php else : ?>
         <form action="" method="post">
             <input type="password" name="password" placeholder="New password">
-            
-            <button type="submit" >Reset password</button>
+
+            <button type="submit">Reset password</button>
         </form>
-        <?php endif ?>
-   
+    <?php endif ?>
+
 </body>
+
 </html>
