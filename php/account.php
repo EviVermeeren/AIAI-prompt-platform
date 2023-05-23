@@ -8,14 +8,12 @@ if (!$user->isAuthenticated()) {
   $user->redirectToLogin();
 }
 
-$email = $_SESSION["email"];
-$user->setEmail($email);
 $user_id = $_SESSION['user_id'];
 
 $conn = Db::getInstance();
 $prompt = new Prompt();
 $prompt->setConnection($conn);
-$prompts = $prompt->getPromptsByUser($email);
+$prompts = $prompt->getPromptsByUserID($user_id);
 
 $profile_picture = $user->getProfilePicture();
 $profile_banner = $user->getProfileBanner();
