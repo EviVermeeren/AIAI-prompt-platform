@@ -129,7 +129,7 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
     </div>
 
     <div class="actions">
-      <button class="action-button like">Like</button>
+      <button class="action-button like" id="btnLike" data-postid="<?php echo $_GET['id']; ?>">Like</button>
       <button class="action-button comment">Comment</button>
       <button class="action-button share">Share</button>
     </div>
@@ -184,6 +184,32 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
       };
       xhr.send("id=<?php echo $id; ?>&_method=DELETE");
     }
+
+    document.querySelector("#btnLike").addEventListener("click", function() {
+      //alert("You liked this prompt!");
+      let postId = this.dataset.postid;
+      let count = document.querySelector(".count");
+
+      let formData = new FormData();
+
+      formData.append("postId", postId);
+
+      fetch("saveLike.php", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.status == "success") {
+            count.innerHTML = parseInt(count.innerHTML) + 1;
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    });
+
+
   </script>
 
 

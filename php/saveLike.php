@@ -1,28 +1,41 @@
 <?php
     require_once("../bootstrap.php");
+    require_once("../classes/Like.php");
     
-    if( !empty($_POST) ) {
-        $postId = $_POST['id'];
-        $userId = 1;
+    session_start();
 
-        $l = new Like();
-        $l->setPostId($postId);
-        $l->setUserId($userId);
-        $l->save();
-
-        $p = new Prompt(); // hier ga je de likes van de post ophalen de betere manier is om te werken met getters en setters
-        $p->$id = $postId;
-        $likes = $p->getLikes();
-        //var_dump($likes); // je moet naar een response gaan kijken en dan krijg je deze vardump te zien
-        
-
-
-        $result = [
-            "status" => "success",
-            "message" => "Like was saved",
-            "likes" => $likes
-        ]; 
-
-        echo json_encode($result);
-
+    // Check if the user is authenticated
+    if (!isset($_SESSION['userId'])) {
+    $response = [
+        'status' => 'error',
+        'message' => 'User not authenticated.'
+    ];
+    echo json_encode($response);
+    exit;
     }
+
+    // Assuming you have the necessary database connection and setup
+    $postId = $_POST['postId'];
+    $userId = $_SESSION['userId'];
+
+    // Save the like in the database
+    // Your code to insert the like into the database
+
+    if ($result) {
+    // Like successfully saved
+    $response = [
+        'status' => 'success',
+        'message' => 'Post liked!'
+    ];
+    } else {
+    // Error occurred while saving the like
+    $response = [
+        'status' => 'error',
+        'message' => 'Error liking the post.'
+    ];
+    }
+
+    echo json_encode($response);
+?>
+
+   
