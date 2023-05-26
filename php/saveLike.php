@@ -1,7 +1,7 @@
 <?php
     require_once("../bootstrap.php");
     require_once("../classes/Like.php");
-    
+
     session_start();
 
     // Check if the user is authenticated

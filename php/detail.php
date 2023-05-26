@@ -186,27 +186,20 @@ $results = $usera->getFavoritesByUserID($user_id, $id);
     }
 
     document.querySelector("#btnLike").addEventListener("click", function() {
-      //alert("You liked this prompt!");
+      alert("You liked this prompt!");
+      
       let postId = this.dataset.postid;
       let count = document.querySelector(".count");
+      let lastLikes = document.querySelector(".last-likes");
+      let countcomment = document.querySelector(".countcomment");
+      let likeButton = document.querySelector("#btnLike");
+      let likeCount = parseInt(count.textContent);
+      let commentCount = parseInt(countcomment.textContent);
+      
+     
 
-      let formData = new FormData();
 
-      formData.append("postId", postId);
 
-      fetch("saveLike.php", {
-          method: "POST",
-          body: formData
-        })
-        .then(response => response.json())
-        .then(result => {
-          if (result.status == "success") {
-            count.innerHTML = parseInt(count.innerHTML) + 1;
-          }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
     });
 
 
