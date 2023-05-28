@@ -98,7 +98,7 @@ class Comment
     //     return $result;
     // }
 
-    public static function getAllComments($postId)
+    public static function getAll($postId)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM comments WHERE postid = :postId");

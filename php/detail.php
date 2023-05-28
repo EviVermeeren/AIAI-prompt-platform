@@ -1,5 +1,6 @@
 <?php
 include_once("../inc/bootstrap.php"); // include the bootstrap file
+include_once(__DIR__ . "../classes/Comment.php"); 
 
 if (!isset($_GET['id'])) { // check if the id parameter is set
   echo "Error: ID parameter not set"; // if not, display an error message
@@ -43,6 +44,11 @@ $username = $userz->getUsernameByEmail($user);
 
 $usera = new User();
 $favorites = $usera->getFavoritesByUserID($user_id, $id);
+
+$allComments = Comment::getAll($postId);
+//var_dump($allComments);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -139,13 +145,18 @@ $favorites = $usera->getFavoritesByUserID($user_id, $id);
 
       <div class="add-comment">
         <img src="../media/pickachu.png" alt="Your Profile Picture">
-        <textarea style="resize: none;" id="commentText" placeholder="Write a comment..."></textarea>
-        <button class="comment-button" id="btnComment" data-postid="<?php echo $_GET['id']; ?>">Comment</button>
+
+        <div class="add-comment-form">
+          <textarea style="resize: none;" id="commentText" placeholder="Write a comment..."></textarea>
+          <button class="comment-button" id="btnComment" data-postid="<?php echo $_GET['id']; ?>">Comment</button>
+        </div>
+
         <ul class="listUpdate">
-          <?php foreach ($allComments as $c) : ?>
+          <?php foreach ($allComments as $c): ?>
             <li><?php echo $c['text']; ?></li>
           <?php endforeach; ?>
         </ul>
+
       </div>
     </div>
   </div>
@@ -225,6 +236,7 @@ $favorites = $usera->getFavoritesByUserID($user_id, $id);
       location.reload(); // Reload the page
     }
 
+    // COMMENT
     document.getElementById("btnComment").addEventListener("click", function() {
       // post id
       console.log("click");
@@ -246,7 +258,7 @@ $favorites = $usera->getFavoritesByUserID($user_id, $id);
         })
         .then(response => response.json())
         .then(result => {
-          console.log(result);
+          //console.log(result);
           // toon comment onderaan
           let newComment = document.createElement("li");
           newComment.innerHTML = result.body;
